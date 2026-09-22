@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://xiexiu.local/schemas/leg.schema.json",
   "title": "Leg",
-  "description": "分段腿：规则引擎枚举/打分输入。价格时刻为参考；模型禁止臆造车次与票价。",
+  "description": "分段腿：规则引擎枚举/打分输入。金额单位为元整数。模型禁止臆造车次与票价。",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -21,10 +21,8 @@
     "as_of"
   ],
   "properties": {
-    "mode": {
-      "type": "string",
-      "enum": ["train", "flight"]
-    },
+    "id": { "type": "string" },
+    "mode": { "type": "string", "enum": ["train", "flight"] },
     "from_city": { "type": "string", "minLength": 1 },
     "to_city": { "type": "string", "minLength": 1 },
     "from_station": { "type": "string", "minLength": 1 },
@@ -33,7 +31,7 @@
     "to_station_code": { "type": "string" },
     "dep_at": {
       "type": "string",
-      "description": "ISO 8601 with timezone offset, e.g. 2026-10-01T08:20:00+08:00",
+      "description": "ISO 8601 with timezone offset",
       "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}([+-]\\d{2}:\\d{2}|Z)$"
     },
     "arr_at": {
@@ -44,23 +42,20 @@
     "price_ref_cny": {
       "type": "integer",
       "minimum": 0,
-      "description": "单一整数参考价（元），打分只用此字段"
+      "description": "打分用代表价（元整数）"
     },
-    "price_range": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["min", "max"],
-      "properties": {
-        "min": { "type": "number", "minimum": 0 },
-        "max": { "type": "number", "minimum": 0 }
-      },
-      "description": "仅展示用区间"
+    "price_min_cny": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "仅展示"
+    },
+    "price_max_cny": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "仅展示"
     },
     "seat_hint": { "type": "string" },
-    "service_ref": {
-      "type": "string",
-      "description": "车次/航班参考文案；mock 可写「Z165 类」；禁止引擎臆造"
-    },
+    "service_ref": { "type": "string" },
     "comfort": {
       "type": "string",
       "enum": [
