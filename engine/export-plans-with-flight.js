@@ -315,30 +315,55 @@ async function exportOd(cfg) {
 }
 
 (async () => {
-  await exportOd({
-    name: '徐州→拉萨',
-    from: '徐州',
-    to: '拉萨',
-    date: '2026-10-01',
-    viaCity: '西宁',
-    viaKey: 'user_via_xining',
-    legsFile: 'data/mock/legs-xuzhou-lhasa.json',
-    outMock: 'data/mock/plans-xuzhou-lhasa.json',
-    outRoot: 'data/plans-xuzhou-lhasa.json',
-    idPrefix: 'xz-lxa',
-  });
-  await exportOd({
-    name: '上海→成都',
-    from: '上海',
-    to: '成都',
-    date: '2026-10-01',
-    viaCity: '武汉',
-    viaKey: 'user_via_wuhan',
-    legsFile: 'data/mock/legs-shanghai-chengdu.json',
-    outMock: 'data/mock/plans-shanghai-chengdu.json',
-    outRoot: 'data/plans-shanghai-chengdu.json',
-    idPrefix: 'sha-ctu',
-  });
+  const only = process.argv[2] || 'all'; // all | xz-lxa | sha-ctu | bj-wh
+  const want = (key) => only === 'all' || only === key;
+
+  const jobs = [
+    {
+      key: 'xz-lxa',
+      name: '徐州→拉萨',
+      from: '徐州',
+      to: '拉萨',
+      date: '2026-10-01',
+      viaCity: '西宁',
+      viaKey: 'user_via_xining',
+      legsFile: 'data/mock/legs-xuzhou-lhasa.json',
+      outMock: 'data/mock/plans-xuzhou-lhasa.json',
+      outRoot: 'data/plans-xuzhou-lhasa.json',
+      idPrefix: 'xz-lxa',
+    },
+    {
+      key: 'sha-ctu',
+      name: '上海→成都',
+      from: '上海',
+      to: '成都',
+      date: '2026-10-01',
+      viaCity: '武汉',
+      viaKey: 'user_via_wuhan',
+      legsFile: 'data/mock/legs-shanghai-chengdu.json',
+      outMock: 'data/mock/plans-shanghai-chengdu.json',
+      outRoot: 'data/plans-shanghai-chengdu.json',
+      idPrefix: 'sha-ctu',
+    },
+    {
+      key: 'bj-wh',
+      name: '北京→武汉',
+      from: '北京',
+      to: '武汉',
+      date: '2026-10-01',
+      viaCity: '郑州',
+      viaKey: 'user_via_zhengzhou',
+      legsFile: 'data/mock/legs-beijing-wuhan.json',
+      outMock: 'data/mock/plans-beijing-wuhan.json',
+      outRoot: 'data/plans-beijing-wuhan.json',
+      idPrefix: 'bj-wh',
+    },
+  ];
+
+  for (const job of jobs) {
+    if (!want(job.key)) continue;
+    await exportOd(job);
+  }
 })().catch((e) => {
   console.error(e);
   process.exit(1);
