@@ -54,10 +54,10 @@ function humanWhy(slot, plan, direct) {
         from && dest
           ? `${from}直飞${dest}，一趟飞机到，少折腾。参考价以航司/OTA为准。`
           : '直飞，一趟飞机到，少折腾。参考价以航司/OTA为准。';
-    } else if (hardseat && slot === 'cheap') {
+    } else if (hardseat && slot === 'cheap' && Number(plan.duration_min) >= 1200) {
       why = '直达硬座最便宜，但要坐四十来个小时。当「最省钱」对照看就行。';
     } else if (slot === 'cheap') {
-      why = '直达方案，票价通常好算，适合想少折腾的人。';
+      why = '直达更便宜一档，适合预算优先、能接受慢一点的人。';
     } else {
       why = '直达走法，少换乘。当「对照」看就行。';
     }
@@ -78,6 +78,8 @@ function humanWhy(slot, plan, direct) {
         : '经武汉拆段。综合看价格和可玩窗口；换乘够长能顺路逛逛。';
   } else if (play) {
     why = `经 ${hubs.join('、')} 拆段。多一趟换乘，窗口够的话能顺路逛逛。`;
+  } else if (hubs.some((h) => h === '遂宁' || h === '内江')) {
+    why = `经 ${hubs.join('、')} 拆段的成渝邪修走法。多一趟换乘，未必更省，但能换换风景。`;
   } else {
     why = `经 ${hubs.join('、')} 拆段。综合看价格和时长。`;
   }
