@@ -21,3 +21,17 @@ python3 engine/search.py
 - `search.py` — 枚举 + MCT + 组装
 
 `service_ref` / 价格时刻来自 mock；**不含实时余票**。
+
+## 数据适配器
+
+| 文件 | 作用 |
+|------|------|
+| `adapters/train.mock.js` | 火车 mock：`search({ from_city, to_city, date? }) → Leg[]`，单机内存 TTL |
+| `adapters/README.md` | 命名约定 |
+
+```bash
+node engine/adapters/train.mock.js 徐州 西宁 2026-10-01
+```
+
+详见 [`docs/data-sources.md`](../docs/data-sources.md)。
+
