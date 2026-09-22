@@ -121,6 +121,20 @@ function search(query) {
   return matched.map((l) => Object.assign({}, l));
 }
 
+/**
+ * Adapter-facing async contract for engine consumers.
+ *
+ * @param {{ from: string, to: string, date?: string|null }} query
+ * @returns {Promise<object[]>} Leg[]
+ */
+async function searchLegs({ from, to, date } = {}) {
+  return search({
+    from_city: from,
+    to_city: to,
+    date: date || undefined,
+  });
+}
+
 function mainCli() {
   const fromCity = process.argv[2];
   const toCity = process.argv[3];
@@ -157,6 +171,7 @@ function mainCli() {
 }
 
 module.exports = {
+  searchLegs,
   search,
   clearCache,
   configure,
