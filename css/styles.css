@@ -264,3 +264,47 @@ html, body {
 }
 .about-pad .disc li { margin-bottom: 8px; }
 .page-body > .van-notice-bar { margin: 0 0 4px; }
+
+
+/* Demo switches + empty/error extras */
+.demo-switches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  justify-content: center;
+  margin-top: 18px;
+  padding-bottom: 4px;
+}
+.demo-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted, #969799);
+  cursor: pointer;
+  user-select: none;
+}
+.demo-switch input {
+  width: 13px;
+  height: 13px;
+  accent-color: var(--muted, #969799);
+}
+.state-desc {
+  font-size: 13px;
+  color: var(--muted, #969799);
+  line-height: 1.55;
+  max-width: 280px;
+  margin: 8px auto 14px;
+  text-align: center;
+  padding: 0 12px;
+}
+.state-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto;
+  padding: 0 12px 8px;
+}
+.retry-btn { margin-top: 4px; }
