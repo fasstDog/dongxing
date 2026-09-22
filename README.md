@@ -17,6 +17,10 @@
 <script src="https://fastly.jsdelivr.net/npm/vant@4/lib/vant.min.js"></script>
 ```
 
+## 微信小程序脚手架
+
+原生微信小程序目录：[**`miniprogram/`**](miniprogram/)（**Vant Weapp**）。查询 + 三主卡结果壳，本地 mock，无登录/支付。打开与 npm 构建见 [`miniprogram/README.md`](miniprogram/README.md)。
+
 ## 如何打开
 
 1. 浏览器直接打开 `index.html`（需能访问 CDN）。

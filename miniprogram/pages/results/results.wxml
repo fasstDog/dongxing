@@ -1,0 +1,47 @@
+<view class="page">
+  <van-notice-bar
+    wx:if="{{ notice }}"
+    left-icon="volume-o"
+    text="{{ notice }}"
+    color="#ed6a0c"
+    background="#fffbe8"
+  />
+
+  <view class="od-line" wx:if="{{ odLine }}">{{ odLine }}</view>
+
+  <view class="loading-wrap" wx:if="{{ loading }}">
+    <van-loading type="spinner" size="24px">正在邪修路线…</van-loading>
+  </view>
+
+  <van-empty wx:elif="{{ !plans.length }}" description="暂无方案（mock）" />
+
+  <block wx:else>
+    <view
+      wx:for="{{ plans }}"
+      wx:key="id"
+      class="plan-card card-{{ item.type }}"
+      data-id="{{ item.id }}"
+      bindtap="onTapDetail"
+    >
+      <view class="plan-head">
+        <van-tag type="{{ item.tagType }}" round>{{ item.type_label }}</van-tag>
+        <text class="price">{{ item.price_display }}</text>
+      </view>
+      <view class="route">{{ item.route_one_line }}</view>
+      <view class="meta">
+        <text>{{ item.duration_display }}</text>
+        <text class="dot">·</text>
+        <text>{{ item.transfers }} 次换乘</text>
+        <text class="dot" wx:if="{{ item.price_note }}">·</text>
+        <text wx:if="{{ item.price_note }}" class="muted">{{ item.price_note }}</text>
+      </view>
+      <view class="why" wx:if="{{ item.why }}">{{ item.why }}</view>
+      <view class="hint" wx:if="{{ item.play_hint }}">{{ item.play_hint }}</view>
+      <view class="card-foot">
+        <text class="muted">点按查看详情（stub）</text>
+      </view>
+    </view>
+  </block>
+
+  <view class="disclaimer">只推荐不卖票 · 价格时刻为参考 mock · 无真实购票</view>
+</view>

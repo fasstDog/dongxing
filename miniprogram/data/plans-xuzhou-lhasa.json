@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "od": {
+      "from_city": "徐州",
+      "to_city": "拉萨"
+    },
+    "note": "mock · 只推荐不卖票 · 价格时刻为参考 · 三主卡精简",
+    "source": "data/mock/plans-xuzhou-lhasa.json"
+  },
+  "scenarios": {
+    "auto": {
+      "response": {
+        "ok": true,
+        "error": null,
+        "main": [
+          {
+            "id": "xz-lxa-cheap",
+            "type": "cheap",
+            "type_label": "最省钱",
+            "price_display": "¥397–760",
+            "price_note": "参考价",
+            "duration_display": "约 42 小时",
+            "transfers": 0,
+            "route_one_line": "徐州 → 拉萨",
+            "vs_direct": "参考价差不多，时长差不多",
+            "why": "直达硬座最便宜，但要坐四十来个小时。当「最省钱」对照看就行。",
+            "play_hint": null,
+            "path_note": "直达"
+          },
+          {
+            "id": "xz-lxa-fast",
+            "type": "fast",
+            "type_label": "最快",
+            "price_display": "¥950–1370",
+            "price_note": "参考价",
+            "duration_display": "约 12 小时",
+            "transfers": 1,
+            "route_one_line": "徐州 → 西安 → 拉萨",
+            "vs_direct": "参考价大概贵 733 块，能少耗大约 30 小时",
+            "why": "先高铁到西安，再飞拉萨。比直达硬座贵一截，但能少耗将近一天半。",
+            "play_hint": "西安能顺路玩 · 大明宫一带",
+            "path_note": "系统选枢纽：西安"
+          },
+          {
+            "id": "xz-lxa-balanced",
+            "type": "balanced",
+            "type_label": "最综合",
+            "price_display": "¥520–780",
+            "price_note": "参考价",
+            "duration_display": "约 48 小时",
+            "transfers": 1,
+            "route_one_line": "徐州 → 西宁 → 拉萨",
+            "vs_direct": "参考价大概贵 253 块，多花大约 6 小时",
+            "why": "经西宁拆两段火车。比直达硬座贵一点、也多几个小时，但换乘够长能顺路逛逛。",
+            "play_hint": "西宁能顺路玩 · 塔尔寺",
+            "path_note": "系统选枢纽：西宁"
+          }
+        ]
+      }
+    }
+  },
+  "response": {
+    "ok": true,
+    "error": null,
+    "main": [
+      {
+        "id": "xz-lxa-cheap",
+        "type": "cheap",
+        "type_label": "最省钱",
+        "price_display": "¥397–760",
+        "price_note": "参考价",
+        "duration_display": "约 42 小时",
+        "transfers": 0,
+        "route_one_line": "徐州 → 拉萨",
+        "vs_direct": "参考价差不多，时长差不多",
+        "why": "直达硬座最便宜，但要坐四十来个小时。当「最省钱」对照看就行。",
+        "play_hint": null,
+        "path_note": "直达"
+      },
+      {
+        "id": "xz-lxa-fast",
+        "type": "fast",
+        "type_label": "最快",
+        "price_display": "¥950–1370",
+        "price_note": "参考价",
+        "duration_display": "约 12 小时",
+        "transfers": 1,
+        "route_one_line": "徐州 → 西安 → 拉萨",
+        "vs_direct": "参考价大概贵 733 块，能少耗大约 30 小时",
+        "why": "先高铁到西安，再飞拉萨。比直达硬座贵一截，但能少耗将近一天半。",
+        "play_hint": "西安能顺路玩 · 大明宫一带",
+        "path_note": "系统选枢纽：西安"
+      },
+      {
+        "id": "xz-lxa-balanced",
+        "type": "balanced",
+        "type_label": "最综合",
+        "price_display": "¥520–780",
+        "price_note": "参考价",
+        "duration_display": "约 48 小时",
+        "transfers": 1,
+        "route_one_line": "徐州 → 西宁 → 拉萨",
+        "vs_direct": "参考价大概贵 253 块，多花大约 6 小时",
+        "why": "经西宁拆两段火车。比直达硬座贵一点、也多几个小时，但换乘够长能顺路逛逛。",
+        "play_hint": "西宁能顺路玩 · 塔尔寺",
+        "path_note": "系统选枢纽：西宁"
+      }
+    ]
+  }
+}

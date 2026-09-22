@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "od": {
+      "from_city": "上海",
+      "to_city": "成都"
+    },
+    "note": "mock · 只推荐不卖票 · 价格时刻为参考 · 三主卡精简",
+    "source": "data/mock/plans-shanghai-chengdu.json"
+  },
+  "scenarios": {
+    "auto": {
+      "response": {
+        "ok": true,
+        "error": null,
+        "main": [
+          {
+            "id": "sha-ctu-cheap",
+            "type": "cheap",
+            "type_label": "最省钱",
+            "price_display": "¥540–800",
+            "price_note": "参考价",
+            "duration_display": "约 25 小时",
+            "transfers": 1,
+            "route_one_line": "上海 → 武汉 → 成都",
+            "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
+            "why": "先高铁到武汉，再坐过夜火车去成都。参考价能省几十块，但要多花大半天；换乘够长能顺路逛逛。",
+            "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
+            "path_note": "系统选枢纽：武汉"
+          },
+          {
+            "id": "sha-ctu-fast",
+            "type": "fast",
+            "type_label": "最快",
+            "price_display": "¥550–1200",
+            "price_note": "参考价",
+            "duration_display": "约 3 小时",
+            "transfers": 0,
+            "route_one_line": "上海 → 成都",
+            "vs_direct": "参考价大概贵 123 块，能少耗大约 10 小时",
+            "why": "上海直飞成都，一趟飞机到，少折腾。参考价以航司/OTA为准。",
+            "play_hint": null,
+            "path_note": "直达"
+          },
+          {
+            "id": "sha-ctu-balanced",
+            "type": "balanced",
+            "type_label": "最综合",
+            "price_display": "¥540–800",
+            "price_note": "参考价",
+            "duration_display": "约 25 小时",
+            "transfers": 1,
+            "route_one_line": "上海 → 武汉 → 成都",
+            "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
+            "why": "经武汉拆段。综合看价格和可玩窗口；换乘够长能顺路逛逛。",
+            "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
+            "path_note": "系统选枢纽：武汉"
+          }
+        ]
+      }
+    }
+  },
+  "response": {
+    "ok": true,
+    "error": null,
+    "main": [
+      {
+        "id": "sha-ctu-cheap",
+        "type": "cheap",
+        "type_label": "最省钱",
+        "price_display": "¥540–800",
+        "price_note": "参考价",
+        "duration_display": "约 25 小时",
+        "transfers": 1,
+        "route_one_line": "上海 → 武汉 → 成都",
+        "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
+        "why": "先高铁到武汉，再坐过夜火车去成都。参考价能省几十块，但要多花大半天；换乘够长能顺路逛逛。",
+        "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
+        "path_note": "系统选枢纽：武汉"
+      },
+      {
+        "id": "sha-ctu-fast",
+        "type": "fast",
+        "type_label": "最快",
+        "price_display": "¥550–1200",
+        "price_note": "参考价",
+        "duration_display": "约 3 小时",
+        "transfers": 0,
+        "route_one_line": "上海 → 成都",
+        "vs_direct": "参考价大概贵 123 块，能少耗大约 10 小时",
+        "why": "上海直飞成都，一趟飞机到，少折腾。参考价以航司/OTA为准。",
+        "play_hint": null,
+        "path_note": "直达"
+      },
+      {
+        "id": "sha-ctu-balanced",
+        "type": "balanced",
+        "type_label": "最综合",
+        "price_display": "¥540–800",
+        "price_note": "参考价",
+        "duration_display": "约 25 小时",
+        "transfers": 1,
+        "route_one_line": "上海 → 武汉 → 成都",
+        "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
+        "why": "经武汉拆段。综合看价格和可玩窗口；换乘够长能顺路逛逛。",
+        "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
+        "path_note": "系统选枢纽：武汉"
+      }
+    ]
+  }
+}

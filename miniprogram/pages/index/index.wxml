@@ -1,0 +1,79 @@
+<view class="page">
+  <van-notice-bar
+    left-icon="info-o"
+    text="只推荐路线，不卖票。当前为 mock 样例（徐州→拉萨）。"
+    color="#1989fa"
+    background="#ecf9ff"
+  />
+
+  <view class="form-block">
+    <van-cell-group inset>
+      <van-field
+        label="出发"
+        placeholder="出发城市"
+        value="{{ fromCity }}"
+        bind:change="onFromChange"
+        clearable
+      />
+      <van-field
+        label="到达"
+        placeholder="到达城市"
+        value="{{ toCity }}"
+        bind:change="onToChange"
+        clearable
+      />
+    </van-cell-group>
+  </view>
+
+  <view class="via-block">
+    <view class="via-header">
+      <text class="via-title">途经（最多 3）</text>
+      <van-button
+        size="small"
+        type="primary"
+        plain
+        hairline
+        disabled="{{ vias.length >= 3 }}"
+        bind:click="onAddVia"
+      >添加途经</van-button>
+    </view>
+    <van-cell-group inset wx:if="{{ vias.length }}">
+      <van-field
+        wx:for="{{ vias }}"
+        wx:key="index"
+        label="途经{{ index + 1 }}"
+        placeholder="途经城市"
+        value="{{ item }}"
+        data-index="{{ index }}"
+        bind:change="onViaChange"
+        use-button-slot
+      >
+        <van-button
+          slot="button"
+          size="small"
+          type="danger"
+          plain
+          hairline
+          data-index="{{ index }}"
+          bind:click="onRemoveVia"
+        >删除</van-button>
+      </van-field>
+    </van-cell-group>
+    <view class="via-empty" wx:else>
+      <text class="muted">可选：有序途经最多 3 个（本页不调真实 API）</text>
+    </view>
+  </view>
+
+  <view class="sample-row">
+    <van-tag type="primary" plain>样例 OD</van-tag>
+    <text class="sample-text">徐州 → 拉萨（已预填）</text>
+  </view>
+
+  <view class="action">
+    <van-button type="primary" block round bind:click="onStart">
+      开始邪修
+    </van-button>
+  </view>
+
+  <view class="disclaimer">{{ disclaimer }}</view>
+</view>

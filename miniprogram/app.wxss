@@ -1,0 +1,30 @@
+page {
+  background: #f7f8fa;
+  color: #323233;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.page {
+  padding: 24rpx;
+  padding-bottom: 48rpx;
+}
+
+.disclaimer {
+  margin-top: 24rpx;
+  color: #969799;
+  font-size: 22rpx;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* 三主卡轻量类型色 */
+.card-cheap {
+  border-left: 8rpx solid #07c160;
+}
+.card-fast {
+  border-left: 8rpx solid #ee0a24;
+}
+.card-balanced {
+  border-left: 8rpx solid #1989fa;
+}
