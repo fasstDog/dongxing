@@ -1,109 +1,21 @@
 {
   "meta": {
-    "note": "TransferPlay 独立表；按 hub_city 查询。西宁为样板城（3～6 条已满）。",
+    "note": "TransferPlay 独立表；按 hub_city 查询。西宁为样板；12 城均已覆盖，薄弱档已补齐。",
     "source": "mock",
-    "as_of": "2026-09-22T19:20:00+08:00",
+    "as_of": "2026-09-22T19:30:00+08:00",
     "hubs_ref": "docs/hubs-mvp.md"
   },
   "pois": [
     {
-      "hub_city": "西宁",
-      "anchor_station": "西宁站",
-      "name": "站内 / 站前休息",
-      "dist_text": "西宁站内或出站口周边",
-      "dist_km": 0.3,
-      "suggest_hours": 1,
-      "suggest_text": "休息、补给、不远逛",
-      "min_buffer_hours": 2,
-      "back_ok_note": "同站缓冲约 ≥2 小时：优先休息与下一程安检，不硬推景点"
-    },
-    {
-      "hub_city": "西宁",
-      "anchor_station": "西宁站",
-      "name": "东关清真大寺一带",
-      "dist_text": "城区内，距西宁站约 5–8km",
-      "dist_km": 6,
-      "suggest_hours": 1.5,
-      "suggest_text": "1–2 小时轻逛 + 用餐",
-      "min_buffer_hours": 3,
-      "back_ok_note": "同城缓冲 ≥3 小时较合适；预留回站打车与安检"
-    },
-    {
-      "hub_city": "西宁",
-      "anchor_station": "西宁站",
-      "name": "青海省博物馆",
-      "dist_text": "城东，距西宁站约 4–6km",
-      "dist_km": 5,
-      "suggest_hours": 1.5,
-      "suggest_text": "建议 1.5–2 小时（含交通）",
-      "min_buffer_hours": 3,
-      "back_ok_note": "闭馆日勿去；缓冲紧时改站前休息"
-    },
-    {
-      "hub_city": "西宁",
-      "anchor_station": "西宁站",
-      "name": "南山公园 / 凤凰台一带",
-      "dist_text": "市区南侧，距西宁站约 6–9km",
-      "dist_km": 7,
-      "suggest_hours": 2,
-      "suggest_text": "建议 2 小时轻行",
-      "min_buffer_hours": 3,
-      "back_ok_note": "海拔与坡度适中；勿排太满以免误车"
-    },
-    {
-      "hub_city": "西宁",
-      "anchor_station": "西宁站",
-      "name": "塔尔寺",
-      "dist_text": "湟中，距西宁城区约 25km",
-      "dist_km": 25,
-      "suggest_hours": 2.5,
-      "suggest_text": "建议游玩 2–3 小时（不含往返）",
-      "min_buffer_hours": 6,
-      "back_ok_note": "缓冲 ≥6 小时较从容；打车往返并提前回站安检；过夜更稳"
-    },
-    {
-      "hub_city": "西宁",
-      "anchor_station": "西宁站",
-      "name": "湟源丹噶尔古城（半日向）",
-      "dist_text": "湟源方向，距西宁约 50km 级",
-      "dist_km": 50,
-      "suggest_hours": 4,
-      "suggest_text": "半日往返，含交通约 4–5 小时",
-      "min_buffer_hours": 6,
-      "back_ok_note": "仅过夜或 ≥6～8 小时窗口考虑；多数换乘不推荐硬排"
-    },
-    {
-      "hub_city": "西安",
-      "anchor_station": "西安北站",
-      "name": "大雁塔 / 大唐不夜城一带",
-      "dist_text": "市区，距西安北站约 15–20km",
-      "dist_km": 18,
-      "suggest_hours": 2,
-      "suggest_text": "建议 2 小时轻逛",
-      "min_buffer_hours": 3,
-      "back_ok_note": "同城缓冲 ≥3 小时可短逛；赶飞机请改接驳休息"
-    },
-    {
-      "hub_city": "西安",
-      "anchor_station": "西安北站",
-      "name": "兵马俑（临潼）",
-      "dist_text": "距西安北站约 40–50km",
-      "dist_km": 45,
-      "suggest_hours": 3.5,
-      "suggest_text": "建议半日 3–4 小时（含交通）",
-      "min_buffer_hours": 6,
-      "back_ok_note": "缓冲 ≥6 小时再考虑；接驳机场/车站需留足时间"
-    },
-    {
       "hub_city": "北京",
       "anchor_station": "北京南站",
-      "name": "天坛公园",
-      "dist_text": "东城区，距北京南站约 6–8km",
-      "dist_km": 7,
-      "suggest_hours": 2.5,
-      "suggest_text": "建议 2–3 小时轻逛",
-      "min_buffer_hours": 5,
-      "back_ok_note": "缓冲 ≥5 小时再考虑；预留市内交通与进站安检时间"
+      "name": "陶然亭公园",
+      "dist_text": "南城，距北京南站约 3–5km",
+      "dist_km": 4,
+      "suggest_hours": 1.5,
+      "suggest_text": "建议 1–2 小时散步",
+      "min_buffer_hours": 4,
+      "back_ok_note": "缓冲 ≥4 小时可短逛；返站接驳和安检不可省略"
     },
     {
       "hub_city": "北京",
@@ -119,13 +31,13 @@
     {
       "hub_city": "北京",
       "anchor_station": "北京南站",
-      "name": "陶然亭公园",
-      "dist_text": "南城，距北京南站约 3–5km",
-      "dist_km": 4,
-      "suggest_hours": 1.5,
-      "suggest_text": "建议 1–2 小时散步",
-      "min_buffer_hours": 4,
-      "back_ok_note": "缓冲 ≥4 小时可短逛；返站接驳和安检不可省略"
+      "name": "天坛公园",
+      "dist_text": "东城区，距北京南站约 6–8km",
+      "dist_km": 7,
+      "suggest_hours": 2.5,
+      "suggest_text": "建议 2–3 小时轻逛",
+      "min_buffer_hours": 5,
+      "back_ok_note": "缓冲 ≥5 小时再考虑；预留市内交通与进站安检时间"
     },
     {
       "hub_city": "上海",
@@ -163,13 +75,13 @@
     {
       "hub_city": "广州",
       "anchor_station": "广州南站",
-      "name": "长隆旅游度假区",
-      "dist_text": "番禺，距广州南站约 5–7km",
-      "dist_km": 6,
-      "suggest_hours": 4,
-      "suggest_text": "建议半日 4 小时起（不含排队）",
-      "min_buffer_hours": 7,
-      "back_ok_note": "缓冲 ≥7 小时或过夜再考虑；园区较大，勿压缩返站时间"
+      "name": "广州塔 / 珠江新城一带",
+      "dist_text": "海珠—天河，距广州南站约 18–24km",
+      "dist_km": 21,
+      "suggest_hours": 3,
+      "suggest_text": "建议 3 小时城市观景 + 用餐",
+      "min_buffer_hours": 6,
+      "back_ok_note": "仅过夜或缓冲 ≥6 小时考虑；晚高峰返南站需留足余量"
     },
     {
       "hub_city": "广州",
@@ -185,13 +97,13 @@
     {
       "hub_city": "广州",
       "anchor_station": "广州南站",
-      "name": "广州塔 / 珠江新城一带",
-      "dist_text": "海珠—天河，距广州南站约 18–24km",
-      "dist_km": 21,
-      "suggest_hours": 3,
-      "suggest_text": "建议 3 小时城市观景 + 用餐",
-      "min_buffer_hours": 6,
-      "back_ok_note": "仅过夜或缓冲 ≥6 小时考虑；晚高峰返南站需留足余量"
+      "name": "长隆旅游度假区",
+      "dist_text": "番禺，距广州南站约 5–7km",
+      "dist_km": 6,
+      "suggest_hours": 4,
+      "suggest_text": "建议半日 4 小时起（不含排队）",
+      "min_buffer_hours": 7,
+      "back_ok_note": "缓冲 ≥7 小时或过夜再考虑；园区较大，勿压缩返站时间"
     },
     {
       "hub_city": "深圳",
@@ -229,6 +141,17 @@
     {
       "hub_city": "成都",
       "anchor_station": "成都东站",
+      "name": "东门市井 / 九眼桥一带",
+      "dist_text": "锦江区，距成都东站约 6–9km",
+      "dist_km": 8,
+      "suggest_hours": 2,
+      "suggest_text": "建议 2 小时用餐 + 轻逛",
+      "min_buffer_hours": 5,
+      "back_ok_note": "缓冲 ≥5 小时可安排；夜间返站仍需预留接驳时间"
+    },
+    {
+      "hub_city": "成都",
+      "anchor_station": "成都东站",
       "name": "春熙路 / 太古里",
       "dist_text": "市中心，距成都东站约 7–9km",
       "dist_km": 8,
@@ -247,17 +170,6 @@
       "suggest_text": "建议 2–3 小时老街轻逛",
       "min_buffer_hours": 6,
       "back_ok_note": "缓冲 ≥6 小时再考虑；节假日拥堵时改站内休息"
-    },
-    {
-      "hub_city": "成都",
-      "anchor_station": "成都东站",
-      "name": "东门市井 / 九眼桥一带",
-      "dist_text": "锦江区，距成都东站约 6–9km",
-      "dist_km": 8,
-      "suggest_hours": 2,
-      "suggest_text": "建议 2 小时用餐 + 轻逛",
-      "min_buffer_hours": 5,
-      "back_ok_note": "缓冲 ≥5 小时可安排；夜间返站仍需预留接驳时间"
     },
     {
       "hub_city": "重庆",
@@ -361,17 +273,6 @@
     {
       "hub_city": "郑州",
       "anchor_station": "郑州东站",
-      "name": "河南博物院",
-      "dist_text": "金水区，距郑州东站约 10–13km",
-      "dist_km": 12,
-      "suggest_hours": 2.5,
-      "suggest_text": "建议 2–3 小时参观",
-      "min_buffer_hours": 5,
-      "back_ok_note": "缓冲 ≥5 小时再考虑；先确认开放与预约，预留返站时间"
-    },
-    {
-      "hub_city": "郑州",
-      "anchor_station": "郑州东站",
       "name": "二七纪念塔 / 二七广场",
       "dist_text": "老城区，距郑州东站约 11–14km",
       "dist_km": 13,
@@ -379,6 +280,17 @@
       "suggest_text": "建议 2 小时城市轻逛 + 用餐",
       "min_buffer_hours": 5,
       "back_ok_note": "缓冲 ≥5 小时可安排；工作日晚高峰返站需加余量"
+    },
+    {
+      "hub_city": "郑州",
+      "anchor_station": "郑州东站",
+      "name": "河南博物院",
+      "dist_text": "金水区，距郑州东站约 10–13km",
+      "dist_km": 12,
+      "suggest_hours": 2.5,
+      "suggest_text": "建议 2–3 小时参观",
+      "min_buffer_hours": 5,
+      "back_ok_note": "缓冲 ≥5 小时再考虑；先确认开放与预约，预留返站时间"
     },
     {
       "hub_city": "郑州",
@@ -392,26 +304,81 @@
       "back_ok_note": "缓冲 ≥5 小时再考虑；先确认开放时间并留返站接驳余量"
     },
     {
+      "hub_city": "西安",
+      "anchor_station": "西安北站",
+      "name": "站内 / 站前休息",
+      "dist_text": "西安北站内或枢纽商业区",
+      "dist_km": 0.3,
+      "suggest_hours": 1,
+      "suggest_text": "休息、补给；赶飞机优先留在枢纽",
+      "min_buffer_hours": 2,
+      "back_ok_note": "同站缓冲约 ≥2 小时：不硬推出城"
+    },
+    {
+      "hub_city": "西安",
+      "anchor_station": "西安北站",
+      "name": "大明宫国家遗址公园",
+      "dist_text": "地铁可达，距西安北站约 8–12km",
+      "dist_km": 10,
+      "suggest_hours": 2,
+      "suggest_text": "建议 2 小时（含地铁）",
+      "min_buffer_hours": 3,
+      "back_ok_note": "相对北站比老城区更近；仍须预留回站安检"
+    },
+    {
+      "hub_city": "西安",
+      "anchor_station": "西安北站",
+      "name": "大雁塔 / 大唐不夜城一带",
+      "dist_text": "市区，距西安北站约 15–20km",
+      "dist_km": 18,
+      "suggest_hours": 2,
+      "suggest_text": "建议 2 小时轻逛",
+      "min_buffer_hours": 3,
+      "back_ok_note": "同城缓冲 ≥3 小时可短逛；赶飞机请改枢纽休息"
+    },
+    {
+      "hub_city": "西安",
+      "anchor_station": "西安北站",
+      "name": "兵马俑（临潼）",
+      "dist_text": "距西安北站约 40–50km",
+      "dist_km": 45,
+      "suggest_hours": 3.5,
+      "suggest_text": "建议半日 3–4 小时（含交通）",
+      "min_buffer_hours": 6,
+      "back_ok_note": "缓冲 ≥6 小时再考虑；接驳机场/车站需留足时间"
+    },
+    {
+      "hub_city": "兰州",
+      "anchor_station": "兰州西站",
+      "name": "站内 / 站前休息",
+      "dist_text": "兰州西站内或出站口周边",
+      "dist_km": 0.3,
+      "suggest_hours": 1,
+      "suggest_text": "休息、补给、不远逛",
+      "min_buffer_hours": 2,
+      "back_ok_note": "同站缓冲约 ≥2 小时：优先休息与下一程安检，不硬推景点"
+    },
+    {
+      "hub_city": "兰州",
+      "anchor_station": "兰州西站",
+      "name": "兰州中心 / 西站商圈一带",
+      "dist_text": "紧邻兰州西站，步行或短途",
+      "dist_km": 1,
+      "suggest_hours": 1.5,
+      "suggest_text": "1–1.5 小时用餐与逛一逛",
+      "min_buffer_hours": 3,
+      "back_ok_note": "同城近站；预留回站安检即可"
+    },
+    {
       "hub_city": "兰州",
       "anchor_station": "兰州西站",
       "name": "甘肃省博物馆",
       "dist_text": "七里河，距兰州西站约 3–5km",
       "dist_km": 4,
       "suggest_hours": 2,
-      "suggest_text": "建议 2 小时参观",
-      "min_buffer_hours": 4,
-      "back_ok_note": "缓冲 ≥4 小时可安排；先确认开放与预约，预留回站安检"
-    },
-    {
-      "hub_city": "兰州",
-      "anchor_station": "兰州西站",
-      "name": "黄河风情线 / 水车园一带",
-      "dist_text": "滨河城区，距兰州西站约 7–10km",
-      "dist_km": 9,
-      "suggest_hours": 2.5,
-      "suggest_text": "建议 2–3 小时沿河散步",
-      "min_buffer_hours": 5,
-      "back_ok_note": "缓冲 ≥5 小时可短逛；沿线较长，按返站交通倒推"
+      "suggest_text": "建议 1.5–2.5 小时（含交通）",
+      "min_buffer_hours": 3,
+      "back_ok_note": "注意闭馆日；缓冲紧时改西站商圈或站内休息"
     },
     {
       "hub_city": "兰州",
@@ -419,10 +386,87 @@
       "name": "白塔山公园",
       "dist_text": "城关北岸，距兰州西站约 9–12km",
       "dist_km": 11,
-      "suggest_hours": 3,
-      "suggest_text": "建议 3 小时登高观景",
+      "suggest_hours": 2.5,
+      "suggest_text": "建议 2–3 小时含上下山与交通",
       "min_buffer_hours": 6,
-      "back_ok_note": "缓冲 ≥6 小时再考虑；坡道与市区拥堵会增加返站时间"
+      "back_ok_note": "坡度与排队耗时；仅缓冲充裕时推荐"
+    },
+    {
+      "hub_city": "兰州",
+      "anchor_station": "兰州西站",
+      "name": "黄河风情线 / 中山桥一带",
+      "dist_text": "城关滨河，距兰州西站约 8–12km",
+      "dist_km": 10,
+      "suggest_hours": 2.5,
+      "suggest_text": "建议 2–3 小时（含地铁/打车）",
+      "min_buffer_hours": 6,
+      "back_ok_note": "半日窗口更稳；须预留回西站或换乘兰州站的时间"
+    },
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "站内 / 站前休息",
+      "dist_text": "西宁站内或出站口周边",
+      "dist_km": 0.3,
+      "suggest_hours": 1,
+      "suggest_text": "休息、补给、不远逛",
+      "min_buffer_hours": 2,
+      "back_ok_note": "同站缓冲约 ≥2 小时：优先休息与下一程安检，不硬推景点"
+    },
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "东关清真大寺一带",
+      "dist_text": "城区内，距西宁站约 5–8km",
+      "dist_km": 6,
+      "suggest_hours": 1.5,
+      "suggest_text": "1–2 小时轻逛 + 用餐",
+      "min_buffer_hours": 3,
+      "back_ok_note": "同城缓冲 ≥3 小时较合适；预留回站打车与安检"
+    },
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "南山公园 / 凤凰台一带",
+      "dist_text": "市区南侧，距西宁站约 6–9km",
+      "dist_km": 7,
+      "suggest_hours": 2,
+      "suggest_text": "建议 2 小时轻行",
+      "min_buffer_hours": 3,
+      "back_ok_note": "海拔与坡度适中；勿排太满以免误车"
+    },
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "青海省博物馆",
+      "dist_text": "城东，距西宁站约 4–6km",
+      "dist_km": 5,
+      "suggest_hours": 1.5,
+      "suggest_text": "建议 1.5–2 小时（含交通）",
+      "min_buffer_hours": 3,
+      "back_ok_note": "闭馆日勿去；缓冲紧时改站前休息"
+    },
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "塔尔寺",
+      "dist_text": "湟中，距西宁城区约 25km",
+      "dist_km": 25,
+      "suggest_hours": 2.5,
+      "suggest_text": "建议游玩 2–3 小时（不含往返）",
+      "min_buffer_hours": 6,
+      "back_ok_note": "缓冲 ≥6 小时较从容；打车往返并提前回站安检；过夜更稳"
+    },
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "湟源丹噶尔古城（半日向）",
+      "dist_text": "湟源方向，距西宁约 50km 级",
+      "dist_km": 50,
+      "suggest_hours": 4,
+      "suggest_text": "半日往返，含交通约 4–5 小时",
+      "min_buffer_hours": 6,
+      "back_ok_note": "仅过夜或 ≥6～8 小时窗口考虑；多数换乘不推荐硬排"
     }
   ]
 }
