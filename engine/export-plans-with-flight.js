@@ -25,7 +25,18 @@ function timeDelta(dd) {
 
 function humanWhy(slot, plan, direct) {
   const hubs = (plan.transfers || []).map((t) => t.hub_city || t.city).filter(Boolean);
-  const hasFlight = (plan.legs || []).some((l) => l.mode === 'flight');
+  const legs = plan.legs || [];
+  const hasFlight = legs.some((l) => l.mode === 'flight');
+  const hardseat = legs.some(
+    (l) =>
+      l.comfort === 'hardseat' ||
+      (String(l.seat_hint || '').includes('硬座') && !String(l.seat_hint || '').includes('硬卧'))
+  );
+  const overnight = legs.some(
+    (l) =>
+      l.mode === 'train' &&
+      (/过夜|动卧|普速/.test(String(l.service_ref || '')) || Number(l.duration_min) >= 600)
+  );
   const play =
     (plan.play && plan.play[0]) ||
     (plan.transfers || []).map((t) => t.transfer_play).find(Boolean);
@@ -34,41 +45,48 @@ function humanWhy(slot, plan, direct) {
   const vsParts = [moneyDelta(pd), timeDelta(dd)].filter(Boolean);
   const vs = vsParts.length ? vsParts.join('，') : '和直达比，还得看当天票价';
 
-  const dest = (plan.legs && plan.legs.length)
-    ? plan.legs[plan.legs.length - 1].to_city
-    : '';
+  const from = legs.length ? legs[0].from_city : '';
+  const dest = legs.length ? legs[legs.length - 1].to_city : '';
   let why;
   if (hubs.length === 0) {
     if (hasFlight) {
-      why = dest
-        ? `直飞${dest}，一趟飞机到，少折腾。参考价以航司/OTA为准。`
-        : '直飞，一趟飞机到，少折腾。参考价以航司/OTA为准。';
+      why =
+        from && dest
+          ? `${from}直飞${dest}，一趟飞机到，少折腾。参考价以航司/OTA为准。`
+          : '直飞，一趟飞机到，少折腾。参考价以航司/OTA为准。';
+    } else if (hardseat && slot === 'cheap') {
+      why = '直达硬座最便宜，但要坐四十来个小时。当「最省钱」对照看就行。';
     } else if (slot === 'cheap') {
       why = '直达方案，票价通常好算，适合想少折腾的人。';
     } else {
-      why = '直达走法，少换乘。';
+      why = '直达走法，少换乘。当「对照」看就行。';
     }
   } else if (hasFlight) {
     // 产品口径：点明「高铁到枢纽再飞」
-    why = `先高铁到${hubs.join('、')}，再飞${dest || '目的地'}。比全程火车贵，但通常能少耗大半天到一天。`;
+    why =
+      dest === '拉萨'
+        ? `先高铁到${hubs.join('、')}，再飞${dest}。比直达硬座贵一截，但能少耗将近一天半。`
+        : `先高铁到${hubs.join('、')}，再飞${dest || '目的地'}。比全程火车贵，但通常能少耗大半天到一天。`;
   } else if (slot === 'fast') {
     why = `经 ${hubs.join('、')} 的高铁组合，门到门更短。`;
+  } else if (hubs.indexOf('西宁') >= 0) {
+    why = '经西宁拆两段火车。比直达硬座贵一点、也多几个小时，但换乘够长能顺路逛逛。';
+  } else if (overnight && hubs.indexOf('武汉') >= 0 && (slot === 'cheap' || slot === 'balanced')) {
+    why =
+      slot === 'cheap'
+        ? '先高铁到武汉，再坐过夜火车去成都。参考价能省几十块，但要多花大半天；换乘够长能顺路逛逛。'
+        : '经武汉拆段。综合看价格和可玩窗口；换乘够长能顺路逛逛。';
   } else if (play) {
     why = `经 ${hubs.join('、')} 拆段。多一趟换乘，窗口够的话能顺路逛逛。`;
   } else {
     why = `经 ${hubs.join('、')} 拆段。综合看价格和时长。`;
   }
 
-  let detail = why;
-  if (!hasFlight || hubs.length) {
-    // 直飞 why 已含参考价提示；其余补 vs + 免责
-    if (!(hasFlight && hubs.length === 0)) {
-      detail = `${why} ${vs}。价格、时刻都是参考，以购票平台为准。`;
-    } else {
-      detail = `${why} ${vs}。`;
-    }
-  } else {
+  let detail;
+  if (hasFlight && hubs.length === 0) {
     detail = `${why} ${vs}。`;
+  } else {
+    detail = `${why} ${vs}。价格、时刻都是参考，以购票平台为准。`;
   }
   if (play) {
     detail += ` ${play.hub_city || hubs[0] || ''}空窗够长，下面写了怎么玩；不够长不会硬推景点。`;

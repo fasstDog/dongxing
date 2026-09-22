@@ -4,10 +4,9 @@
       "from_city": "上海",
       "to_city": "成都"
     },
-    "note": "由 pipeline 程序生成；无实时余票；为什么文案为口语模板",
+    "note": "pipeline + train/flight mock；最快含空铁/直飞；无实时余票",
     "legs_source": "legs-shanghai-chengdu.json",
-    "pois_source": "hub-pois.json",
-    "api": "docs/api-plans-contract.md"
+    "pois_source": "hub-pois.json"
   },
   "scenarios": {
     "auto": {
@@ -35,8 +34,9 @@
           "data_source": "mock",
           "as_of": "2026-09-22T19:40:00+08:00",
           "disclaimer": "价格、时刻均为参考，以购票平台为准",
-          "generated_by": "engine/pipeline.js + human why templates",
-          "no_realtime_inventory": true
+          "generated_by": "engine/export-plans-with-flight.js",
+          "no_realtime_inventory": true,
+          "adapters": "train.mock+flight.mock"
         },
         "direct_baseline": {
           "price_ref_cny": 657,
@@ -50,7 +50,7 @@
             "成都"
           ],
           "hubs": [
-            null
+            "武汉"
           ],
           "note": "系统选枢纽：武汉"
         },
@@ -67,24 +67,8 @@
             "transfers": 1,
             "route_one_line": "上海 → 武汉 → 成都",
             "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
-            "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
-            "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
-            "why_facts": {
-              "hubs": [
-                "武汉"
-              ],
-              "user_via": false,
-              "price_ref_cny": 614,
-              "direct_price_ref_cny": 657,
-              "price_delta_cny": -43,
-              "duration_min": 1500,
-              "direct_duration_min": 790,
-              "duration_delta_min": 710,
-              "transfers": 1,
-              "comfort_score": null,
-              "playable": true,
-              "notes": []
-            },
+            "why": "先高铁到武汉，再坐过夜火车去成都。参考价能省几十块，但要多花大半天；换乘够长能顺路逛逛。",
+            "why_detail": "先高铁到武汉，再坐过夜火车去成都。参考价能省几十块，但要多花大半天；换乘够长能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
             "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
             "path_note": "系统选枢纽：武汉",
             "timeline": [
@@ -136,25 +120,25 @@
               {
                 "hub_city": "武汉",
                 "name": "黄鹤楼 / 户部巷一带",
-                "dist_text": "武昌老城，距武汉站约 13–16km",
-                "suggest_text": "建议 2–3 小时登楼 + 用餐",
-                "ok": "缓冲 ≥6 小时再考虑；节假日客流与返站交通需加余量",
+                "dist_text": "武昌老城，距武汉站大概 13–16 公里",
+                "suggest_text": "登楼 + 吃个饭，大概 2–3 小时",
+                "ok": "空出 6 小时以上比较从容；节假日人多，早点回站",
                 "min_buffer_hours": 6
               },
               {
                 "hub_city": "武汉",
                 "name": "东湖听涛景区",
-                "dist_text": "武昌东湖，距武汉站约 7–10km",
-                "suggest_text": "建议 2–3 小时湖畔散步",
-                "ok": "缓冲 ≥5 小时可短逛；湖区较大，按固定返站点倒推",
+                "dist_text": "武昌东湖，距武汉站大概 7–10 公里",
+                "suggest_text": "湖边走走，大概 2–3 小时",
+                "ok": "空出 5 小时以上能短逛；湖区大，按回站时间倒推别超时",
                 "min_buffer_hours": 5
               },
               {
                 "hub_city": "武汉",
                 "name": "湖北省博物馆",
-                "dist_text": "武昌东湖路，距武汉站约 8–11km",
-                "suggest_text": "建议 2–3 小时参观",
-                "ok": "缓冲 ≥5 小时再考虑；先确认开放与预约，预留返站接驳",
+                "dist_text": "武昌东湖路，距武汉站大概 8–11 公里",
+                "suggest_text": "参观大概 2–3 小时",
+                "ok": "空出 5 小时以上再考虑；先看开放和预约，留足回站时间",
                 "min_buffer_hours": 5
               }
             ],
@@ -186,23 +170,7 @@
             "route_one_line": "上海 → 成都",
             "vs_direct": "参考价大概贵 123 块，能少耗大约 10 小时",
             "why": "上海直飞成都，一趟飞机到，少折腾。参考价以航司/OTA为准。",
-            "why_detail": "直达走法，少换乘。 参考价大概贵 123 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。",
-            "why_facts": {
-              "hubs": [],
-              "user_via": false,
-              "price_ref_cny": 780,
-              "direct_price_ref_cny": 657,
-              "price_delta_cny": 123,
-              "duration_min": 190,
-              "direct_duration_min": 790,
-              "duration_delta_min": -600,
-              "transfers": 0,
-              "comfort_score": null,
-              "playable": false,
-              "notes": [
-                "空铁混搭"
-              ]
-            },
+            "why_detail": "上海直飞成都，一趟飞机到，少折腾。参考价以航司/OTA为准。 参考价大概贵 123 块，能少耗大约 10 小时。",
             "play_hint": null,
             "path_note": "直达",
             "timeline": [
@@ -246,24 +214,8 @@
             "transfers": 1,
             "route_one_line": "上海 → 武汉 → 成都",
             "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
-            "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
-            "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
-            "why_facts": {
-              "hubs": [
-                "武汉"
-              ],
-              "user_via": false,
-              "price_ref_cny": 614,
-              "direct_price_ref_cny": 657,
-              "price_delta_cny": -43,
-              "duration_min": 1500,
-              "direct_duration_min": 790,
-              "duration_delta_min": 710,
-              "transfers": 1,
-              "comfort_score": null,
-              "playable": true,
-              "notes": []
-            },
+            "why": "经武汉拆段。综合看价格和可玩窗口；换乘够长能顺路逛逛。",
+            "why_detail": "经武汉拆段。综合看价格和可玩窗口；换乘够长能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
             "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
             "path_note": "系统选枢纽：武汉",
             "timeline": [
@@ -418,8 +370,9 @@
           "data_source": "mock",
           "as_of": "2026-09-22T19:40:00+08:00",
           "disclaimer": "价格、时刻均为参考，以购票平台为准",
-          "generated_by": "engine/pipeline.js + human why templates",
-          "no_realtime_inventory": true
+          "generated_by": "engine/export-plans-with-flight.js",
+          "no_realtime_inventory": true,
+          "adapters": "train.mock+flight.mock"
         },
         "direct_baseline": {
           "price_ref_cny": 614,
@@ -433,13 +386,13 @@
             "成都"
           ],
           "hubs": [
-            null
+            "武汉"
           ],
           "note": "因你指定经 武汉"
         },
         "main": [
           {
-            "id": "sha-ctu-cheap",
+            "id": "sha-ctu-via-cheap",
             "type": "cheap",
             "type_label": "最省钱",
             "price_ref_cny": 614,
@@ -450,24 +403,8 @@
             "transfers": 1,
             "route_one_line": "上海 → 武汉 → 成都",
             "vs_direct": "参考价差不多，时长差不多",
-            "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
-            "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
-            "why_facts": {
-              "hubs": [
-                "武汉"
-              ],
-              "user_via": false,
-              "price_ref_cny": 614,
-              "direct_price_ref_cny": 614,
-              "price_delta_cny": 0,
-              "duration_min": 1500,
-              "direct_duration_min": 1500,
-              "duration_delta_min": 0,
-              "transfers": 1,
-              "comfort_score": null,
-              "playable": true,
-              "notes": []
-            },
+            "why": "按你指定经武汉：高铁到武汉，再坐过夜火车去成都。换乘够长还能顺路逛逛。",
+            "why_detail": "按你指定经武汉：高铁到武汉，再坐过夜火车去成都。换乘够长还能顺路逛逛。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
             "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
             "path_note": "因你指定经 武汉",
             "timeline": [
@@ -519,25 +456,25 @@
               {
                 "hub_city": "武汉",
                 "name": "黄鹤楼 / 户部巷一带",
-                "dist_text": "武昌老城，距武汉站约 13–16km",
-                "suggest_text": "建议 2–3 小时登楼 + 用餐",
-                "ok": "缓冲 ≥6 小时再考虑；节假日客流与返站交通需加余量",
+                "dist_text": "武昌老城，距武汉站大概 13–16 公里",
+                "suggest_text": "登楼 + 吃个饭，大概 2–3 小时",
+                "ok": "空出 6 小时以上比较从容；节假日人多，早点回站",
                 "min_buffer_hours": 6
               },
               {
                 "hub_city": "武汉",
                 "name": "东湖听涛景区",
-                "dist_text": "武昌东湖，距武汉站约 7–10km",
-                "suggest_text": "建议 2–3 小时湖畔散步",
-                "ok": "缓冲 ≥5 小时可短逛；湖区较大，按固定返站点倒推",
+                "dist_text": "武昌东湖，距武汉站大概 7–10 公里",
+                "suggest_text": "湖边走走，大概 2–3 小时",
+                "ok": "空出 5 小时以上能短逛；湖区大，按回站时间倒推别超时",
                 "min_buffer_hours": 5
               },
               {
                 "hub_city": "武汉",
                 "name": "湖北省博物馆",
-                "dist_text": "武昌东湖路，距武汉站约 8–11km",
-                "suggest_text": "建议 2–3 小时参观",
-                "ok": "缓冲 ≥5 小时再考虑；先确认开放与预约，预留返站接驳",
+                "dist_text": "武昌东湖路，距武汉站大概 8–11 公里",
+                "suggest_text": "参观大概 2–3 小时",
+                "ok": "空出 5 小时以上再考虑；先看开放和预约，留足回站时间",
                 "min_buffer_hours": 5
               }
             ],
@@ -557,7 +494,7 @@
             ]
           },
           {
-            "id": "sha-ctu-fast",
+            "id": "sha-ctu-via-fast",
             "type": "fast",
             "type_label": "最快",
             "price_ref_cny": 713,
@@ -568,24 +505,8 @@
             "transfers": 1,
             "route_one_line": "上海 → 武汉 → 成都",
             "vs_direct": "参考价大概贵 99 块，能少耗大约 10 小时",
-            "why": "上海直飞成都，一趟飞机到，少折腾。参考价以航司/OTA为准。",
-            "why_detail": "经 武汉 的高铁组合，门到门更短。 参考价大概贵 99 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。 换乘以接驳为主，窗口不够长不会硬推景点。",
-            "why_facts": {
-              "hubs": [
-                "武汉"
-              ],
-              "user_via": false,
-              "price_ref_cny": 713,
-              "direct_price_ref_cny": 614,
-              "price_delta_cny": 99,
-              "duration_min": 890,
-              "direct_duration_min": 1500,
-              "duration_delta_min": -610,
-              "transfers": 1,
-              "comfort_score": null,
-              "playable": false,
-              "notes": []
-            },
+            "why": "仍按你指定的武汉：两段高铁拼起来。比直达贵一点，但能少耗大约 10 小时。",
+            "why_detail": "仍按你指定的武汉：两段高铁拼起来。比直达贵一点，但能少耗大约 10 小时。 参考价大概贵 99 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。 换乘以接驳为主，窗口不够长不会硬推景点。",
             "play_hint": null,
             "path_note": "因你指定经 武汉",
             "timeline": [
@@ -650,7 +571,7 @@
             ]
           },
           {
-            "id": "sha-ctu-balanced",
+            "id": "sha-ctu-via-balanced",
             "type": "balanced",
             "type_label": "最综合",
             "price_ref_cny": 614,
@@ -661,24 +582,8 @@
             "transfers": 1,
             "route_one_line": "上海 → 武汉 → 成都",
             "vs_direct": "参考价差不多，时长差不多",
-            "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
-            "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
-            "why_facts": {
-              "hubs": [
-                "武汉"
-              ],
-              "user_via": false,
-              "price_ref_cny": 614,
-              "direct_price_ref_cny": 614,
-              "price_delta_cny": 0,
-              "duration_min": 1500,
-              "direct_duration_min": 1500,
-              "duration_delta_min": 0,
-              "transfers": 1,
-              "comfort_score": null,
-              "playable": true,
-              "notes": []
-            },
+            "why": "按你指定经武汉，两段高铁比较稳：主要看换乘怎么排，不硬推景点。",
+            "why_detail": "按你指定经武汉，两段高铁比较稳：主要看换乘怎么排，不硬推景点。 参考价大概贵 99 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。 换乘以接驳为主，窗口不够长不会硬推景点。",
             "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
             "path_note": "因你指定经 武汉",
             "timeline": [
@@ -796,8 +701,9 @@
       "data_source": "mock",
       "as_of": "2026-09-22T19:40:00+08:00",
       "disclaimer": "价格、时刻均为参考，以购票平台为准",
-      "generated_by": "engine/pipeline.js + human why templates",
-      "no_realtime_inventory": true
+      "generated_by": "engine/export-plans-with-flight.js",
+      "no_realtime_inventory": true,
+      "adapters": "train.mock+flight.mock"
     },
     "direct_baseline": {
       "price_ref_cny": 657,
@@ -811,7 +717,7 @@
         "成都"
       ],
       "hubs": [
-        null
+        "武汉"
       ],
       "note": "系统选枢纽：武汉"
     },
@@ -828,24 +734,8 @@
         "transfers": 1,
         "route_one_line": "上海 → 武汉 → 成都",
         "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
-        "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
-        "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
-        "why_facts": {
-          "hubs": [
-            "武汉"
-          ],
-          "user_via": false,
-          "price_ref_cny": 614,
-          "direct_price_ref_cny": 657,
-          "price_delta_cny": -43,
-          "duration_min": 1500,
-          "direct_duration_min": 790,
-          "duration_delta_min": 710,
-          "transfers": 1,
-          "comfort_score": null,
-          "playable": true,
-          "notes": []
-        },
+        "why": "先高铁到武汉，再坐过夜火车去成都。参考价能省几十块，但要多花大半天；换乘够长能顺路逛逛。",
+        "why_detail": "先高铁到武汉，再坐过夜火车去成都。参考价能省几十块，但要多花大半天；换乘够长能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
         "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
         "path_note": "系统选枢纽：武汉",
         "timeline": [
@@ -897,25 +787,25 @@
           {
             "hub_city": "武汉",
             "name": "黄鹤楼 / 户部巷一带",
-            "dist_text": "武昌老城，距武汉站约 13–16km",
-            "suggest_text": "建议 2–3 小时登楼 + 用餐",
-            "ok": "缓冲 ≥6 小时再考虑；节假日客流与返站交通需加余量",
+            "dist_text": "武昌老城，距武汉站大概 13–16 公里",
+            "suggest_text": "登楼 + 吃个饭，大概 2–3 小时",
+            "ok": "空出 6 小时以上比较从容；节假日人多，早点回站",
             "min_buffer_hours": 6
           },
           {
             "hub_city": "武汉",
             "name": "东湖听涛景区",
-            "dist_text": "武昌东湖，距武汉站约 7–10km",
-            "suggest_text": "建议 2–3 小时湖畔散步",
-            "ok": "缓冲 ≥5 小时可短逛；湖区较大，按固定返站点倒推",
+            "dist_text": "武昌东湖，距武汉站大概 7–10 公里",
+            "suggest_text": "湖边走走，大概 2–3 小时",
+            "ok": "空出 5 小时以上能短逛；湖区大，按回站时间倒推别超时",
             "min_buffer_hours": 5
           },
           {
             "hub_city": "武汉",
             "name": "湖北省博物馆",
-            "dist_text": "武昌东湖路，距武汉站约 8–11km",
-            "suggest_text": "建议 2–3 小时参观",
-            "ok": "缓冲 ≥5 小时再考虑；先确认开放与预约，预留返站接驳",
+            "dist_text": "武昌东湖路，距武汉站大概 8–11 公里",
+            "suggest_text": "参观大概 2–3 小时",
+            "ok": "空出 5 小时以上再考虑；先看开放和预约，留足回站时间",
             "min_buffer_hours": 5
           }
         ],
@@ -947,23 +837,7 @@
         "route_one_line": "上海 → 成都",
         "vs_direct": "参考价大概贵 123 块，能少耗大约 10 小时",
         "why": "上海直飞成都，一趟飞机到，少折腾。参考价以航司/OTA为准。",
-        "why_detail": "直达走法，少换乘。 参考价大概贵 123 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。",
-        "why_facts": {
-          "hubs": [],
-          "user_via": false,
-          "price_ref_cny": 780,
-          "direct_price_ref_cny": 657,
-          "price_delta_cny": 123,
-          "duration_min": 190,
-          "direct_duration_min": 790,
-          "duration_delta_min": -600,
-          "transfers": 0,
-          "comfort_score": null,
-          "playable": false,
-          "notes": [
-            "空铁混搭"
-          ]
-        },
+        "why_detail": "上海直飞成都，一趟飞机到，少折腾。参考价以航司/OTA为准。 参考价大概贵 123 块，能少耗大约 10 小时。",
         "play_hint": null,
         "path_note": "直达",
         "timeline": [
@@ -1007,24 +881,8 @@
         "transfers": 1,
         "route_one_line": "上海 → 武汉 → 成都",
         "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
-        "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
-        "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
-        "why_facts": {
-          "hubs": [
-            "武汉"
-          ],
-          "user_via": false,
-          "price_ref_cny": 614,
-          "direct_price_ref_cny": 657,
-          "price_delta_cny": -43,
-          "duration_min": 1500,
-          "direct_duration_min": 790,
-          "duration_delta_min": 710,
-          "transfers": 1,
-          "comfort_score": null,
-          "playable": true,
-          "notes": []
-        },
+        "why": "经武汉拆段。综合看价格和可玩窗口；换乘够长能顺路逛逛。",
+        "why_detail": "经武汉拆段。综合看价格和可玩窗口；换乘够长能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
         "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
         "path_note": "系统选枢纽：武汉",
         "timeline": [
