@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xiexiu.local/schemas/play-poi.schema.json",
+  "title": "PlayPoi",
+  "description": "头部枢纽换乘「怎么玩」POI。仅当 buffer_hours >= min_buffer_hours 时由引擎挂载。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "hub_city",
+    "anchor_station",
+    "name",
+    "dist_text",
+    "suggest_hours",
+    "suggest_text",
+    "min_buffer_hours",
+    "back_ok_note"
+  ],
+  "properties": {
+    "hub_city": { "type": "string", "minLength": 1 },
+    "anchor_station": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "dist_text": { "type": "string" },
+    "dist_km": { "type": ["number", "null"], "minimum": 0 },
+    "suggest_hours": { "type": "number", "exclusiveMinimum": 0 },
+    "suggest_text": { "type": "string" },
+    "min_buffer_hours": {
+      "type": "number",
+      "minimum": 0,
+      "description": "同站休息约≥2；同城景点≥3；半日≥6"
+    },
+    "back_ok_note": { "type": "string" }
+  }
+}
