@@ -27,18 +27,21 @@
    ```
 3. 建议手机模式 / 窄窗；宽屏有手机外框。
 
-结果页优先读 `data/plans-*.json`（由引擎生成）。空态 / 加载 / 失败文案见 [`docs/空态与文案规范.md`](docs/空态与文案规范.md)。
+查询页可切换样例 OD：**徐州→拉萨** / **上海→成都**。结果页读对应 `data/plans-*.json`（或 `data/mock/plans-*.json`）。空态 / 加载 / 失败见 [`docs/空态与文案规范.md`](docs/空态与文案规范.md)。
 
 ## 规则引擎（mock）
 
-程序算方案：取腿 → MCT → 打分 → 导出前端 JSON。**不含实时余票**；模型禁止编车次/票价。详见 [`engine/README.md`](engine/README.md)。
+程序算方案：取腿 → MCT → 打分 → 导出前端 JSON。以 **`engine/pipeline.js`** 为准。**不含实时余票**；模型禁止编车次/票价。详见 [`engine/README.md`](engine/README.md)。
 
 ```bash
-# Python：枚举 + 打分，重写前端 / API 形 JSON
+# 徐州→拉萨：Python 枚举 + 打分
 python3 engine/search.py
 
-# Node：pipeline 冒烟（徐州→拉萨，含 via 西宁）
+# 徐州→拉萨：Node pipeline 冒烟（含 via 西宁）
 node engine/search-pipeline-demo.js
+
+# 上海→成都：导出 plans（含 user_via_wuhan）
+node engine/export-shanghai-chengdu.js
 
 # 火车 mock 适配器单测
 node engine/adapters/train.mock.js 徐州 西宁 2026-10-01
@@ -46,15 +49,19 @@ node engine/adapters/train.mock.js 徐州 西宁 2026-10-01
 
 | 产出 | 用途 |
 |------|------|
-| `data/plans-xuzhou-lhasa.json` | 前端 `mock-plan-response.v1` |
-| `data/mock/plans-xuzhou-lhasa.json` | 引擎 API 形（[`docs/api-plans-contract.md`](docs/api-plans-contract.md)） |
+| `data/plans-xuzhou-lhasa.json` | 前端 · 徐拉 |
+| `data/plans-shanghai-chengdu.json` | 前端 · 沪蓉 |
+| `data/mock/plans-*.json` | 引擎 API 形（[`docs/api-plans-contract.md`](docs/api-plans-contract.md)） |
+| `data/mock/legs-*.json` | 腿 mock（train.mock `legsPath`） |
 | `data/hub-pois.json` | 12 城「怎么玩」POI |
+
+重跑导出前请确认 `render_why` 口语模板，避免盖掉产品人话。
 
 ## 屏幕地图
 
 | 页面 | 说明 |
 |------|------|
-| **查询页** | 出发/目的地、日期灵活、有序途经最多 3。「开始邪修」。默认徐州 → 拉萨。 |
+| **查询页** | 出发/目的地、日期灵活、有序途经最多 3；可切徐拉 / 沪蓉样例。「开始邪修」。 |
 | **结果页** | 短 Loading → 三主卡 + 更多；途经时 NoticeBar + Tabs。含无方案 / 失败态；查询页底可开演示开关。 |
 | **方案详情** | 怎么去（Steps）、为什么、怎么玩、分段去购票 → Toast。 |
 | **关于** | 说明与免责声明。 |
