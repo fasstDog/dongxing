@@ -1,6 +1,6 @@
 # 合规数据源选型与缓存降级（草稿）
 
-> 状态：草稿，供负责人 / 规则引擎评审  
+> 状态：§8 已拍板；适配器骨架见 `engine/adapters/train.mock.js`  
 > 约束（拍板）：合规数据源；**密钥不进仓**；**禁止违规爬取**。  
 > MVP：**火车优先**，航班第二（空铁混搭）。引擎只消费 `Leg` / `TransferPlay`，不臆造车次票价。
 
@@ -101,10 +101,10 @@
 ## 7. MVP 落地顺序（建议）
 
 1. ~~字段定稿 + mock 腿 / TransferPlay~~（已完成）  
-2. **本文评审通过** → 选定火车供应商（或确认阶段性纯 mock）  
-3. 实现 `TrainLegProvider` 接口：`search(od, date) -> Leg[]`，内置缓存与降级  
-4. 接 1～2 条热门线真源对照人工答案（含徐州→拉萨）  
-5. 再启 `FlightLegProvider`（可更晚）
+2. ~~§8 拍板：纯 mock 可演示；短名单私有；单机内存缓存~~（已完成）  
+3. ~~`train.mock` 适配器骨架~~（`engine/adapters/train.mock.js`）  
+4. 引擎枚举改为优先 `require('../adapters/train.mock').search`（规则引擎）  
+5. 后续：`train.<vendor>.js` 合规源；再启 `flight.*`
 
 ---
 
