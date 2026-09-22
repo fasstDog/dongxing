@@ -34,13 +34,23 @@ function humanWhy(slot, plan, direct) {
   const vsParts = [moneyDelta(pd), timeDelta(dd)].filter(Boolean);
   const vs = vsParts.length ? vsParts.join('，') : '和直达比，还得看当天票价';
 
+  const dest = (plan.legs && plan.legs.length)
+    ? plan.legs[plan.legs.length - 1].to_city
+    : '';
   let why;
   if (hubs.length === 0) {
-    if (hasFlight) why = '飞机直达，门到门通常最快，票价浮动大。';
-    else if (slot === 'cheap') why = '直达方案，票价通常好算，适合想少折腾的人。';
-    else why = '直达走法，少换乘。';
+    if (hasFlight) {
+      why = dest
+        ? `直飞${dest}，一趟飞机到，少折腾。参考价以航司/OTA为准。`
+        : '直飞，一趟飞机到，少折腾。参考价以航司/OTA为准。';
+    } else if (slot === 'cheap') {
+      why = '直达方案，票价通常好算，适合想少折腾的人。';
+    } else {
+      why = '直达走法，少换乘。';
+    }
   } else if (hasFlight) {
-    why = `经 ${hubs.join('、')} 空铁混搭。比全程火车贵，但往往能少耗不少时间。`;
+    // 产品口径：点明「高铁到枢纽再飞」
+    why = `先高铁到${hubs.join('、')}，再飞${dest || '目的地'}。比全程火车贵，但通常能少耗大半天到一天。`;
   } else if (slot === 'fast') {
     why = `经 ${hubs.join('、')} 的高铁组合，门到门更短。`;
   } else if (play) {
@@ -49,10 +59,20 @@ function humanWhy(slot, plan, direct) {
     why = `经 ${hubs.join('、')} 拆段。综合看价格和时长。`;
   }
 
-  let detail = `${why} ${vs}。价格、时刻都是参考，以购票平台为准。`;
+  let detail = why;
+  if (!hasFlight || hubs.length) {
+    // 直飞 why 已含参考价提示；其余补 vs + 免责
+    if (!(hasFlight && hubs.length === 0)) {
+      detail = `${why} ${vs}。价格、时刻都是参考，以购票平台为准。`;
+    } else {
+      detail = `${why} ${vs}。`;
+    }
+  } else {
+    detail = `${why} ${vs}。`;
+  }
   if (play) {
     detail += ` ${play.hub_city || hubs[0] || ''}空窗够长，下面写了怎么玩；不够长不会硬推景点。`;
-  } else if (hubs.length) {
+  } else if (hubs.length && !hasFlight) {
     detail += ' 换乘以接驳为主，窗口不够长不会硬推景点。';
   }
   return { why, why_detail: detail, vs_direct: vs };
