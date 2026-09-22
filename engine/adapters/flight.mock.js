@@ -259,7 +259,7 @@ module.exports = {
   search,
   clearCache,
   configure,
-  DEFAULT_LEGS_PATHS,
+  DEFAULT_LEGS_DIR,
   DEFAULT_TTL_MS,
 };
 
