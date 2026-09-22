@@ -38,4 +38,5 @@ The lower-level mock CLI remains available:
 
 ```bash
 node engine/adapters/train.mock.js 徐州 西宁 2026-10-01
+node engine/adapters/train.mock.js 西宁 拉萨 --after 2026-10-02T14:40:00+08:00
 ```
