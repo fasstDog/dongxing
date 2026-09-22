@@ -1,0 +1,1050 @@
+{
+  "meta": {
+    "od": {
+      "from_city": "徐州",
+      "to_city": "拉萨"
+    },
+    "note": "由 engine/search.py 程序生成；无实时余票；价格时刻为参考",
+    "legs_source": "legs-xuzhou-lhasa.json",
+    "pois_source": "hub-pois.json",
+    "api": "docs/api-plans-contract.md"
+  },
+  "scenarios": {
+    "auto": {
+      "request": {
+        "from_city": "徐州",
+        "to_city": "拉萨",
+        "date_flexible": true,
+        "date": null,
+        "vias": [],
+        "path_mode": "auto"
+      },
+      "response": {
+        "ok": true,
+        "error": null,
+        "meta": {
+          "request": {
+            "from_city": "徐州",
+            "to_city": "拉萨",
+            "date_flexible": true,
+            "date": null,
+            "vias": [],
+            "path_mode": "auto"
+          },
+          "path_mode": "auto",
+          "data_source": "mock",
+          "as_of": "2026-09-22T19:20:00+08:00",
+          "disclaimer": "价格、时刻均为参考，以购票平台为准",
+          "generated_by": "engine/search.py",
+          "no_realtime_inventory": true
+        },
+        "direct_baseline": {
+          "price_ref_cny": 397,
+          "duration_min": 2520,
+          "summary": "硬座便宜；硬卧难抢",
+          "leg_id": "leg-xz-lxa-direct"
+        },
+        "path": {
+          "cities": [
+            "徐州",
+            "西宁",
+            "拉萨"
+          ],
+          "hubs": [
+            "西宁"
+          ],
+          "note": "系统选枢纽：西宁"
+        },
+        "main": [
+          {
+            "id": "auto-cheap",
+            "type": "cheap",
+            "type_label": "最省钱",
+            "price_ref_cny": 397,
+            "price_display": "¥397–760",
+            "price_note": "参考价",
+            "duration_min": 2520,
+            "duration_display": "约 42–46 小时",
+            "transfers": 0,
+            "route_one_line": "徐州 → 拉萨（火车 · 硬座）",
+            "vs_direct": "参考价比直达接近约 0 元；时长接近约 0 小时",
+            "why": "直达对照方案：徐州 → 拉萨（火车 · 硬座）。总价偏低但久坐，仅作「最省钱」候选。",
+            "why_detail": "直达对照方案：徐州 → 拉萨（火车 · 硬座）。总价偏低但久坐，仅作「最省钱」候选。 参考价比直达接近约 0 元；时长接近约 0 小时。价格、时刻均为参考，以购票平台为准。",
+            "why_facts": {
+              "hubs": [],
+              "user_via": false,
+              "price_ref_cny": 397,
+              "direct_price_ref_cny": 397,
+              "price_delta_cny": 0,
+              "duration_min": 2520,
+              "direct_duration_min": 2520,
+              "duration_delta_min": 0,
+              "transfers": 0,
+              "comfort_score": 0.15,
+              "playable": false,
+              "notes": []
+            },
+            "play_hint": null,
+            "path_note": "直达对照",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车 · 硬座",
+                "from_station": "徐州站",
+                "to_station": "拉萨站",
+                "dep_at": "2026-10-01T12:00:00+08:00",
+                "arr_at": "2026-10-03T06:00:00+08:00",
+                "duration_min": 2520,
+                "duration_display": "约 42–46 小时",
+                "seat_hint": "硬座便宜；硬卧难抢",
+                "price_ref_cny": 397,
+                "price_display": "约 ¥397–760",
+                "service_ref": "Z 字头过路车（参考）",
+                "leg_id": "leg-xz-lxa-direct",
+                "comfort": "hardseat"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "徐州 → 拉萨",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥397–760",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "auto-fast",
+            "type": "fast",
+            "type_label": "最快",
+            "price_ref_cny": 1130,
+            "price_display": "¥950–1370",
+            "price_note": "参考价",
+            "duration_min": 740,
+            "duration_display": "约 11–13 小时",
+            "transfers": 1,
+            "route_one_line": "徐州→西安（高铁）；西安→拉萨（飞机）",
+            "vs_direct": "参考价比直达更贵约 733 元；时长更短约 29 小时",
+            "why": "系统选枢纽 西安 拆段：徐州→西安（高铁）；西安→拉萨（飞机）。综合参考价、时长与舒适度。",
+            "why_detail": "系统选枢纽 西安 拆段：徐州→西安（高铁）；西安→拉萨（飞机）。综合参考价、时长与舒适度。 参考价比直达更贵约 733 元；时长更短约 29 小时。价格、时刻均为参考，以购票平台为准。 换乘缓冲达标，已附「怎么玩」建议；不够长则不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "西安"
+              ],
+              "user_via": false,
+              "price_ref_cny": 1130,
+              "direct_price_ref_cny": 397,
+              "price_delta_cny": 733,
+              "duration_min": 740,
+              "direct_duration_min": 2520,
+              "duration_delta_min": -1780,
+              "transfers": 1,
+              "comfort_score": 0.5,
+              "playable": true,
+              "notes": [
+                "空铁混搭"
+              ]
+            },
+            "play_hint": "西安可玩 · 大雁塔 / 大唐不夜城一带等",
+            "path_note": "系统选枢纽：西安",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "徐州东站",
+                "to_station": "西安北站",
+                "dep_at": "2026-10-01T07:30:00+08:00",
+                "arr_at": "2026-10-01T12:10:00+08:00",
+                "duration_min": 280,
+                "duration_display": "约 3–5 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 480,
+                "price_display": "约 ¥450–520",
+                "service_ref": "G 字头（参考）",
+                "leg_id": "leg-xz-xian-g",
+                "comfort": "second_class"
+              },
+              {
+                "kind": "xfer",
+                "city": "西安",
+                "xfer_kind": "same_city",
+                "xfer_kind_label": "同城换乘",
+                "buffer_min": 270,
+                "buffer_display": "约 4 小时",
+                "tip": "同城接驳：预留交通与安检/值机时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "flight",
+                "mode_label": "飞机",
+                "from_station": "西安咸阳国际机场",
+                "to_station": "拉萨贡嘎机场",
+                "dep_at": "2026-10-01T16:40:00+08:00",
+                "arr_at": "2026-10-01T19:50:00+08:00",
+                "duration_min": 190,
+                "duration_display": "约 2–4 小时",
+                "seat_hint": "经济舱",
+                "price_ref_cny": 650,
+                "price_display": "约 ¥500–850",
+                "service_ref": "航司直飞（参考）",
+                "leg_id": "leg-xian-lxa-flight",
+                "comfort": "economy"
+              }
+            ],
+            "play": [
+              {
+                "hub_city": "西安",
+                "name": "大雁塔 / 大唐不夜城一带",
+                "dist_text": "市区，距西安北站约 15–20km",
+                "suggest_text": "建议 2 小时轻逛",
+                "ok": "同城缓冲 ≥3 小时可短逛；赶飞机请改接驳休息",
+                "min_buffer_hours": 3
+              }
+            ],
+            "buy_legs": [
+              {
+                "name": "徐州 → 西安",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥450–520",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "西安 → 拉萨",
+                "sub": "跳转 航司 / OTA · 约 ¥500–850",
+                "mode": "flight",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "auto-balanced",
+            "type": "balanced",
+            "type_label": "最综合",
+            "price_ref_cny": 650,
+            "price_display": "¥520–780",
+            "price_note": "参考价",
+            "duration_min": 2860,
+            "duration_display": "约 47–51 小时",
+            "transfers": 1,
+            "route_one_line": "徐州→西宁（火车）；西宁→拉萨（火车）",
+            "vs_direct": "参考价比直达更贵约 253 元；时长更长约 5 小时",
+            "why": "系统选枢纽 西宁 拆段：徐州→西宁（火车）；西宁→拉萨（火车）。综合参考价、时长与舒适度。",
+            "why_detail": "系统选枢纽 西宁 拆段：徐州→西宁（火车）；西宁→拉萨（火车）。综合参考价、时长与舒适度。 参考价比直达更贵约 253 元；时长更长约 5 小时。价格、时刻均为参考，以购票平台为准。 换乘缓冲达标，已附「怎么玩」建议；不够长则不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "西宁"
+              ],
+              "user_via": false,
+              "price_ref_cny": 650,
+              "direct_price_ref_cny": 397,
+              "price_delta_cny": 253,
+              "duration_min": 2860,
+              "direct_duration_min": 2520,
+              "duration_delta_min": 340,
+              "transfers": 1,
+              "comfort_score": 0.7,
+              "playable": true,
+              "notes": [
+                "始发进藏"
+              ]
+            },
+            "play_hint": "西宁可玩 · 塔尔寺等",
+            "path_note": "系统选枢纽：西宁",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "徐州站",
+                "to_station": "西宁站",
+                "dep_at": "2026-10-01T18:10:00+08:00",
+                "arr_at": "2026-10-02T14:40:00+08:00",
+                "duration_min": 1230,
+                "duration_display": "约 19–21 小时",
+                "seat_hint": "硬卧 / 硬座",
+                "price_ref_cny": 350,
+                "price_display": "约 ¥280–420",
+                "service_ref": "Z165 类",
+                "leg_id": "leg-xz-xnn-z-class",
+                "comfort": "hard_sleeper"
+              },
+              {
+                "kind": "xfer",
+                "city": "西宁",
+                "xfer_kind": "same_station",
+                "xfer_kind_label": "同站换乘",
+                "buffer_min": 380,
+                "buffer_display": "约 6 小时",
+                "tip": "预留安检与接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "西宁站",
+                "to_station": "拉萨站",
+                "dep_at": "2026-10-02T21:00:00+08:00",
+                "arr_at": "2026-10-03T17:50:00+08:00",
+                "duration_min": 1250,
+                "duration_display": "约 19–21 小时",
+                "seat_hint": "硬卧优先",
+                "price_ref_cny": 300,
+                "price_display": "约 ¥240–360",
+                "service_ref": "西宁始发进藏 Z6801 类",
+                "leg_id": "leg-xnn-lxa-origin",
+                "comfort": "hard_sleeper"
+              }
+            ],
+            "play": [
+              {
+                "hub_city": "西宁",
+                "name": "塔尔寺",
+                "dist_text": "湟中，距西宁城区约 25km",
+                "suggest_text": "建议游玩 2–3 小时（不含往返）",
+                "ok": "缓冲 ≥6 小时较从容；打车往返并提前回站安检；过夜更稳",
+                "min_buffer_hours": 6
+              },
+              {
+                "hub_city": "西宁",
+                "name": "湟源丹噶尔古城（半日向）",
+                "dist_text": "湟源方向，距西宁约 50km 级",
+                "suggest_text": "半日往返，含交通约 4–5 小时",
+                "ok": "仅过夜或 ≥6～8 小时窗口考虑；多数换乘不推荐硬排",
+                "min_buffer_hours": 6
+              }
+            ],
+            "buy_legs": [
+              {
+                "name": "徐州 → 西宁",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥280–420",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "西宁 → 拉萨",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥240–360",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          }
+        ],
+        "more": []
+      }
+    },
+    "user_via_xining": {
+      "request": {
+        "from_city": "徐州",
+        "to_city": "拉萨",
+        "date_flexible": true,
+        "date": null,
+        "vias": [
+          "西宁"
+        ],
+        "path_mode": "user"
+      },
+      "response": {
+        "ok": true,
+        "error": null,
+        "meta": {
+          "request": {
+            "from_city": "徐州",
+            "to_city": "拉萨",
+            "date_flexible": true,
+            "date": null,
+            "vias": [
+              "西宁"
+            ],
+            "path_mode": "user"
+          },
+          "path_mode": "user",
+          "data_source": "mock",
+          "as_of": "2026-09-22T19:20:00+08:00",
+          "disclaimer": "价格、时刻均为参考，以购票平台为准",
+          "generated_by": "engine/search.py",
+          "no_realtime_inventory": true
+        },
+        "direct_baseline": null,
+        "path": {
+          "cities": [
+            "徐州",
+            "西宁",
+            "拉萨"
+          ],
+          "hubs": [
+            "西宁"
+          ],
+          "note": "因你指定经 西宁"
+        },
+        "main": [
+          {
+            "id": "user-cheap",
+            "type": "cheap",
+            "type_label": "最省钱",
+            "price_ref_cny": 650,
+            "price_display": "¥520–780",
+            "price_note": "参考价",
+            "duration_min": 2860,
+            "duration_display": "约 47–51 小时",
+            "transfers": 1,
+            "route_one_line": "徐州→西宁（火车）；西宁→拉萨（火车）",
+            "vs_direct": "相对直达的参考对照见详情",
+            "why": "按你指定经 西宁 分段组合：徐州→西宁（火车）；西宁→拉萨（火车）。程序按参考价与时长打分，不编造车次余票。",
+            "why_detail": "按你指定经 西宁 分段组合：徐州→西宁（火车）；西宁→拉萨（火车）。程序按参考价与时长打分，不编造车次余票。 相对直达的参考对照见详情。价格、时刻均为参考，以购票平台为准。 换乘缓冲达标，已附「怎么玩」建议；不够长则不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "西宁"
+              ],
+              "user_via": true,
+              "price_ref_cny": 650,
+              "direct_price_ref_cny": null,
+              "price_delta_cny": null,
+              "duration_min": 2860,
+              "direct_duration_min": null,
+              "duration_delta_min": null,
+              "transfers": 1,
+              "comfort_score": 0.7,
+              "playable": true,
+              "notes": [
+                "始发进藏",
+                "用户指定途经"
+              ]
+            },
+            "play_hint": "西宁可玩 · 塔尔寺等",
+            "path_note": "因你指定经 西宁",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "徐州站",
+                "to_station": "西宁站",
+                "dep_at": "2026-10-01T18:10:00+08:00",
+                "arr_at": "2026-10-02T14:40:00+08:00",
+                "duration_min": 1230,
+                "duration_display": "约 19–21 小时",
+                "seat_hint": "硬卧 / 硬座",
+                "price_ref_cny": 350,
+                "price_display": "约 ¥280–420",
+                "service_ref": "Z165 类",
+                "leg_id": "leg-xz-xnn-z-class",
+                "comfort": "hard_sleeper"
+              },
+              {
+                "kind": "xfer",
+                "city": "西宁",
+                "xfer_kind": "same_station",
+                "xfer_kind_label": "同站换乘",
+                "buffer_min": 380,
+                "buffer_display": "约 6 小时",
+                "tip": "预留安检与接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "西宁站",
+                "to_station": "拉萨站",
+                "dep_at": "2026-10-02T21:00:00+08:00",
+                "arr_at": "2026-10-03T17:50:00+08:00",
+                "duration_min": 1250,
+                "duration_display": "约 19–21 小时",
+                "seat_hint": "硬卧优先",
+                "price_ref_cny": 300,
+                "price_display": "约 ¥240–360",
+                "service_ref": "西宁始发进藏 Z6801 类",
+                "leg_id": "leg-xnn-lxa-origin",
+                "comfort": "hard_sleeper"
+              }
+            ],
+            "play": [
+              {
+                "hub_city": "西宁",
+                "name": "塔尔寺",
+                "dist_text": "湟中，距西宁城区约 25km",
+                "suggest_text": "建议游玩 2–3 小时（不含往返）",
+                "ok": "缓冲 ≥6 小时较从容；打车往返并提前回站安检；过夜更稳",
+                "min_buffer_hours": 6
+              },
+              {
+                "hub_city": "西宁",
+                "name": "湟源丹噶尔古城（半日向）",
+                "dist_text": "湟源方向，距西宁约 50km 级",
+                "suggest_text": "半日往返，含交通约 4–5 小时",
+                "ok": "仅过夜或 ≥6～8 小时窗口考虑；多数换乘不推荐硬排",
+                "min_buffer_hours": 6
+              }
+            ],
+            "buy_legs": [
+              {
+                "name": "徐州 → 西宁",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥280–420",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "西宁 → 拉萨",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥240–360",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "user-fast",
+            "type": "fast",
+            "type_label": "最快",
+            "price_ref_cny": 650,
+            "price_display": "¥520–780",
+            "price_note": "参考价",
+            "duration_min": 2860,
+            "duration_display": "约 47–51 小时",
+            "transfers": 1,
+            "route_one_line": "徐州→西宁（火车）；西宁→拉萨（火车）",
+            "vs_direct": "相对直达的参考对照见详情",
+            "why": "按你指定经 西宁 分段组合：徐州→西宁（火车）；西宁→拉萨（火车）。程序按参考价与时长打分，不编造车次余票。",
+            "why_detail": "按你指定经 西宁 分段组合：徐州→西宁（火车）；西宁→拉萨（火车）。程序按参考价与时长打分，不编造车次余票。 相对直达的参考对照见详情。价格、时刻均为参考，以购票平台为准。 换乘缓冲达标，已附「怎么玩」建议；不够长则不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "西宁"
+              ],
+              "user_via": true,
+              "price_ref_cny": 650,
+              "direct_price_ref_cny": null,
+              "price_delta_cny": null,
+              "duration_min": 2860,
+              "direct_duration_min": null,
+              "duration_delta_min": null,
+              "transfers": 1,
+              "comfort_score": 0.7,
+              "playable": true,
+              "notes": [
+                "始发进藏",
+                "用户指定途经"
+              ]
+            },
+            "play_hint": "西宁可玩 · 塔尔寺等",
+            "path_note": "因你指定经 西宁",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "徐州站",
+                "to_station": "西宁站",
+                "dep_at": "2026-10-01T18:10:00+08:00",
+                "arr_at": "2026-10-02T14:40:00+08:00",
+                "duration_min": 1230,
+                "duration_display": "约 19–21 小时",
+                "seat_hint": "硬卧 / 硬座",
+                "price_ref_cny": 350,
+                "price_display": "约 ¥280–420",
+                "service_ref": "Z165 类",
+                "leg_id": "leg-xz-xnn-z-class",
+                "comfort": "hard_sleeper"
+              },
+              {
+                "kind": "xfer",
+                "city": "西宁",
+                "xfer_kind": "same_station",
+                "xfer_kind_label": "同站换乘",
+                "buffer_min": 380,
+                "buffer_display": "约 6 小时",
+                "tip": "预留安检与接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "西宁站",
+                "to_station": "拉萨站",
+                "dep_at": "2026-10-02T21:00:00+08:00",
+                "arr_at": "2026-10-03T17:50:00+08:00",
+                "duration_min": 1250,
+                "duration_display": "约 19–21 小时",
+                "seat_hint": "硬卧优先",
+                "price_ref_cny": 300,
+                "price_display": "约 ¥240–360",
+                "service_ref": "西宁始发进藏 Z6801 类",
+                "leg_id": "leg-xnn-lxa-origin",
+                "comfort": "hard_sleeper"
+              }
+            ],
+            "play": [
+              {
+                "hub_city": "西宁",
+                "name": "塔尔寺",
+                "dist_text": "湟中，距西宁城区约 25km",
+                "suggest_text": "建议游玩 2–3 小时（不含往返）",
+                "ok": "缓冲 ≥6 小时较从容；打车往返并提前回站安检；过夜更稳",
+                "min_buffer_hours": 6
+              },
+              {
+                "hub_city": "西宁",
+                "name": "湟源丹噶尔古城（半日向）",
+                "dist_text": "湟源方向，距西宁约 50km 级",
+                "suggest_text": "半日往返，含交通约 4–5 小时",
+                "ok": "仅过夜或 ≥6～8 小时窗口考虑；多数换乘不推荐硬排",
+                "min_buffer_hours": 6
+              }
+            ],
+            "buy_legs": [
+              {
+                "name": "徐州 → 西宁",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥280–420",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "西宁 → 拉萨",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥240–360",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "user-balanced",
+            "type": "balanced",
+            "type_label": "最综合",
+            "price_ref_cny": 650,
+            "price_display": "¥520–780",
+            "price_note": "参考价",
+            "duration_min": 2860,
+            "duration_display": "约 47–51 小时",
+            "transfers": 1,
+            "route_one_line": "徐州→西宁（火车）；西宁→拉萨（火车）",
+            "vs_direct": "相对直达的参考对照见详情",
+            "why": "按你指定经 西宁 分段组合：徐州→西宁（火车）；西宁→拉萨（火车）。程序按参考价与时长打分，不编造车次余票。",
+            "why_detail": "按你指定经 西宁 分段组合：徐州→西宁（火车）；西宁→拉萨（火车）。程序按参考价与时长打分，不编造车次余票。 相对直达的参考对照见详情。价格、时刻均为参考，以购票平台为准。 换乘缓冲达标，已附「怎么玩」建议；不够长则不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "西宁"
+              ],
+              "user_via": true,
+              "price_ref_cny": 650,
+              "direct_price_ref_cny": null,
+              "price_delta_cny": null,
+              "duration_min": 2860,
+              "direct_duration_min": null,
+              "duration_delta_min": null,
+              "transfers": 1,
+              "comfort_score": 0.7,
+              "playable": true,
+              "notes": [
+                "始发进藏",
+                "用户指定途经"
+              ]
+            },
+            "play_hint": "西宁可玩 · 塔尔寺等",
+            "path_note": "因你指定经 西宁",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "徐州站",
+                "to_station": "西宁站",
+                "dep_at": "2026-10-01T18:10:00+08:00",
+                "arr_at": "2026-10-02T14:40:00+08:00",
+                "duration_min": 1230,
+                "duration_display": "约 19–21 小时",
+                "seat_hint": "硬卧 / 硬座",
+                "price_ref_cny": 350,
+                "price_display": "约 ¥280–420",
+                "service_ref": "Z165 类",
+                "leg_id": "leg-xz-xnn-z-class",
+                "comfort": "hard_sleeper"
+              },
+              {
+                "kind": "xfer",
+                "city": "西宁",
+                "xfer_kind": "same_station",
+                "xfer_kind_label": "同站换乘",
+                "buffer_min": 380,
+                "buffer_display": "约 6 小时",
+                "tip": "预留安检与接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "西宁站",
+                "to_station": "拉萨站",
+                "dep_at": "2026-10-02T21:00:00+08:00",
+                "arr_at": "2026-10-03T17:50:00+08:00",
+                "duration_min": 1250,
+                "duration_display": "约 19–21 小时",
+                "seat_hint": "硬卧优先",
+                "price_ref_cny": 300,
+                "price_display": "约 ¥240–360",
+                "service_ref": "西宁始发进藏 Z6801 类",
+                "leg_id": "leg-xnn-lxa-origin",
+                "comfort": "hard_sleeper"
+              }
+            ],
+            "play": [
+              {
+                "hub_city": "西宁",
+                "name": "塔尔寺",
+                "dist_text": "湟中，距西宁城区约 25km",
+                "suggest_text": "建议游玩 2–3 小时（不含往返）",
+                "ok": "缓冲 ≥6 小时较从容；打车往返并提前回站安检；过夜更稳",
+                "min_buffer_hours": 6
+              },
+              {
+                "hub_city": "西宁",
+                "name": "湟源丹噶尔古城（半日向）",
+                "dist_text": "湟源方向，距西宁约 50km 级",
+                "suggest_text": "半日往返，含交通约 4–5 小时",
+                "ok": "仅过夜或 ≥6～8 小时窗口考虑；多数换乘不推荐硬排",
+                "min_buffer_hours": 6
+              }
+            ],
+            "buy_legs": [
+              {
+                "name": "徐州 → 西宁",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥280–420",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "西宁 → 拉萨",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥240–360",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          }
+        ],
+        "more": []
+      }
+    }
+  },
+  "request": {
+    "from_city": "徐州",
+    "to_city": "拉萨",
+    "date_flexible": true,
+    "date": null,
+    "vias": [],
+    "path_mode": "auto"
+  },
+  "response": {
+    "ok": true,
+    "error": null,
+    "meta": {
+      "request": {
+        "from_city": "徐州",
+        "to_city": "拉萨",
+        "date_flexible": true,
+        "date": null,
+        "vias": [],
+        "path_mode": "auto"
+      },
+      "path_mode": "auto",
+      "data_source": "mock",
+      "as_of": "2026-09-22T19:20:00+08:00",
+      "disclaimer": "价格、时刻均为参考，以购票平台为准",
+      "generated_by": "engine/search.py",
+      "no_realtime_inventory": true
+    },
+    "direct_baseline": {
+      "price_ref_cny": 397,
+      "duration_min": 2520,
+      "summary": "硬座便宜；硬卧难抢",
+      "leg_id": "leg-xz-lxa-direct"
+    },
+    "path": {
+      "cities": [
+        "徐州",
+        "西宁",
+        "拉萨"
+      ],
+      "hubs": [
+        "西宁"
+      ],
+      "note": "系统选枢纽：西宁"
+    },
+    "main": [
+      {
+        "id": "auto-cheap",
+        "type": "cheap",
+        "type_label": "最省钱",
+        "price_ref_cny": 397,
+        "price_display": "¥397–760",
+        "price_note": "参考价",
+        "duration_min": 2520,
+        "duration_display": "约 42–46 小时",
+        "transfers": 0,
+        "route_one_line": "徐州 → 拉萨（火车 · 硬座）",
+        "vs_direct": "参考价比直达接近约 0 元；时长接近约 0 小时",
+        "why": "直达对照方案：徐州 → 拉萨（火车 · 硬座）。总价偏低但久坐，仅作「最省钱」候选。",
+        "why_detail": "直达对照方案：徐州 → 拉萨（火车 · 硬座）。总价偏低但久坐，仅作「最省钱」候选。 参考价比直达接近约 0 元；时长接近约 0 小时。价格、时刻均为参考，以购票平台为准。",
+        "why_facts": {
+          "hubs": [],
+          "user_via": false,
+          "price_ref_cny": 397,
+          "direct_price_ref_cny": 397,
+          "price_delta_cny": 0,
+          "duration_min": 2520,
+          "direct_duration_min": 2520,
+          "duration_delta_min": 0,
+          "transfers": 0,
+          "comfort_score": 0.15,
+          "playable": false,
+          "notes": []
+        },
+        "play_hint": null,
+        "path_note": "直达对照",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "火车 · 硬座",
+            "from_station": "徐州站",
+            "to_station": "拉萨站",
+            "dep_at": "2026-10-01T12:00:00+08:00",
+            "arr_at": "2026-10-03T06:00:00+08:00",
+            "duration_min": 2520,
+            "duration_display": "约 42–46 小时",
+            "seat_hint": "硬座便宜；硬卧难抢",
+            "price_ref_cny": 397,
+            "price_display": "约 ¥397–760",
+            "service_ref": "Z 字头过路车（参考）",
+            "leg_id": "leg-xz-lxa-direct",
+            "comfort": "hardseat"
+          }
+        ],
+        "play": null,
+        "buy_legs": [
+          {
+            "name": "徐州 → 拉萨",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥397–760",
+            "mode": "train",
+            "deep_link_hint": null
+          }
+        ]
+      },
+      {
+        "id": "auto-fast",
+        "type": "fast",
+        "type_label": "最快",
+        "price_ref_cny": 1130,
+        "price_display": "¥950–1370",
+        "price_note": "参考价",
+        "duration_min": 740,
+        "duration_display": "约 11–13 小时",
+        "transfers": 1,
+        "route_one_line": "徐州→西安（高铁）；西安→拉萨（飞机）",
+        "vs_direct": "参考价比直达更贵约 733 元；时长更短约 29 小时",
+        "why": "系统选枢纽 西安 拆段：徐州→西安（高铁）；西安→拉萨（飞机）。综合参考价、时长与舒适度。",
+        "why_detail": "系统选枢纽 西安 拆段：徐州→西安（高铁）；西安→拉萨（飞机）。综合参考价、时长与舒适度。 参考价比直达更贵约 733 元；时长更短约 29 小时。价格、时刻均为参考，以购票平台为准。 换乘缓冲达标，已附「怎么玩」建议；不够长则不会硬推景点。",
+        "why_facts": {
+          "hubs": [
+            "西安"
+          ],
+          "user_via": false,
+          "price_ref_cny": 1130,
+          "direct_price_ref_cny": 397,
+          "price_delta_cny": 733,
+          "duration_min": 740,
+          "direct_duration_min": 2520,
+          "duration_delta_min": -1780,
+          "transfers": 1,
+          "comfort_score": 0.5,
+          "playable": true,
+          "notes": [
+            "空铁混搭"
+          ]
+        },
+        "play_hint": "西安可玩 · 大雁塔 / 大唐不夜城一带等",
+        "path_note": "系统选枢纽：西安",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "高铁",
+            "from_station": "徐州东站",
+            "to_station": "西安北站",
+            "dep_at": "2026-10-01T07:30:00+08:00",
+            "arr_at": "2026-10-01T12:10:00+08:00",
+            "duration_min": 280,
+            "duration_display": "约 3–5 小时",
+            "seat_hint": "二等座",
+            "price_ref_cny": 480,
+            "price_display": "约 ¥450–520",
+            "service_ref": "G 字头（参考）",
+            "leg_id": "leg-xz-xian-g",
+            "comfort": "second_class"
+          },
+          {
+            "kind": "xfer",
+            "city": "西安",
+            "xfer_kind": "same_city",
+            "xfer_kind_label": "同城换乘",
+            "buffer_min": 270,
+            "buffer_display": "约 4 小时",
+            "tip": "同城接驳：预留交通与安检/值机时间"
+          },
+          {
+            "kind": "leg",
+            "mode": "flight",
+            "mode_label": "飞机",
+            "from_station": "西安咸阳国际机场",
+            "to_station": "拉萨贡嘎机场",
+            "dep_at": "2026-10-01T16:40:00+08:00",
+            "arr_at": "2026-10-01T19:50:00+08:00",
+            "duration_min": 190,
+            "duration_display": "约 2–4 小时",
+            "seat_hint": "经济舱",
+            "price_ref_cny": 650,
+            "price_display": "约 ¥500–850",
+            "service_ref": "航司直飞（参考）",
+            "leg_id": "leg-xian-lxa-flight",
+            "comfort": "economy"
+          }
+        ],
+        "play": [
+          {
+            "hub_city": "西安",
+            "name": "大雁塔 / 大唐不夜城一带",
+            "dist_text": "市区，距西安北站约 15–20km",
+            "suggest_text": "建议 2 小时轻逛",
+            "ok": "同城缓冲 ≥3 小时可短逛；赶飞机请改接驳休息",
+            "min_buffer_hours": 3
+          }
+        ],
+        "buy_legs": [
+          {
+            "name": "徐州 → 西安",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥450–520",
+            "mode": "train",
+            "deep_link_hint": null
+          },
+          {
+            "name": "西安 → 拉萨",
+            "sub": "跳转 航司 / OTA · 约 ¥500–850",
+            "mode": "flight",
+            "deep_link_hint": null
+          }
+        ]
+      },
+      {
+        "id": "auto-balanced",
+        "type": "balanced",
+        "type_label": "最综合",
+        "price_ref_cny": 650,
+        "price_display": "¥520–780",
+        "price_note": "参考价",
+        "duration_min": 2860,
+        "duration_display": "约 47–51 小时",
+        "transfers": 1,
+        "route_one_line": "徐州→西宁（火车）；西宁→拉萨（火车）",
+        "vs_direct": "参考价比直达更贵约 253 元；时长更长约 5 小时",
+        "why": "系统选枢纽 西宁 拆段：徐州→西宁（火车）；西宁→拉萨（火车）。综合参考价、时长与舒适度。",
+        "why_detail": "系统选枢纽 西宁 拆段：徐州→西宁（火车）；西宁→拉萨（火车）。综合参考价、时长与舒适度。 参考价比直达更贵约 253 元；时长更长约 5 小时。价格、时刻均为参考，以购票平台为准。 换乘缓冲达标，已附「怎么玩」建议；不够长则不会硬推景点。",
+        "why_facts": {
+          "hubs": [
+            "西宁"
+          ],
+          "user_via": false,
+          "price_ref_cny": 650,
+          "direct_price_ref_cny": 397,
+          "price_delta_cny": 253,
+          "duration_min": 2860,
+          "direct_duration_min": 2520,
+          "duration_delta_min": 340,
+          "transfers": 1,
+          "comfort_score": 0.7,
+          "playable": true,
+          "notes": [
+            "始发进藏"
+          ]
+        },
+        "play_hint": "西宁可玩 · 塔尔寺等",
+        "path_note": "系统选枢纽：西宁",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "火车",
+            "from_station": "徐州站",
+            "to_station": "西宁站",
+            "dep_at": "2026-10-01T18:10:00+08:00",
+            "arr_at": "2026-10-02T14:40:00+08:00",
+            "duration_min": 1230,
+            "duration_display": "约 19–21 小时",
+            "seat_hint": "硬卧 / 硬座",
+            "price_ref_cny": 350,
+            "price_display": "约 ¥280–420",
+            "service_ref": "Z165 类",
+            "leg_id": "leg-xz-xnn-z-class",
+            "comfort": "hard_sleeper"
+          },
+          {
+            "kind": "xfer",
+            "city": "西宁",
+            "xfer_kind": "same_station",
+            "xfer_kind_label": "同站换乘",
+            "buffer_min": 380,
+            "buffer_display": "约 6 小时",
+            "tip": "预留安检与接驳时间"
+          },
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "火车",
+            "from_station": "西宁站",
+            "to_station": "拉萨站",
+            "dep_at": "2026-10-02T21:00:00+08:00",
+            "arr_at": "2026-10-03T17:50:00+08:00",
+            "duration_min": 1250,
+            "duration_display": "约 19–21 小时",
+            "seat_hint": "硬卧优先",
+            "price_ref_cny": 300,
+            "price_display": "约 ¥240–360",
+            "service_ref": "西宁始发进藏 Z6801 类",
+            "leg_id": "leg-xnn-lxa-origin",
+            "comfort": "hard_sleeper"
+          }
+        ],
+        "play": [
+          {
+            "hub_city": "西宁",
+            "name": "塔尔寺",
+            "dist_text": "湟中，距西宁城区约 25km",
+            "suggest_text": "建议游玩 2–3 小时（不含往返）",
+            "ok": "缓冲 ≥6 小时较从容；打车往返并提前回站安检；过夜更稳",
+            "min_buffer_hours": 6
+          },
+          {
+            "hub_city": "西宁",
+            "name": "湟源丹噶尔古城（半日向）",
+            "dist_text": "湟源方向，距西宁约 50km 级",
+            "suggest_text": "半日往返，含交通约 4–5 小时",
+            "ok": "仅过夜或 ≥6～8 小时窗口考虑；多数换乘不推荐硬排",
+            "min_buffer_hours": 6
+          }
+        ],
+        "buy_legs": [
+          {
+            "name": "徐州 → 西宁",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥280–420",
+            "mode": "train",
+            "deep_link_hint": null
+          },
+          {
+            "name": "西宁 → 拉萨",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥240–360",
+            "mode": "train",
+            "deep_link_hint": null
+          }
+        ]
+      }
+    ],
+    "more": []
+  }
+}
