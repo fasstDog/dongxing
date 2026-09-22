@@ -21,7 +21,11 @@ function plansKeyForOd(fromCity, toCity) {
 }
 
 function getRawForOd(fromCity, toCity) {
-  return MOCK[plansKeyForOd(fromCity, toCity)] || MOCK_DEFAULT;
+  const key = plansKeyForOd(fromCity, toCity);
+  if (MOCK[key]) return MOCK[key];
+  // 未覆盖 OD：返回 null，结果页走空态（不误用默认徐拉）
+  if (fromCity && toCity) return null;
+  return MOCK_DEFAULT;
 }
 
 function formatClock(iso) {
@@ -166,11 +170,17 @@ function adaptResponse(raw, scenarioKey) {
 }
 
 function loadAdaptedPlans(fromCity, toCity, scenarioKey) {
-  return Promise.resolve(adaptResponse(getRawForOd(fromCity, toCity), scenarioKey));
+  const raw = getRawForOd(fromCity, toCity);
+  if (!raw) {
+    return Promise.resolve({ ok: true, main: [], error: null });
+  }
+  return Promise.resolve(adaptResponse(raw, scenarioKey));
 }
 
 function findPlan(fromCity, toCity, planId) {
-  const adapted = adaptResponse(getRawForOd(fromCity, toCity));
+  const raw = getRawForOd(fromCity, toCity);
+  if (!raw) return null;
+  const adapted = adaptResponse(raw);
   const list = adapted.main || [];
   for (let i = 0; i < list.length; i++) {
     if (list[i].id === planId) return list[i];
