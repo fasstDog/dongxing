@@ -1,3 +1,5 @@
+.top-actions { display: flex; align-items: center; justify-content: space-between; gap: 16rpx; margin: 16rpx 8rpx 8rpx; }
+.hero { flex: 1; font-size: 26rpx; color: #646566; line-height: 1.4; }
 .search-wrap { margin: 40rpx 8rpx 24rpx; }
 .samples { display: flex; align-items: center; gap: 16rpx; padding: 0 8rpx; flex-wrap: wrap; }
 .samples-label { font-size: 24rpx; color: #969799; }

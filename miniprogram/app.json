@@ -2,7 +2,8 @@
   "pages": [
     "pages/query/query",
     "pages/results/results",
-    "pages/detail/detail"
+    "pages/detail/detail",
+    "pages/about/about"
   ],
   "window": {
     "navigationBarTitleText": "邪修交通",

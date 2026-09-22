@@ -17,6 +17,10 @@ Page({
     demoError: false
   },
 
+  goAbout() {
+    wx.navigateTo({ url: '/pages/about/about' });
+  },
+
   onFromChange(e) { this.setData({ fromCity: e.detail }); },
   onToChange(e) { this.setData({ toCity: e.detail }); },
   onDateChange(e) { this.setData({ date: e.detail }); },

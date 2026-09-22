@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "关于 / 免责声明",
+  "usingComponents": {
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-toast": "@vant/weapp/toast/index"
+  }
+}

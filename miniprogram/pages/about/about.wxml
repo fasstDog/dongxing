@@ -1,0 +1,37 @@
+<view class="page about-page">
+  <van-cell-group inset>
+    <van-cell title="邪修交通是什么？" />
+    <view class="about-pad">
+      <view class="p">填出发地和目的地（日期、途经城市可选），帮你拼比直达更划算或更好受的走法：高铁 / 动车 / 飞机怎么搭。说清楚怎么去、为什么这样推；换乘空得够长，再告诉你怎么玩。</view>
+      <view class="p"><text class="strong">只推荐路线，不卖票。</text>分段「去购票」跳去 12306 / 航司 / OTA；票价、时刻、有没有票，都以那边为准。</view>
+    </view>
+  </van-cell-group>
+
+  <view class="block-gap">
+    <van-cell-group inset>
+      <van-cell title="免责声明" />
+      <view class="about-pad">
+        <view class="li">这里展示的价格、时刻、席别都是<text class="strong">参考</text>，不承诺能买到。</view>
+        <view class="li">我们<text class="strong">不卖票、不收款、不帮抢票、也不管退改签</text>。</view>
+        <view class="li">换乘空窗和景点建议仅供参考；接驳和安检时间自己多留点，以现场为准。</view>
+        <view class="li">高原线请自己掂量身体，并核对进藏政策。</view>
+      </view>
+    </van-cell-group>
+  </view>
+
+  <view class="block-gap">
+    <van-cell-group inset>
+      <van-cell
+        title="数据说明"
+        label="mock 参考 · 可复制摘要"
+        is-link
+        bind:click="onCopyDataNote"
+      />
+    </van-cell-group>
+  </view>
+
+  <view class="data-preview">{{ versionHint }}</view>
+  <view class="disclaimer">只推荐路线，不卖票。价格、时刻都是参考，不保证有票。</view>
+
+  <van-toast id="van-toast" />
+</view>

@@ -1,0 +1,33 @@
+.block-gap {
+  margin-top: 24rpx;
+}
+.about-pad {
+  padding: 8rpx 32rpx 28rpx;
+  color: #646566;
+  font-size: 26rpx;
+  line-height: 1.55;
+}
+.about-pad .p {
+  margin-bottom: 16rpx;
+}
+.about-pad .li {
+  margin-bottom: 12rpx;
+  padding-left: 24rpx;
+  position: relative;
+}
+.about-pad .li::before {
+  content: '·';
+  position: absolute;
+  left: 4rpx;
+  color: #c8c9cc;
+}
+.strong {
+  color: #323233;
+  font-weight: 600;
+}
+.data-preview {
+  margin: 32rpx 16rpx 8rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: #c8c9cc;
+}

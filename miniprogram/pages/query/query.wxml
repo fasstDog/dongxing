@@ -6,6 +6,11 @@
     background="#ecf5ff"
   />
 
+  <view class="top-actions">
+    <text class="hero">帮你找到直达之外那条更聪明的路</text>
+    <van-button size="small" plain hairline type="primary" bind:click="goAbout">关于</van-button>
+  </view>
+
   <view class="section-title">去哪儿</view>
   <van-cell-group inset>
     <van-field label="出发" placeholder="如 徐州" value="{{ fromCity }}" clearable bind:change="onFromChange" />
