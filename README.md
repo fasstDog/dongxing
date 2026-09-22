@@ -31,7 +31,7 @@
    ```
 3. 建议手机模式 / 窄窗。
 
-样例 OD（已挂）：**徐州→拉萨** / **上海→成都** / **北京→武汉**。「最快」可含空铁或直飞。第四样例 **成都→重庆** 腿表已落，plans 导出中。空态见 [`docs/空态与文案规范.md`](docs/空态与文案规范.md)。
+样例 OD（已挂）：**徐州→拉萨** / **上海→成都** / **北京→武汉** / **成都→重庆**。「最快」可含空铁或直飞。空态见 [`docs/空态与文案规范.md`](docs/空态与文案规范.md)。
 
 ## 如何打开（小程序）
 
@@ -58,7 +58,8 @@ node engine/adapters/train.mock.js 徐州 西宁 2026-10-01
 | `data/plans-xuzhou-lhasa.json` | 前端 · 徐拉 |
 | `data/plans-shanghai-chengdu.json` | 前端 · 沪蓉 |
 | `data/plans-beijing-wuhan.json` | 前端 · 京广 |
-| `data/mock/legs-chengdu-chongqing.json` | 成渝腿（plans 待导出） |
+| `data/mock/legs-chengdu-chongqing.json` | 成渝腿 |
+| `data/mock/plans-chengdu-chongqing.json` | 成渝三主卡 mock |
 | `data/mock/plans-*.json` / `legs-*.json` | 引擎 API 形 / 腿 mock |
 | `engine/adapters/flight.mock.js` | 航班腿（扫全部 `legs-*.json`） |
 | `data/hub-pois.json` | 12 城「怎么玩」POI |

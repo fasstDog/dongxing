@@ -4,7 +4,8 @@
 const MOCK = {
   '徐州|拉萨': require('../data/plans-xuzhou-lhasa.json'),
   '上海|成都': require('../data/plans-shanghai-chengdu.json'),
-  '北京|武汉': require('../data/plans-beijing-wuhan.json')
+  '北京|武汉': require('../data/plans-beijing-wuhan.json'),
+  '成都|重庆': require('../data/plans-chengdu-chongqing.json')
 };
 const MOCK_DEFAULT = MOCK['徐州|拉萨'];
 

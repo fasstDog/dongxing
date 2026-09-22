@@ -4,7 +4,8 @@ const LOADING_MS = 700;
 const SAMPLE_OD = {
   xz: { fromCity: '徐州', toCity: '拉萨' },
   sh: { fromCity: '上海', toCity: '成都' },
-  bj: { fromCity: '北京', toCity: '武汉' }
+  bj: { fromCity: '北京', toCity: '武汉' },
+  cd: { fromCity: '成都', toCity: '重庆' }
 };
 
 Page({

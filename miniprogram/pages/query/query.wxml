@@ -56,6 +56,7 @@
     <van-button size="mini" round plain type="primary" data-od="xz" bind:click="onSample">徐州→拉萨</van-button>
     <van-button size="mini" round plain type="primary" data-od="sh" bind:click="onSample">上海→成都</van-button>
     <van-button size="mini" round plain type="primary" data-od="bj" bind:click="onSample">北京→武汉</van-button>
+    <van-button size="mini" round plain type="primary" data-od="cd" bind:click="onSample">成都→重庆</van-button>
   </view>
 
   <view class="demo-switches">

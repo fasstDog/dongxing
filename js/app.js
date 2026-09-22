@@ -11,6 +11,7 @@
     "徐州|拉萨": "data/mock/plans-xuzhou-lhasa.json",
     "上海|成都": "data/mock/plans-shanghai-chengdu.json",
     "北京|武汉": "data/mock/plans-beijing-wuhan.json",
+    "成都|重庆": "data/mock/plans-chengdu-chongqing.json",
   };
   const PLANS_MOCK_DEFAULT = "data/mock/plans-xuzhou-lhasa.json";
 
@@ -561,6 +562,17 @@
         runSearch({ forceOk: true });
       }
 
+      function loadExampleChengduChongqing() {
+        from.value = "成都";
+        to.value = "重庆";
+        dateFlexible.value = true;
+        date.value = "";
+        vias.value = [];
+        demoEmpty.value = false;
+        demoError.value = false;
+        runSearch({ forceOk: true });
+      }
+
       function removeVia(i) {
         vias.value.splice(i, 1);
       }
@@ -848,6 +860,7 @@
         loadExample,
         loadExampleShanghaiChengdu,
         loadExampleBeijingWuhan,
+        loadExampleChengduChongqing,
       };
     },
   })
