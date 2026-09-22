@@ -78,11 +78,38 @@ function scoreFastest(plan) {
 function scoreBalanced(plan, weights) {
   const w = { ...DEFAULT_BALANCED_WEIGHTS, ...(weights || {}) };
   const f = planFeatures(plan);
+  const legs = Array.isArray(plan && plan.legs) ? plan.legs : [];
+  const flightPen = 2.0 * legs.filter((l) => l && l.mode === 'flight').length;
+  const comfortMap = {
+    hardseat: 0.15,
+    economy: 0.45,
+    second_class: 0.55,
+    hard_sleeper: 0.7,
+    first_class: 0.75,
+    soft_sleeper: 0.85,
+    unknown: 0.4,
+  };
+  let comfort = 0.4;
+  if (legs.length) {
+    comfort =
+      legs.reduce(
+        (s, l) => s + (comfortMap[l.comfort] != null ? comfortMap[l.comfort] : 0.4),
+        0
+      ) / legs.length;
+  }
+  const playable =
+    (Array.isArray(plan.play) && plan.play.length > 0) ||
+    (Array.isArray(plan.transfers) &&
+      plan.transfers.some((x) => x && (x.transfer_play || (plan.play && plan.play.length))));
+  // 空铁进最快；综合偏铁路卧铺 + 可玩窗口
   return (
     f.price * w.price +
     f.duration * w.duration +
     f.transfers * w.transfers +
-    f.maxLegSitMin * w.maxLegSitMin
+    f.maxLegSitMin * w.maxLegSitMin +
+    flightPen -
+    comfort * 2.5 -
+    (playable ? 1.6 : 0)
   );
 }
 
