@@ -21,6 +21,10 @@ with the shape in [`docs/data-contract-mock.md`](../../docs/data-contract-mock.m
 and labels each result `source: 'mock'`. The date is accepted by the contract;
 the mock shifts its reference snapshot to the requested calendar date.
 
+## 什么时候用火车，什么时候用航班
+
+MVP 默认优先用火车，适合价格更低、站点更贴近城市的方案；需要“最快”、跨越较远距离，或后续做**空铁混搭**时调用航班。流水线可以同时调用 train 与 flight，再按 `after_at` 过滤可衔接的下一腿；两者都输出相同的 `Leg[]` 结构，mock 结果标记 `source: 'mock'`。
+
 ## Adding a vendor
 
 Add a `train.<vendor>.js` CommonJS module exporting an async
