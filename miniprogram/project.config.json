@@ -1,8 +1,11 @@
 {
-  "description": "邪修交通 · 微信小程序脚手架",
+  "description": "邪修交通 · 微信小程序脚手架（打开本目录 miniprogram/）",
   "packOptions": {
     "ignore": [
-      { "type": "folder", "value": "node_modules" }
+      {
+        "type": "folder",
+        "value": "node_modules"
+      }
     ],
     "include": []
   },

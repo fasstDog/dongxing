@@ -1,18 +1,18 @@
-const TAG_TYPE = {
-  cheap: 'success',
-  fast: 'danger',
-  balanced: 'primary'
-};
+const { loadAdaptedPlans } = require('../../utils/adapt-plans');
+
+const LOADING_MS = 700;
 
 Page({
   data: {
-    loading: true,
+    status: 'loading', // loading | ok | empty | error
     plans: [],
     odLine: '',
     notice: '',
     fromCity: '',
     toCity: '',
-    vias: []
+    vias: [],
+    demoEmpty: false,
+    demoError: false
   },
 
   onLoad(options) {
@@ -20,54 +20,98 @@ Page({
     const toCity = decodeURIComponent(options.to || '拉萨');
     const viasRaw = options.vias ? decodeURIComponent(options.vias) : '';
     const vias = viasRaw ? viasRaw.split(',').filter(Boolean) : [];
-    const viaPart = vias.length ? `（途经 ${vias.join('、')}）` : '';
+    const demoEmpty = options.demoEmpty === '1';
+    const demoError = options.demoError === '1';
+    const viaPart = vias.length ? '（途经 ' + vias.join('、') + '）' : '';
     this.setData({
-      fromCity,
-      toCity,
-      vias,
-      odLine: `${fromCity} → ${toCity}${viaPart}`,
+      fromCity: fromCity,
+      toCity: toCity,
+      vias: vias,
+      demoEmpty: demoEmpty,
+      demoError: demoError,
+      odLine: fromCity + ' → ' + toCity + viaPart,
       notice: vias.length
-        ? `已记录途经：${vias.join('、')}（当前仍展示徐州→拉萨 mock 三主卡）`
-        : '当前展示 mock：徐州→拉萨 三主卡壳'
+        ? '已记录途经：' + vias.join('、') + '（本脚手架仍按 OD 读 mock 三主卡）'
+        : '只推荐不卖票 · mock 三主卡'
     });
-    this.loadMock();
+    this.runLoad();
   },
 
-  loadMock() {
-    this.setData({ loading: true });
-    // 短 loading，贴近 Web 原型体验；数据来自本地 JSON（无 API）
-    const apply = (payload) => {
-      const main = (((payload || {}).response || {}).main) || [];
-      const plans = main.map((p) => ({
-        ...p,
-        tagType: TAG_TYPE[p.type] || 'primary'
-      }));
-      this.setData({ plans, loading: false });
+  runLoad() {
+    const fromCity = this.data.fromCity;
+    const toCity = this.data.toCity;
+    this.setData({ status: 'loading', plans: [] });
+
+    const finish = (status, plans) => {
+      this.setData({
+        status: status,
+        plans: plans || []
+      });
     };
 
-    try {
-      // 优先 require 本地 mock（构建进包）
-      // eslint-disable-next-line global-require
-      const data = require('../../data/plans-xuzhou-lhasa.json');
-      setTimeout(() => apply(data), 400);
-    } catch (err) {
-      // 回退：wx.request 本地路径在真机不可用；DevTools 可用相对路径时再试
-      wx.request({
-        url: '/data/plans-xuzhou-lhasa.json',
-        success: (res) => apply(res.data),
-        fail: () => {
-          this.setData({ loading: false, plans: [] });
-          wx.showToast({ title: 'mock 加载失败', icon: 'none' });
-        }
-      });
-    }
+    setTimeout(() => {
+      if (this.data.demoError) {
+        finish('error', []);
+        return;
+      }
+      if (this.data.demoEmpty) {
+        finish('empty', []);
+        return;
+      }
+      loadAdaptedPlans(fromCity, toCity)
+        .then((adapted) => {
+          if (!adapted.ok) {
+            finish('error', []);
+            return;
+          }
+          if (!adapted.main || !adapted.main.length) {
+            finish('empty', []);
+            return;
+          }
+          finish('ok', adapted.main);
+        })
+        .catch(() => {
+          finish('error', []);
+        });
+    }, LOADING_MS);
   },
 
-  onTapDetail(e) {
-    const id = e.currentTarget.dataset.id;
-    wx.showToast({
-      title: `详情 stub：${id || ''}`,
-      icon: 'none'
+  onRetry() {
+    this.runLoad();
+  },
+
+  onBackQuery() {
+    wx.navigateBack({
+      fail: () => {
+        wx.redirectTo({ url: '/pages/query/query' });
+      }
     });
+  },
+
+  onEmptySample(e) {
+    const od = e.currentTarget.dataset.od;
+    let fromCity = '徐州';
+    let toCity = '拉萨';
+    if (od === 'sh') {
+      fromCity = '上海';
+      toCity = '成都';
+    }
+    this.setData({
+      fromCity: fromCity,
+      toCity: toCity,
+      vias: [],
+      demoEmpty: false,
+      demoError: false,
+      odLine: fromCity + ' → ' + toCity,
+      notice: '示例 OD · mock 三主卡'
+    });
+    getApp().globalData.lastQuery = {
+      fromCity: fromCity,
+      toCity: toCity,
+      vias: [],
+      demoEmpty: false,
+      demoError: false
+    };
+    this.runLoad();
   }
 });

@@ -18,7 +18,6 @@ page {
   text-align: center;
 }
 
-/* 三主卡轻量类型色 */
 .card-cheap {
   border-left: 8rpx solid #07c160;
 }
@@ -27,4 +26,17 @@ page {
 }
 .card-balanced {
   border-left: 8rpx solid #1989fa;
+}
+
+.section-title {
+  margin: 16rpx 8rpx 12rpx;
+  font-size: 26rpx;
+  color: #969799;
+}
+
+.tiny-hint {
+  margin: 8rpx 0 0;
+  font-size: 22rpx;
+  color: #c8c9cc;
+  line-height: 1.4;
 }

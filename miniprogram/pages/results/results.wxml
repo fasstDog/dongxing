@@ -9,39 +9,60 @@
 
   <view class="od-line" wx:if="{{ odLine }}">{{ odLine }}</view>
 
-  <view class="loading-wrap" wx:if="{{ loading }}">
-    <van-loading type="spinner" size="24px">正在邪修路线…</van-loading>
+  <!-- loading -->
+  <view class="state-wrap" wx:if="{{ status === 'loading' }}">
+    <van-loading type="spinner" size="24px" vertical>正在邪修组合…</van-loading>
   </view>
 
-  <van-empty wx:elif="{{ !plans.length }}" description="暂无方案（mock）" />
+  <!-- error -->
+  <view class="state-wrap" wx:elif="{{ status === 'error' }}">
+    <van-empty image="error" description="这趟没查到，多半是数据暂不可用">
+      <view class="empty-desc">价格、时刻都是参考，不保证有票。也可以改条件再查。</view>
+      <view class="empty-actions">
+        <van-button round type="primary" bind:click="onRetry">再试一次</van-button>
+        <van-button round plain type="primary" bind:click="onBackQuery">改条件</van-button>
+      </view>
+    </van-empty>
+  </view>
 
-  <block wx:else>
+  <!-- empty -->
+  <view class="state-wrap" wx:elif="{{ status === 'empty' }}">
+    <van-empty description="这趟暂时拼不出方案">
+      <view class="empty-desc">可能是城市名不好认、日期太偏，或这条线我们还没覆盖好。价格时刻都是参考，不保证有票。</view>
+      <view class="empty-actions">
+        <van-button round plain type="primary" block bind:click="onBackQuery">改查询条件</van-button>
+        <van-button round plain type="primary" block data-od="xz" bind:click="onEmptySample">看看示例：徐州→拉萨</van-button>
+        <van-button round plain type="primary" block data-od="sh" bind:click="onEmptySample">看看示例：上海→成都</van-button>
+      </view>
+    </van-empty>
+  </view>
+
+  <!-- cards -->
+  <block wx:elif="{{ status === 'ok' }}">
     <view
       wx:for="{{ plans }}"
       wx:key="id"
       class="plan-card card-{{ item.type }}"
-      data-id="{{ item.id }}"
-      bindtap="onTapDetail"
     >
       <view class="plan-head">
-        <van-tag type="{{ item.tagType }}" round>{{ item.type_label }}</van-tag>
-        <text class="price">{{ item.price_display }}</text>
+        <van-tag type="{{ item.tagType }}" round>{{ item.typeLabel }}</van-tag>
+        <view class="price-wrap">
+          <text class="price">{{ item.price }}</text>
+          <text class="price-note" wx:if="{{ item.priceNote }}">{{ item.priceNote }}</text>
+        </view>
       </view>
-      <view class="route">{{ item.route_one_line }}</view>
+      <view class="route">{{ item.routeOneLine }}</view>
       <view class="meta">
-        <text>{{ item.duration_display }}</text>
+        <text>{{ item.duration }}</text>
         <text class="dot">·</text>
         <text>{{ item.transfers }} 次换乘</text>
-        <text class="dot" wx:if="{{ item.price_note }}">·</text>
-        <text wx:if="{{ item.price_note }}" class="muted">{{ item.price_note }}</text>
       </view>
+      <view class="vs" wx:if="{{ item.vsDirect }}">vs直达：{{ item.vsDirect }}</view>
       <view class="why" wx:if="{{ item.why }}">{{ item.why }}</view>
-      <view class="hint" wx:if="{{ item.play_hint }}">{{ item.play_hint }}</view>
-      <view class="card-foot">
-        <text class="muted">点按查看详情（stub）</text>
-      </view>
+      <view class="hint" wx:if="{{ item.playHint }}">怎么玩：{{ item.playHint }}</view>
     </view>
   </block>
 
   <view class="disclaimer">只推荐不卖票 · 价格时刻为参考 mock · 无真实购票</view>
+  <van-toast id="van-toast" />
 </view>

@@ -19,7 +19,9 @@
 
 ## 微信小程序脚手架
 
-原生微信小程序目录：[**`miniprogram/`**](miniprogram/)（**Vant Weapp**）。查询 + 三主卡结果壳，本地 mock，无登录/支付。打开与 npm 构建见 [`miniprogram/README.md`](miniprogram/README.md)。
+原生微信小程序目录：[**`miniprogram/`**](miniprogram/)（**Vant Weapp** `@vant/weapp`）。查询页 + 结果三主卡，本地 mock，无登录/支付。
+
+用微信开发者工具 **打开 `miniprogram/`**（非仓库根）→ `npm install` → **工具 → 构建 npm**。详见 [`miniprogram/README.md`](miniprogram/README.md)。
 
 ## 如何打开
 

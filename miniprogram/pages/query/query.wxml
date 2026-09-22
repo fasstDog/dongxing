@@ -1,0 +1,110 @@
+<view class="page">
+  <van-notice-bar
+    left-icon="info-o"
+    text="只推荐路线，不卖票。价格与时刻为参考。"
+    color="#1989fa"
+    background="#ecf5ff"
+  />
+
+  <view class="section-title">去哪儿</view>
+  <van-cell-group inset>
+    <van-field
+      label="出发"
+      placeholder="如 徐州"
+      value="{{ fromCity }}"
+      clearable
+      bind:change="onFromChange"
+    />
+    <van-field
+      label="到达"
+      placeholder="如 拉萨"
+      value="{{ toCity }}"
+      clearable
+      bind:change="onToChange"
+    />
+  </van-cell-group>
+
+  <view class="section-title">日期</view>
+  <van-cell-group inset>
+    <van-cell title="日期灵活">
+      <van-switch
+        slot="right-icon"
+        size="22px"
+        checked="{{ dateFlexible }}"
+        bind:change="onFlexibleChange"
+      />
+    </van-cell>
+    <van-field
+      wx:if="{{ !dateFlexible }}"
+      label="出发日"
+      placeholder="YYYY-MM-DD"
+      value="{{ date }}"
+      bind:change="onDateChange"
+    />
+    <van-cell wx:else title="出发日" value="灵活，不锁死某一天" />
+  </van-cell-group>
+
+  <view class="section-title">途经（有序，最多 3）</view>
+  <van-cell-group inset>
+    <block wx:for="{{ vias }}" wx:key="index">
+      <van-field
+        label="途经{{ index + 1 }}"
+        placeholder="途经城市，如 西宁"
+        value="{{ item }}"
+        clearable
+        data-index="{{ index }}"
+        bind:change="onViaChange"
+        use-button-slot
+      >
+        <van-button
+          slot="button"
+          size="small"
+          type="danger"
+          plain
+          hairline
+          data-index="{{ index }}"
+          bind:click="onRemoveVia"
+        >删除</van-button>
+      </van-field>
+    </block>
+    <view class="via-actions">
+      <van-button
+        block
+        plain
+        hairline
+        type="primary"
+        icon="plus"
+        disabled="{{ vias.length >= 3 }}"
+        bind:click="onAddVia"
+      >添加途经城市</van-button>
+      <view class="tiny-hint">填写后按「出发 → 途经 → 到达」分段拼方案；不填则系统自动邪修。</view>
+    </view>
+  </van-cell-group>
+
+  <view class="search-wrap">
+    <van-button type="primary" block round size="large" bind:click="onSearch">
+      开始邪修
+    </van-button>
+  </view>
+
+  <view class="samples">
+    <text class="samples-label">样例</text>
+    <van-button size="mini" round plain type="primary" data-od="xz" bind:click="onSample">徐州→拉萨</van-button>
+    <van-button size="mini" round plain type="primary" data-od="sh" bind:click="onSample">上海→成都</van-button>
+  </view>
+
+  <view class="demo-switches">
+    <view class="demo-row">
+      <text>演示：无方案</text>
+      <van-switch size="20px" checked="{{ demoEmpty }}" bind:change="onDemoEmpty" />
+    </view>
+    <view class="demo-row">
+      <text>演示：加载失败</text>
+      <van-switch size="20px" checked="{{ demoError }}" bind:change="onDemoError" />
+    </view>
+    <view class="tiny-hint">仅原型用，默认关闭。</view>
+  </view>
+
+  <view class="disclaimer">{{ disclaimer }}</view>
+  <van-toast id="van-toast" />
+</view>
