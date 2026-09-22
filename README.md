@@ -4,7 +4,9 @@
 
 产品与技术拍板：[`docs/技术与设计拍板.md`](docs/技术与设计拍板.md)、[`docs/产品需求整理.md`](docs/产品需求整理.md)。
 
-微信小程序脚手架（Vant Weapp，查询+三主卡壳）：见 **[`miniprogram/README.md`](miniprogram/README.md)**。交互对照 [`docs/小程序-查询与三主卡交互要点.md`](docs/小程序-查询与三主卡交互要点.md)。
+微信小程序（Vant Weapp：查询 + 三主卡 + 详情）：**[`miniprogram/README.md`](miniprogram/README.md)**。交互对照 [`docs/小程序-查询与三主卡交互要点.md`](docs/小程序-查询与三主卡交互要点.md)。
+
+当前稳定 tag：**[`v0.2.0-miniprogram`](https://github.com/fasstDog/xiexiu-traffic-prototype/releases/tag/v0.2.0-miniprogram)**（三线 Web + 小程序详情壳）。
 
 ## UI 技术（开源优先）
 
@@ -29,7 +31,7 @@
    ```
 3. 建议手机模式 / 窄窗。
 
-样例 OD：**徐州→拉萨** / **上海→成都** / **北京→武汉**。结果页读对应 `data/plans-*.json`。「最快」可含空铁或直飞。空态见 [`docs/空态与文案规范.md`](docs/空态与文案规范.md)。
+样例 OD（已挂）：**徐州→拉萨** / **上海→成都** / **北京→武汉**。「最快」可含空铁或直飞。第四样例 **成都→重庆** 腿表已落，plans 导出中。空态见 [`docs/空态与文案规范.md`](docs/空态与文案规范.md)。
 
 ## 如何打开（小程序）
 
@@ -40,9 +42,10 @@
 程序算方案：取腿 → MCT → 打分 → 导出。以 **`engine/pipeline.js`** 为准。`adapters/index` 合并 **train.mock + flight.mock**。**不含实时余票**。详见 [`engine/README.md`](engine/README.md)。
 
 ```bash
-# 重导全部样例 plans（含空铁/直飞；京广：bj-wh）
+# 重导样例 plans（含空铁/直飞）
 node engine/export-plans-with-flight.js
 node engine/export-plans-with-flight.js bj-wh
+node engine/export-plans-with-flight.js cd-cq   # 成渝，腿已有
 
 # pipeline 冒烟 / 适配器单测
 node engine/search-pipeline-demo.js
@@ -55,17 +58,18 @@ node engine/adapters/train.mock.js 徐州 西宁 2026-10-01
 | `data/plans-xuzhou-lhasa.json` | 前端 · 徐拉 |
 | `data/plans-shanghai-chengdu.json` | 前端 · 沪蓉 |
 | `data/plans-beijing-wuhan.json` | 前端 · 京广 |
+| `data/mock/legs-chengdu-chongqing.json` | 成渝腿（plans 待导出） |
 | `data/mock/plans-*.json` / `legs-*.json` | 引擎 API 形 / 腿 mock |
 | `engine/adapters/flight.mock.js` | 航班腿（扫全部 `legs-*.json`） |
 | `data/hub-pois.json` | 12 城「怎么玩」POI |
 
-重跑导出前确认 `render_why` 口语模板。当前 tag：`v0.1.1`。
+重跑导出前确认 `render_why` 口语模板。
 
 ## 屏幕地图（Web）
 
 | 页面 | 说明 |
 |------|------|
-| **查询页** | 出发/到达、途经、样例 OD 切换。「开始邪修」。 |
+| **查询页** | 出发/到达、途经、三线样例 OD 切换。「开始邪修」。 |
 | **结果页** | 三主卡 + 更多；空态 / 失败演示开关。 |
 | **方案详情** | Steps（含 flight）、为什么、怎么玩、去购票 Toast。 |
 | **关于** | 说明与免责声明。 |
