@@ -1,0 +1,712 @@
+{
+  "meta": {
+    "od": {
+      "from_city": "成都",
+      "to_city": "重庆"
+    },
+    "note": "pipeline + train/flight mock；最快含空铁/直飞；无实时余票",
+    "legs_source": "legs-chengdu-chongqing.json",
+    "pois_source": "hub-pois.json"
+  },
+  "scenarios": {
+    "auto": {
+      "request": {
+        "from_city": "成都",
+        "to_city": "重庆",
+        "date_flexible": true,
+        "date": "2026-10-01",
+        "vias": [],
+        "path_mode": "auto"
+      },
+      "response": {
+        "ok": true,
+        "error": null,
+        "meta": {
+          "request": {
+            "from_city": "成都",
+            "to_city": "重庆",
+            "date_flexible": true,
+            "date": "2026-10-01",
+            "vias": [],
+            "path_mode": "auto"
+          },
+          "path_mode": "auto",
+          "data_source": "mock",
+          "as_of": "2026-09-22T20:00:00+08:00",
+          "disclaimer": "价格、时刻均为参考，以购票平台为准",
+          "generated_by": "engine/export-plans-with-flight.js",
+          "no_realtime_inventory": true,
+          "adapters": "train.mock+flight.mock"
+        },
+        "direct_baseline": {
+          "price_ref_cny": 154,
+          "duration_min": 90,
+          "summary": "成都 → 重庆",
+          "leg_id": "leg-cd-cq-g-direct"
+        },
+        "path": {
+          "cities": [
+            "成都",
+            "重庆"
+          ],
+          "hubs": [],
+          "note": "直达"
+        },
+        "main": [
+          {
+            "id": "cd-cq-cheap",
+            "type": "cheap",
+            "type_label": "最省钱",
+            "price_ref_cny": 76,
+            "price_display": "¥65–110",
+            "price_note": "参考价",
+            "duration_min": 260,
+            "duration_display": "约 4 小时",
+            "transfers": 0,
+            "route_one_line": "成都 → 重庆",
+            "vs_direct": "参考价大概省 78 块，多花大约 3 小时",
+            "why": "直达更便宜一档，适合预算优先、能接受慢一点的人。",
+            "why_detail": "直达更便宜一档，适合预算优先、能接受慢一点的人。 参考价大概省 78 块，多花大约 3 小时。价格、时刻都是参考，以购票平台为准。",
+            "play_hint": null,
+            "path_note": "直达",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "成都站",
+                "to_station": "重庆站",
+                "dep_at": "2026-10-01T10:30:00+08:00",
+                "arr_at": "2026-10-01T14:50:00+08:00",
+                "duration_min": 260,
+                "duration_display": "约 4 小时",
+                "seat_hint": "硬座",
+                "price_ref_cny": 76,
+                "price_display": "约 ¥76",
+                "service_ref": "普速/较慢动车类（参考）",
+                "leg_id": "leg-cd-cq-d-cheap",
+                "comfort": "hardseat"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "成都 → 重庆",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥76",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "cd-cq-fast",
+            "type": "fast",
+            "type_label": "最快",
+            "price_ref_cny": 420,
+            "price_display": "¥280–700",
+            "price_note": "参考价",
+            "duration_min": 55,
+            "duration_display": "约 1 小时",
+            "transfers": 0,
+            "route_one_line": "成都 → 重庆",
+            "vs_direct": "参考价大概贵 266 块，能少耗大约 1 小时",
+            "why": "成都直飞重庆，一趟飞机到，少折腾。参考价以航司/OTA为准。",
+            "why_detail": "成都直飞重庆，一趟飞机到，少折腾。参考价以航司/OTA为准。 参考价大概贵 266 块，能少耗大约 1 小时。",
+            "play_hint": null,
+            "path_note": "直达",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "flight",
+                "mode_label": "飞机",
+                "from_station": "成都双流国际机场",
+                "to_station": "重庆江北国际机场",
+                "dep_at": "2026-10-01T10:00:00+08:00",
+                "arr_at": "2026-10-01T10:55:00+08:00",
+                "duration_min": 55,
+                "duration_display": "约 1 小时",
+                "seat_hint": "经济舱",
+                "price_ref_cny": 420,
+                "price_display": "约 ¥420",
+                "service_ref": "航司短途直飞对照（参考）",
+                "leg_id": "leg-cd-cq-flight",
+                "comfort": "economy"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "成都 → 重庆",
+                "sub": "跳转 航司 / OTA · 约 ¥420",
+                "mode": "flight",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "cd-cq-balanced",
+            "type": "balanced",
+            "type_label": "最综合",
+            "price_ref_cny": 154,
+            "price_display": "¥140–175",
+            "price_note": "参考价",
+            "duration_min": 90,
+            "duration_display": "约 2 小时",
+            "transfers": 0,
+            "route_one_line": "成都 → 重庆",
+            "vs_direct": "参考价差不多，时长差不多",
+            "why": "直达走法，少换乘。当「对照」看就行。",
+            "why_detail": "直达走法，少换乘。当「对照」看就行。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。",
+            "play_hint": null,
+            "path_note": "直达",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "成都东站",
+                "to_station": "重庆西站",
+                "dep_at": "2026-10-01T08:20:00+08:00",
+                "arr_at": "2026-10-01T09:50:00+08:00",
+                "duration_min": 90,
+                "duration_display": "约 2 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 154,
+                "price_display": "约 ¥154",
+                "service_ref": "G 字头成渝直达（参考）",
+                "leg_id": "leg-cd-cq-g-direct",
+                "comfort": "second_class"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "成都 → 重庆",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥154",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          }
+        ],
+        "more": [
+          {
+            "id": "cd-cq-more-1",
+            "type_label": "其它组合",
+            "title": "成都 → 重庆",
+            "sub": "直达 · 约 ¥154",
+            "price_display": "¥154",
+            "plan_id": "plan-leg-cd-cq-g-direct-pm"
+          },
+          {
+            "id": "cd-cq-more-2",
+            "type_label": "其它组合",
+            "title": "成都 → 遂宁 → 重庆",
+            "sub": "系统选枢纽：遂宁 · 约 ¥120",
+            "price_display": "¥120",
+            "plan_id": "plan-leg-cd-sn-g_leg-sn-cq-g"
+          },
+          {
+            "id": "cd-cq-more-3",
+            "type_label": "其它组合",
+            "title": "成都 → 内江 → 重庆",
+            "sub": "系统选枢纽：内江 · 约 ¥130",
+            "price_display": "¥130",
+            "plan_id": "plan-leg-cd-nj-g_leg-nj-cq-g"
+          }
+        ]
+      }
+    },
+    "user_via_suining": {
+      "request": {
+        "from_city": "成都",
+        "to_city": "重庆",
+        "date_flexible": true,
+        "date": "2026-10-01",
+        "vias": [
+          "遂宁"
+        ],
+        "path_mode": "user"
+      },
+      "response": {
+        "ok": true,
+        "error": null,
+        "meta": {
+          "request": {
+            "from_city": "成都",
+            "to_city": "重庆",
+            "date_flexible": true,
+            "date": "2026-10-01",
+            "vias": [
+              "遂宁"
+            ],
+            "path_mode": "user"
+          },
+          "path_mode": "user",
+          "data_source": "mock",
+          "as_of": "2026-09-22T20:00:00+08:00",
+          "disclaimer": "价格、时刻均为参考，以购票平台为准",
+          "generated_by": "engine/export-plans-with-flight.js",
+          "no_realtime_inventory": true,
+          "adapters": "train.mock+flight.mock"
+        },
+        "direct_baseline": {
+          "price_ref_cny": 120,
+          "duration_min": 280,
+          "summary": "成都 → 遂宁 → 重庆",
+          "leg_id": "leg-cd-sn-g"
+        },
+        "path": {
+          "cities": [
+            "成都",
+            "重庆"
+          ],
+          "hubs": [
+            "遂宁"
+          ],
+          "note": "因你指定经 遂宁"
+        },
+        "main": [
+          {
+            "id": "cd-cq-via-cheap",
+            "type": "cheap",
+            "type_label": "最省钱",
+            "price_ref_cny": 120,
+            "price_display": "¥100–150",
+            "price_note": "参考价",
+            "duration_min": 280,
+            "duration_display": "约 5 小时",
+            "transfers": 1,
+            "route_one_line": "成都 → 遂宁 → 重庆",
+            "vs_direct": "参考价差不多，时长差不多",
+            "why": "经 遂宁 拆段的成渝邪修走法。多一趟换乘，未必更省，但能换换风景。",
+            "why_detail": "经 遂宁 拆段的成渝邪修走法。多一趟换乘，未必更省，但能换换风景。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。 换乘以接驳为主，窗口不够长不会硬推景点。",
+            "play_hint": null,
+            "path_note": "因你指定经 遂宁",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "成都东站",
+                "to_station": "遂宁站",
+                "dep_at": "2026-10-01T07:40:00+08:00",
+                "arr_at": "2026-10-01T08:35:00+08:00",
+                "duration_min": 55,
+                "duration_display": "约 1 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 52,
+                "price_display": "约 ¥52",
+                "service_ref": "G/D 成遂（参考）",
+                "leg_id": "leg-cd-sn-g",
+                "comfort": "second_class"
+              },
+              {
+                "kind": "xfer",
+                "city": "遂宁",
+                "xfer_kind": "same_station",
+                "xfer_kind_label": "同站换乘",
+                "buffer_min": 145,
+                "buffer_display": "约 145 分钟",
+                "tip": "预留接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "遂宁站",
+                "to_station": "重庆北站",
+                "dep_at": "2026-10-01T11:00:00+08:00",
+                "arr_at": "2026-10-01T12:20:00+08:00",
+                "duration_min": 80,
+                "duration_display": "约 1 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 68,
+                "price_display": "约 ¥68",
+                "service_ref": "G/D 遂渝（参考）",
+                "leg_id": "leg-sn-cq-g",
+                "comfort": "second_class"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "成都 → 遂宁",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥52",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "遂宁 → 重庆",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥68",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "cd-cq-via-fast",
+            "type": "fast",
+            "type_label": "最快",
+            "price_ref_cny": 120,
+            "price_display": "¥100–150",
+            "price_note": "参考价",
+            "duration_min": 280,
+            "duration_display": "约 5 小时",
+            "transfers": 1,
+            "route_one_line": "成都 → 遂宁 → 重庆",
+            "vs_direct": "参考价差不多，时长差不多",
+            "why": "经 遂宁 的高铁组合，门到门更短。",
+            "why_detail": "经 遂宁 的高铁组合，门到门更短。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。 换乘以接驳为主，窗口不够长不会硬推景点。",
+            "play_hint": null,
+            "path_note": "因你指定经 遂宁",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "成都东站",
+                "to_station": "遂宁站",
+                "dep_at": "2026-10-01T07:40:00+08:00",
+                "arr_at": "2026-10-01T08:35:00+08:00",
+                "duration_min": 55,
+                "duration_display": "约 1 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 52,
+                "price_display": "约 ¥52",
+                "service_ref": "G/D 成遂（参考）",
+                "leg_id": "leg-cd-sn-g",
+                "comfort": "second_class"
+              },
+              {
+                "kind": "xfer",
+                "city": "遂宁",
+                "xfer_kind": "same_station",
+                "xfer_kind_label": "同站换乘",
+                "buffer_min": 145,
+                "buffer_display": "约 145 分钟",
+                "tip": "预留接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "遂宁站",
+                "to_station": "重庆北站",
+                "dep_at": "2026-10-01T11:00:00+08:00",
+                "arr_at": "2026-10-01T12:20:00+08:00",
+                "duration_min": 80,
+                "duration_display": "约 1 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 68,
+                "price_display": "约 ¥68",
+                "service_ref": "G/D 遂渝（参考）",
+                "leg_id": "leg-sn-cq-g",
+                "comfort": "second_class"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "成都 → 遂宁",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥52",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "遂宁 → 重庆",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥68",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "cd-cq-via-balanced",
+            "type": "balanced",
+            "type_label": "最综合",
+            "price_ref_cny": 120,
+            "price_display": "¥100–150",
+            "price_note": "参考价",
+            "duration_min": 280,
+            "duration_display": "约 5 小时",
+            "transfers": 1,
+            "route_one_line": "成都 → 遂宁 → 重庆",
+            "vs_direct": "参考价差不多，时长差不多",
+            "why": "经 遂宁 拆段的成渝邪修走法。多一趟换乘，未必更省，但能换换风景。",
+            "why_detail": "经 遂宁 拆段的成渝邪修走法。多一趟换乘，未必更省，但能换换风景。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。 换乘以接驳为主，窗口不够长不会硬推景点。",
+            "play_hint": null,
+            "path_note": "因你指定经 遂宁",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "成都东站",
+                "to_station": "遂宁站",
+                "dep_at": "2026-10-01T07:40:00+08:00",
+                "arr_at": "2026-10-01T08:35:00+08:00",
+                "duration_min": 55,
+                "duration_display": "约 1 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 52,
+                "price_display": "约 ¥52",
+                "service_ref": "G/D 成遂（参考）",
+                "leg_id": "leg-cd-sn-g",
+                "comfort": "second_class"
+              },
+              {
+                "kind": "xfer",
+                "city": "遂宁",
+                "xfer_kind": "same_station",
+                "xfer_kind_label": "同站换乘",
+                "buffer_min": 145,
+                "buffer_display": "约 145 分钟",
+                "tip": "预留接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "遂宁站",
+                "to_station": "重庆北站",
+                "dep_at": "2026-10-01T11:00:00+08:00",
+                "arr_at": "2026-10-01T12:20:00+08:00",
+                "duration_min": 80,
+                "duration_display": "约 1 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 68,
+                "price_display": "约 ¥68",
+                "service_ref": "G/D 遂渝（参考）",
+                "leg_id": "leg-sn-cq-g",
+                "comfort": "second_class"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "成都 → 遂宁",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥52",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "遂宁 → 重庆",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥68",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          }
+        ],
+        "more": []
+      }
+    }
+  },
+  "request": {
+    "from_city": "成都",
+    "to_city": "重庆",
+    "date_flexible": true,
+    "date": "2026-10-01",
+    "vias": [],
+    "path_mode": "auto"
+  },
+  "response": {
+    "ok": true,
+    "error": null,
+    "meta": {
+      "request": {
+        "from_city": "成都",
+        "to_city": "重庆",
+        "date_flexible": true,
+        "date": "2026-10-01",
+        "vias": [],
+        "path_mode": "auto"
+      },
+      "path_mode": "auto",
+      "data_source": "mock",
+      "as_of": "2026-09-22T20:00:00+08:00",
+      "disclaimer": "价格、时刻均为参考，以购票平台为准",
+      "generated_by": "engine/export-plans-with-flight.js",
+      "no_realtime_inventory": true,
+      "adapters": "train.mock+flight.mock"
+    },
+    "direct_baseline": {
+      "price_ref_cny": 154,
+      "duration_min": 90,
+      "summary": "成都 → 重庆",
+      "leg_id": "leg-cd-cq-g-direct"
+    },
+    "path": {
+      "cities": [
+        "成都",
+        "重庆"
+      ],
+      "hubs": [],
+      "note": "直达"
+    },
+    "main": [
+      {
+        "id": "cd-cq-cheap",
+        "type": "cheap",
+        "type_label": "最省钱",
+        "price_ref_cny": 76,
+        "price_display": "¥65–110",
+        "price_note": "参考价",
+        "duration_min": 260,
+        "duration_display": "约 4 小时",
+        "transfers": 0,
+        "route_one_line": "成都 → 重庆",
+        "vs_direct": "参考价大概省 78 块，多花大约 3 小时",
+        "why": "直达更便宜一档，适合预算优先、能接受慢一点的人。",
+        "why_detail": "直达更便宜一档，适合预算优先、能接受慢一点的人。 参考价大概省 78 块，多花大约 3 小时。价格、时刻都是参考，以购票平台为准。",
+        "play_hint": null,
+        "path_note": "直达",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "火车",
+            "from_station": "成都站",
+            "to_station": "重庆站",
+            "dep_at": "2026-10-01T10:30:00+08:00",
+            "arr_at": "2026-10-01T14:50:00+08:00",
+            "duration_min": 260,
+            "duration_display": "约 4 小时",
+            "seat_hint": "硬座",
+            "price_ref_cny": 76,
+            "price_display": "约 ¥76",
+            "service_ref": "普速/较慢动车类（参考）",
+            "leg_id": "leg-cd-cq-d-cheap",
+            "comfort": "hardseat"
+          }
+        ],
+        "play": null,
+        "buy_legs": [
+          {
+            "name": "成都 → 重庆",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥76",
+            "mode": "train",
+            "deep_link_hint": null
+          }
+        ]
+      },
+      {
+        "id": "cd-cq-fast",
+        "type": "fast",
+        "type_label": "最快",
+        "price_ref_cny": 420,
+        "price_display": "¥280–700",
+        "price_note": "参考价",
+        "duration_min": 55,
+        "duration_display": "约 1 小时",
+        "transfers": 0,
+        "route_one_line": "成都 → 重庆",
+        "vs_direct": "参考价大概贵 266 块，能少耗大约 1 小时",
+        "why": "成都直飞重庆，一趟飞机到，少折腾。参考价以航司/OTA为准。",
+        "why_detail": "成都直飞重庆，一趟飞机到，少折腾。参考价以航司/OTA为准。 参考价大概贵 266 块，能少耗大约 1 小时。",
+        "play_hint": null,
+        "path_note": "直达",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "flight",
+            "mode_label": "飞机",
+            "from_station": "成都双流国际机场",
+            "to_station": "重庆江北国际机场",
+            "dep_at": "2026-10-01T10:00:00+08:00",
+            "arr_at": "2026-10-01T10:55:00+08:00",
+            "duration_min": 55,
+            "duration_display": "约 1 小时",
+            "seat_hint": "经济舱",
+            "price_ref_cny": 420,
+            "price_display": "约 ¥420",
+            "service_ref": "航司短途直飞对照（参考）",
+            "leg_id": "leg-cd-cq-flight",
+            "comfort": "economy"
+          }
+        ],
+        "play": null,
+        "buy_legs": [
+          {
+            "name": "成都 → 重庆",
+            "sub": "跳转 航司 / OTA · 约 ¥420",
+            "mode": "flight",
+            "deep_link_hint": null
+          }
+        ]
+      },
+      {
+        "id": "cd-cq-balanced",
+        "type": "balanced",
+        "type_label": "最综合",
+        "price_ref_cny": 154,
+        "price_display": "¥140–175",
+        "price_note": "参考价",
+        "duration_min": 90,
+        "duration_display": "约 2 小时",
+        "transfers": 0,
+        "route_one_line": "成都 → 重庆",
+        "vs_direct": "参考价差不多，时长差不多",
+        "why": "直达走法，少换乘。当「对照」看就行。",
+        "why_detail": "直达走法，少换乘。当「对照」看就行。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。",
+        "play_hint": null,
+        "path_note": "直达",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "高铁",
+            "from_station": "成都东站",
+            "to_station": "重庆西站",
+            "dep_at": "2026-10-01T08:20:00+08:00",
+            "arr_at": "2026-10-01T09:50:00+08:00",
+            "duration_min": 90,
+            "duration_display": "约 2 小时",
+            "seat_hint": "二等座",
+            "price_ref_cny": 154,
+            "price_display": "约 ¥154",
+            "service_ref": "G 字头成渝直达（参考）",
+            "leg_id": "leg-cd-cq-g-direct",
+            "comfort": "second_class"
+          }
+        ],
+        "play": null,
+        "buy_legs": [
+          {
+            "name": "成都 → 重庆",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥154",
+            "mode": "train",
+            "deep_link_hint": null
+          }
+        ]
+      }
+    ],
+    "more": [
+      {
+        "id": "cd-cq-more-1",
+        "type_label": "其它组合",
+        "title": "成都 → 重庆",
+        "sub": "直达 · 约 ¥154",
+        "price_display": "¥154",
+        "plan_id": "plan-leg-cd-cq-g-direct-pm"
+      },
+      {
+        "id": "cd-cq-more-2",
+        "type_label": "其它组合",
+        "title": "成都 → 遂宁 → 重庆",
+        "sub": "系统选枢纽：遂宁 · 约 ¥120",
+        "price_display": "¥120",
+        "plan_id": "plan-leg-cd-sn-g_leg-sn-cq-g"
+      },
+      {
+        "id": "cd-cq-more-3",
+        "type_label": "其它组合",
+        "title": "成都 → 内江 → 重庆",
+        "sub": "系统选枢纽：内江 · 约 ¥130",
+        "price_display": "¥130",
+        "plan_id": "plan-leg-cd-nj-g_leg-nj-cq-g"
+      }
+    ]
+  }
+}
