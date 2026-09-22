@@ -35,3 +35,15 @@ node engine/adapters/train.mock.js 徐州 西宁 2026-10-01
 
 详见 [`docs/data-sources.md`](../docs/data-sources.md)。
 
+## Node 流水线（CJS）
+
+| 文件 | 作用 |
+|------|------|
+| `pipeline.js` | `searchPlans({from,to,date,vias})`：adapters 取腿 → MVP 枢纽 1 转 / 指定途经链 → MCT → `hub-pois` TransferPlay → `score.pickMainCards` |
+| `search-pipeline-demo.js` | 徐州→拉萨、徐州→拉萨 via 西宁 冒烟 |
+
+```bash
+node engine/search-pipeline-demo.js
+```
+
+无新依赖；mock OD 不足时返回 `{ ok:false, reason, main, more:[] }`。不含 LLM / 实时余票。
