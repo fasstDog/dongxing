@@ -18,7 +18,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '../..');
 const DEFAULT_LEGS_PATH = path.join(ROOT, 'data', 'mock', 'legs-xuzhou-lhasa.json');
-/** MVP 单机内存 TTL（毫秒）；mock 数据不变时可略长 */
+/** MVP 单机内存 TTL（毫秒） */
 const DEFAULT_TTL_MS = 15 * 60 * 1000;
 
 /** @type {Map<string, { expires: number, legs: object[] }>} */
@@ -52,75 +52,45 @@ function loadAllLegs() {
   return list.filter((l) => l && l.mode === 'train');
 }
 
-/**
- * Shift dep_at / arr_at to the given calendar date (local +08:00 assumed in mock ISO).
- * Keeps duration; does not invent new services.
- */
-function shiftToDate(leg, dateStr) {
-  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return { ...leg };
-  const dep = new Date(leg.dep_at);
-  const arr = new Date(leg.arr_at);
-  if (Number.isNaN(dep.getTime()) || Number.isNaN(arr.getTime())) return { ...leg };
-  const durMs = arr.getTime() - dep.getTime();
-  const [y, m, d] = dateStr.split('-').map(Number);
-  const nextDep = new Date(dep);
-  nextDep.setFullYear(y, m - 1, d);
-  const nextArr = new Date(nextDep.getTime() + durMs);
-  return {
-    ...leg,
-    dep_at: nextDep.toISOString().replace(/\.\d{3}Z$/, '+08:00').replace(/Z$/, '+08:00'),
-    arr_at: nextArr.toISOString().replace(/\.\d{3}Z$/, '+08:00').replace(/Z$/, '+08:00'),
-    // Prefer keeping original offset strings if parse round-trip is messy — use slice replace:
-    // Re-build from components for stable +08:00 mock:
-    ...rebuildIsoPair(dep, arr, dateStr),
-    source: leg.source || 'mock',
-    as_of: leg.as_of || new Date().toISOString().replace(/\.\d{3}Z$/, '+08:00'),
-  };
-}
-
 function pad(n) {
   return String(n).padStart(2, '0');
 }
 
-function rebuildIsoPair(dep, arr, dateStr) {
-  const durMs = arr.getTime() - dep.getTime();
-  const [y, m, d] = dateStr.split('-').map(Number);
-  const depLocal = new Date(y, m - 1, d, dep.getHours(), dep.getMinutes(), dep.getSeconds());
-  // Use UTC getters carefully — mock strings are +08:00; parse ISO keeps absolute instant.
-  // Simpler: string-replace date prefix on dep_at / arr_at and fix arr calendar if overnight.
-  return null;
+/** Calendar day + n days as YYYY-MM-DD (UTC+8 wall date arithmetic). */
+function addDaysYmd(ymd, days) {
+  const ms = Date.parse(ymd + 'T12:00:00+08:00') + days * 86400000;
+  const d = new Date(ms);
+  // format in +08
+  const shifted = new Date(ms + 8 * 3600 * 1000);
+  const y = shifted.getUTCFullYear();
+  const m = shifted.getUTCMonth() + 1;
+  const day = shifted.getUTCDate();
+  return y + '-' + pad(m) + '-' + pad(day);
 }
 
-/** Stable date shift: replace YYYY-MM-DD prefix; bump arr date by overnight delta. */
+function daySpanYmd(fromYmd, toYmd) {
+  const a = Date.parse(fromYmd + 'T12:00:00+08:00');
+  const b = Date.parse(toYmd + 'T12:00:00+08:00');
+  return Math.round((b - a) / 86400000);
+}
+
+/**
+ * Keep clock + offset suffix; move calendar to dateStr; preserve overnight span.
+ */
 function applyDate(leg, dateStr) {
-  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-    return Object.assign({}, leg, { source: leg.source || 'mock' });
-  }
-  const depDay = leg.dep_at.slice(0, 10);
-  const arrDay = leg.arr_at.slice(0, 10);
-  const daySpan = Math.round(
-    (Date.parse(arrDay + 'T00:00:00+08:00') - Date.parse(depDay + 'T00:00:00+08:00')) / 86400000
-  );
-  const depAt = dateStr + leg.dep_at.slice(10);
-  const base = Date.parse(dateStr + 'T00:00:00+08:00') + daySpan * 86400000;
-  const arrDate = new Date(base);
-  const arrDayStr =
-    arrDate.getFullYear() +
-    '-' +
-    pad(arrDate.getMonth() + 1) +
-    '-' +
-    pad(arrDate.getDate());
-  const arrAt = arrDayStr + leg.arr_at.slice(10);
-  return Object.assign({}, leg, {
-    dep_at: depAt,
-    arr_at: arrAt,
-    source: leg.source || 'mock',
-  });
+  const out = Object.assign({}, leg, { source: leg.source || 'mock' });
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return out;
+  const depDay = String(leg.dep_at).slice(0, 10);
+  const arrDay = String(leg.arr_at).slice(0, 10);
+  const span = daySpanYmd(depDay, arrDay);
+  out.dep_at = dateStr + String(leg.dep_at).slice(10);
+  out.arr_at = addDaysYmd(dateStr, span) + String(leg.arr_at).slice(10);
+  return out;
 }
 
 /**
  * @param {{ from_city: string, to_city: string, date?: string, bypassCache?: boolean }} query
- * @returns {object[]} Leg[]
+ * @returns {object[]}
  */
 function search(query) {
   if (!query || !query.from_city || !query.to_city) {
@@ -141,8 +111,7 @@ function search(query) {
     }
   }
 
-  const all = loadAllLegs();
-  const matched = all
+  const matched = loadAllLegs()
     .filter((l) => l.from_city === fromCity && l.to_city === toCity)
     .map((l) => applyDate(l, date));
 
