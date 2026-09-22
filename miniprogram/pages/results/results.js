@@ -33,8 +33,8 @@ Page({
       demoError: options.demoError === '1',
       odLine: fromCity + ' → ' + toCity + (vias.length ? '（途经 ' + vias.join('、') + '）' : ''),
       notice: vias.length
-        ? '已记录途经：' + vias.join('、') + '（脚手架仍按 OD 读 mock）'
-        : '只推荐不卖票 · mock 三主卡'
+        ? '已记录途经：' + vias.join('、') + '（样例仍按出发/到达出方案）'
+        : '只推荐路线，不卖票。价格、时刻都是参考。'
     });
     this.runLoad();
   },
@@ -86,7 +86,7 @@ Page({
       demoEmpty: false,
       demoError: false,
       odLine: s.fromCity + ' → ' + s.toCity,
-      notice: '示例 OD · mock 三主卡'
+      notice: '示例路线 · 只推荐不卖票'
     });
     this.runLoad();
   },

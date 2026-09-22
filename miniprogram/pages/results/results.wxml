@@ -60,6 +60,6 @@
     </view>
   </block>
 
-  <view class="disclaimer">只推荐不卖票 · 价格时刻为参考 mock · 无真实购票</view>
+  <view class="disclaimer">只推荐路线，不卖票。价格、时刻都是参考，不保证有票。</view>
   <van-toast id="van-toast" />
 </view>

@@ -42,7 +42,7 @@ Page({
 
   onBuy() {
     Toast({
-      message: '将跳转12306/OTA，不卖票',
+      message: '我们不卖票。去 12306 / 航司 / OTA 自己买',
       duration: 2500
     });
   },

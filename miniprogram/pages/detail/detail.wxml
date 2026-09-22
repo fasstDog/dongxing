@@ -22,7 +22,7 @@
         <view class="tl-badge xfer">换</view>
         <view class="tl-body">
           <view class="tl-title">{{ item.city }} · {{ item.xferLabel }}</view>
-          <view class="tl-desc" wx:if="{{ item.buffer }}">缓冲 {{ item.buffer }}</view>
+          <view class="tl-desc" wx:if="{{ item.buffer }}">空窗 {{ item.buffer }}</view>
           <view class="tl-desc">{{ item.tip }}</view>
         </view>
       </view>
@@ -42,7 +42,7 @@
         </view>
       </view>
     </block>
-    <view wx:if="{{ !plan.timeline.length }}" class="muted pad">暂无行程段（mock）</view>
+    <view wx:if="{{ !plan.timeline.length }}" class="muted pad">暂时没有行程明细</view>
   </view>
 
   <view class="block-title">为什么</view>
@@ -59,7 +59,7 @@
       />
     </van-cell-group>
   </block>
-  <view wx:elif="{{ plan.playHint }}" class="block muted">怎么玩提示：{{ plan.playHint }}（空窗不够长时不硬推景点）</view>
+  <view wx:elif="{{ plan.playHint }}" class="block muted">{{ plan.playHint }}</view>
 
   <view class="block-title">去购票</view>
   <van-cell-group inset>

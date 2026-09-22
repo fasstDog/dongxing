@@ -40,7 +40,7 @@ function adaptTimelineItem(seg) {
       city: seg.city || '',
       xferLabel: seg.xfer_kind_label || seg.xferKindLabel || '换乘',
       buffer: seg.buffer_display || seg.bufferDisplay || '',
-      tip: seg.tip || '预留接驳时间'
+      tip: seg.tip || '留足接驳时间，就在站里歇会儿'
     };
   }
   const mode = seg.mode || 'train';

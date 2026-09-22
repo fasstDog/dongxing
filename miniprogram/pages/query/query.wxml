@@ -1,7 +1,7 @@
 <view class="page">
   <van-notice-bar
     left-icon="info-o"
-    text="只推荐路线，不卖票。价格与时刻为参考。"
+    text="只推荐路线，不卖票。价格、时刻都是参考，不保证有票。"
     color="#1989fa"
     background="#ecf5ff"
   />
@@ -59,6 +59,6 @@
     <view class="tiny-hint">仅原型用，默认关闭。</view>
   </view>
 
-  <view class="disclaimer">只推荐路线，不卖票。价格与时刻为参考 mock。</view>
+  <view class="disclaimer">只推荐路线，不卖票。价格、时刻都是参考，不保证有票。</view>
   <van-toast id="van-toast" />
 </view>
