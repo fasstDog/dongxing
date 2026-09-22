@@ -9,21 +9,15 @@ from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+from export_fe import export_fe
+from score import (
+    MCT_SAME_CITY_MIN,
+    MCT_SAME_STATION_MIN,
+    pick_three,
+    comfort_avg as comfort_score,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
-MCT_SAME_STATION_MIN = 60
-MCT_SAME_CITY_MIN = 180
-CHEAP_MAX_DURATION_MIN = 60 * 55  # 防极端：约 55h 上限仍允许直达硬座
-
-COMFORT_SCORE = {
-    "hardseat": 0.15,
-    "economy": 0.45,
-    "second_class": 0.55,
-    "hard_sleeper": 0.7,
-    "first_class": 0.75,
-    "soft_sleeper": 0.85,
-    "unknown": 0.4,
-}
 
 
 def parse_dt(s: str) -> datetime:
@@ -96,11 +90,6 @@ def connectable(a: dict, b: dict) -> bool:
     buf = buffer_min(a, b)
     return buf >= need
 
-
-def comfort_score(legs: list[dict]) -> float:
-    if not legs:
-        return 0.0
-    return sum(COMFORT_SCORE.get(l.get("comfort") or "unknown", 0.4) for l in legs) / len(legs)
 
 
 def pick_pois(hub_city: str, buffer_h: float, pois: list[dict], limit: int = 2) -> list[dict]:
@@ -393,19 +382,6 @@ def chain_playable(legs: list[dict], pois: list[dict]) -> bool:
     return False
 
 
-def pick_main(
-    cands: list[tuple[list[dict], str | None, bool]], pois: list[dict]
-) -> dict[str, tuple]:
-    if not cands:
-        return {}
-    cheap = min(cands, key=lambda c: score_cheap(c[0]))
-    fast = min(cands, key=lambda c: score_fast(c[0]))
-    balanced = min(
-        cands, key=lambda c: score_balanced(c[0], chain_playable(c[0], pois))
-    )
-    return {"cheap": cheap, "fast": fast, "balanced": balanced}
-
-
 def search(
     req: dict,
     legs: list[dict],
@@ -458,7 +434,11 @@ def search(
             "leg_id": d.get("id"),
         }
 
-    picked = pick_main(cands, pois)
+    picked = pick_three(
+        cands,
+        duration_fn=door_to_door_min,
+        playable_fn=lambda legs: chain_playable(legs, pois),
+    )
     main = []
     used_ids = set()
     for ptype, (chain, note, user_via) in picked.items():
@@ -611,6 +591,36 @@ def main() -> None:
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    # 同步前端路径 data/plans-xuzhou-lhasa.json
+    auto_req = scenarios[0]["request"]
+    cands = enumerate_candidates(
+        auto_req["from_city"],
+        auto_req["to_city"],
+        [],
+        "auto",
+        legs,
+        HUBS_MVP,
+    )
+    picked = pick_three(
+        cands,
+        duration_fn=door_to_door_min,
+        playable_fn=lambda lg: chain_playable(lg, pois),
+    )
+    fe = export_fe(
+        request=auto_req,
+        picked=picked,
+        all_cands=cands,
+        pois=pois,
+        legs_source=args.legs.name,
+        pois_source=args.pois.name,
+        as_of=max((l["as_of"] for l in legs), default=None),
+    )
+    fe_out = ROOT / "data/plans-xuzhou-lhasa.json"
+    fe_out.parent.mkdir(parents=True, exist_ok=True)
+    fe_out.write_text(json.dumps(fe, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"wrote {fe_out}")
+
     print(f"wrote {args.out}")
     for name, sc in out["scenarios"].items():
         r = sc["response"]
