@@ -4,9 +4,7 @@
  * 与 train.mock 同契约：search({ from_city, to_city, date?, after_at? }) → Leg[]
  * 仅返回 mode === "flight"；单机内存 TTL；不臆造航班号/票价。
  *
- * 默认合并读取：
- *   data/mock/legs-xuzhou-lhasa.json
- *   data/mock/legs-shanghai-chengdu.json
+ * 默认合并读取 data/mock/legs-*.json（含徐拉 / 沪蓉 / 京汉 等）
  *
  *   node engine/adapters/flight.mock.js 西安 拉萨
  *   node engine/adapters/flight.mock.js 上海 成都 2026-10-08
@@ -18,25 +16,39 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '../..');
-const DEFAULT_LEGS_PATHS = [
-  path.join(ROOT, 'data', 'mock', 'legs-xuzhou-lhasa.json'),
-  path.join(ROOT, 'data', 'mock', 'legs-shanghai-chengdu.json'),
-];
+const DEFAULT_LEGS_DIR = path.join(ROOT, 'data', 'mock');
 const DEFAULT_TTL_MS = 15 * 60 * 1000;
 
 /** @type {Map<string, { expires: number, legs: object[] }>} */
 const cache = new Map();
 
-let legsPaths = DEFAULT_LEGS_PATHS.slice();
+/** Single-file override; null = merge all data/mock/legs-*.json */
+let legsPath = null;
+let legsDir = DEFAULT_LEGS_DIR;
 let ttlMs = DEFAULT_TTL_MS;
 
 function configure(opts) {
   if (!opts || typeof opts !== 'object') return;
-  if (opts.legsPath) legsPaths = [path.resolve(opts.legsPath)];
-  if (Array.isArray(opts.legsPaths) && opts.legsPaths.length) {
-    legsPaths = opts.legsPaths.map((p) => path.resolve(p));
+  if (opts.legsPath) {
+    legsPath = path.resolve(opts.legsPath);
   }
+  if (Array.isArray(opts.legsPaths) && opts.legsPaths.length) {
+    legsPath = null;
+    legsDir = path.dirname(path.resolve(opts.legsPaths[0]));
+    // keep explicit list via temporary marker files — prefer legsDir scan
+  }
+  if (opts.legsDir) legsDir = path.resolve(opts.legsDir);
   if (typeof opts.ttlMs === 'number' && opts.ttlMs >= 0) ttlMs = opts.ttlMs;
+}
+
+function resolveLegsFiles() {
+  if (legsPath) return [legsPath];
+  if (!fs.existsSync(legsDir)) return [];
+  return fs
+    .readdirSync(legsDir)
+    .filter((n) => /^legs-.*\.json$/.test(n))
+    .map((n) => path.join(legsDir, n))
+    .sort();
 }
 
 function clearCache() {
@@ -48,19 +60,18 @@ function cacheKey(fromCity, toCity, date, afterAt) {
 }
 
 function loadAllLegs() {
+  const files = resolveLegsFiles();
   const out = [];
-  let any = false;
-  for (const p of legsPaths) {
+  for (const p of files) {
     if (!fs.existsSync(p)) continue;
-    any = true;
     const raw = JSON.parse(fs.readFileSync(p, 'utf8'));
     const list = Array.isArray(raw.legs) ? raw.legs : Array.isArray(raw) ? raw : [];
     for (const l of list) {
       if (l && l.mode === 'flight') out.push(l);
     }
   }
-  if (!any) {
-    const err = new Error('LEGS_NOT_FOUND: ' + legsPaths.join(', '));
+  if (!files.length) {
+    const err = new Error('LEGS_NOT_FOUND: ' + legsDir);
     err.code = 'LEGS_NOT_FOUND';
     throw err;
   }
