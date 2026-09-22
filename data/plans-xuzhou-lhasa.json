@@ -3,17 +3,21 @@
   "request": {
     "from_city": "徐州",
     "to_city": "拉萨",
-    "date": "2026-10-01",
+    "date": null,
     "date_policy": "flexible"
   },
   "meta": {
-    "od": { "from_city": "徐州", "to_city": "拉萨" },
+    "od": {
+      "from_city": "徐州",
+      "to_city": "拉萨"
+    },
     "source": "mock",
     "as_of": "2026-09-22T19:20:00+08:00",
-    "price_note": "所有金额均为参考价（人民币元），以购票平台为准",
-    "availability_note": "本 mock 不提供实时余票、座位库存或出票承诺",
-    "legs_source": "data/mock/legs-xuzhou-lhasa.json",
-    "transfer_plays_source": "data/hub-pois.json"
+    "price_note": "价格、时刻均为参考，以购票平台为准",
+    "availability_note": "不含实时余票；不代表可售",
+    "legs_source": "legs-xuzhou-lhasa.json",
+    "transfer_plays_source": "hub-pois.json",
+    "generated_by": "engine/search.py + engine/score.py"
   },
   "plans": [
     {
@@ -27,12 +31,12 @@
         "duration_text": "约 42 小时",
         "transfers": 0,
         "price_ref_cny": 397,
-        "price_text": "参考价约 ¥397（硬座）"
+        "price_text": "参考价约 ¥397"
       },
       "price_ref_cny": 397,
       "price_min_cny": 397,
       "price_max_cny": 760,
-      "price_label": "参考价（硬座约 ¥397；硬卧约 ¥760）",
+      "price_label": "参考价约 ¥397–760",
       "transfers": [],
       "legs": [
         {
@@ -55,10 +59,10 @@
           "as_of": "2026-09-22T19:20:00+08:00"
         }
       ],
-      "why": "参考总价最低，适合预算优先且能接受 40 小时以上久坐的人；硬座体验差，硬卧价格更高且过路票不确定。价格、时刻均为参考，不代表有票。",
+      "why": "参考总价最低，适合预算优先且能接受长时间久坐的人；硬座体验差，硬卧价格更高且过路票不确定。价格、时刻均为参考，不代表有票。",
       "purchase": {
         "mode": "external",
-        "note": "按段前往 12306 或铁路 OTA 查询；本产品只推荐路线，不卖票"
+        "note": "按段前往 12306 或航司/OTA 查询；本产品只推荐路线，不卖票"
       }
     },
     {
@@ -67,17 +71,17 @@
       "label": "最快",
       "rank": 2,
       "summary": {
-        "route_text": "徐州东 → 西安北 → 拉萨贡嘎",
+        "route_text": "徐州 → 西安 → 拉萨（空铁）",
         "duration_min": 740,
         "duration_text": "约 12 小时 20 分（含换乘）",
         "transfers": 1,
         "price_ref_cny": 1130,
-        "price_text": "参考价约 ¥1,130"
+        "price_text": "参考价约 ¥1130"
       },
       "price_ref_cny": 1130,
       "price_min_cny": 950,
       "price_max_cny": 1370,
-      "price_label": "参考价约 ¥950–1,370",
+      "price_label": "参考价约 ¥950–1370",
       "transfers": [
         {
           "hub_city": "西安",
@@ -86,8 +90,18 @@
           "buffer_min": 270,
           "buffer_text": "约 4 小时 30 分",
           "kind": "同城换乘",
-          "tip": "西安北站到咸阳机场需接驳，预留值机与安检时间",
-          "transfer_play": null
+          "tip": "窗口达到玩法阈值；去大明宫国家遗址公园后请提前回站",
+          "transfer_play": {
+            "hub_city": "西安",
+            "anchor_station": "西安北站",
+            "name": "大明宫国家遗址公园",
+            "dist_text": "地铁可达，距西安北站约 8–12km",
+            "dist_km": 10,
+            "suggest_hours": 2,
+            "suggest_text": "建议 2 小时（含地铁）",
+            "min_buffer_hours": 3,
+            "back_ok_note": "相对北站比老城区更近；仍须预留回站安检"
+          }
         }
       ],
       "legs": [
@@ -130,10 +144,10 @@
           "as_of": "2026-09-22T19:20:00+08:00"
         }
       ],
-      "why": "高铁接西安再飞拉萨，门到门时间最短，避开直达 40 小时以上的久坐；代价是参考总价明显更高，机票价格波动也更大。",
+      "why": "门到门参考时长最短的空铁组合；总价更高，机票随季节波动。价格、时刻均为参考，不代表有票。",
       "purchase": {
         "mode": "external",
-        "note": "徐州东→西安北查 12306；西安→拉萨查航司或 OTA；本产品不出票"
+        "note": "按段前往 12306 或航司/OTA 查询；本产品只推荐路线，不卖票"
       }
     },
     {
@@ -160,8 +174,8 @@
           "to_leg_id": "leg-xnn-lxa-origin",
           "buffer_min": 380,
           "buffer_text": "约 6 小时 20 分",
-          "kind": "同城换乘",
-          "tip": "窗口达到半日向阈值；去塔尔寺后需提前回西宁站安检",
+          "kind": "同站换乘",
+          "tip": "窗口达到玩法阈值；去塔尔寺后请提前回站",
           "transfer_play": {
             "hub_city": "西宁",
             "anchor_station": "西宁站",
@@ -215,206 +229,12 @@
           "as_of": "2026-09-22T19:20:00+08:00"
         }
       ],
-      "why": "经西宁拆两段：后半段是西宁始发进藏车，通常比过路直达更适合安排席别；参考总价介于直达硬座与硬卧之间，换乘窗口达到 6 小时以上，还能顺路玩塔尔寺。",
+      "why": "经西宁拆两段：后半段参考始发/更优席别；参考总价介于直达硬座与硬卧之间。换乘窗口够长，还可顺路玩塔尔寺。价格、时刻均为参考，不代表有票。",
       "purchase": {
         "mode": "external",
-        "note": "分段查 12306；价格、时刻和可购席别以平台实时结果为准"
+        "note": "按段前往 12306 或航司/OTA 查询；本产品只推荐路线，不卖票"
       }
     }
   ],
-  "morePlans": [
-    {
-      "id": "plan-more-direct-sleeper",
-      "kind": "direct-sleeper",
-      "label": "直达硬卧",
-      "plan_ref": "plan-cheapest",
-      "summary": {
-        "route_text": "徐州 → 拉萨（直达过路车）",
-        "duration_min": 2520,
-        "duration_text": "约 42 小时",
-        "transfers": 0,
-        "price_ref_cny": 760,
-        "price_text": "参考价约 ¥760（硬卧）"
-      },
-      "price_ref_cny": 760,
-      "price_min_cny": 397,
-      "price_max_cny": 760,
-      "price_label": "参考价（硬卧约 ¥760）",
-      "transfers": [],
-      "legs": [
-        {
-          "id": "leg-xz-lxa-direct",
-          "mode": "train",
-          "from_city": "徐州",
-          "to_city": "拉萨",
-          "from_station": "徐州站",
-          "to_station": "拉萨站",
-          "dep_at": "2026-10-01T12:00:00+08:00",
-          "arr_at": "2026-10-03T06:00:00+08:00",
-          "duration_min": 2520,
-          "price_ref_cny": 397,
-          "price_min_cny": 397,
-          "price_max_cny": 760,
-          "seat_hint": "硬卧（参考）",
-          "service_ref": "Z 字头过路车（参考）",
-          "comfort": "hard_sleeper",
-          "source": "mock",
-          "as_of": "2026-09-22T19:20:00+08:00"
-        }
-      ],
-      "why": "比硬座舒服，但仍需连续乘坐约 42 小时；硬卧金额只是参考区间，不表示有余票。"
-    },
-    {
-      "id": "plan-more-xining-rest",
-      "kind": "xining-rest",
-      "label": "西宁站前休息",
-      "plan_ref": "plan-balanced",
-      "summary": {
-        "route_text": "徐州 → 西宁 → 拉萨",
-        "duration_min": 2860,
-        "duration_text": "约 47 小时 40 分（含换乘）",
-        "transfers": 1,
-        "price_ref_cny": 650,
-        "price_text": "参考价约 ¥650"
-      },
-      "price_ref_cny": 650,
-      "price_min_cny": 520,
-      "price_max_cny": 780,
-      "price_label": "参考价约 ¥520–780",
-      "transfers": [
-        {
-          "hub_city": "西宁",
-          "from_leg_id": "leg-xz-xnn-z-class",
-          "to_leg_id": "leg-xnn-lxa-origin",
-          "buffer_min": 380,
-          "buffer_text": "约 6 小时 20 分",
-          "kind": "同城换乘",
-          "tip": "不出城更稳，可在站内或站前补给、休息",
-          "transfer_play": {
-            "hub_city": "西宁",
-            "anchor_station": "西宁站",
-            "name": "站内 / 站前休息",
-            "dist_text": "西宁站内或出站口周边",
-            "dist_km": 0.3,
-            "suggest_hours": 1,
-            "suggest_text": "休息、补给，不远逛",
-            "min_buffer_hours": 2,
-            "back_ok_note": "同站缓冲约 ≥2 小时：优先休息与下一程安检，不硬推景点"
-          }
-        }
-      ],
-      "legs": [
-        {
-          "id": "leg-xz-xnn-z-class",
-          "mode": "train",
-          "from_city": "徐州",
-          "to_city": "西宁",
-          "from_station": "徐州站",
-          "to_station": "西宁站",
-          "dep_at": "2026-10-01T18:10:00+08:00",
-          "arr_at": "2026-10-02T14:40:00+08:00",
-          "duration_min": 1230,
-          "price_ref_cny": 350,
-          "price_min_cny": 280,
-          "price_max_cny": 420,
-          "seat_hint": "硬卧 / 硬座",
-          "service_ref": "Z165 类",
-          "comfort": "hard_sleeper",
-          "source": "mock",
-          "as_of": "2026-09-22T19:20:00+08:00"
-        },
-        {
-          "id": "leg-xnn-lxa-origin",
-          "mode": "train",
-          "from_city": "西宁",
-          "to_city": "拉萨",
-          "from_station": "西宁站",
-          "to_station": "拉萨站",
-          "dep_at": "2026-10-02T21:00:00+08:00",
-          "arr_at": "2026-10-03T17:50:00+08:00",
-          "duration_min": 1250,
-          "price_ref_cny": 300,
-          "price_min_cny": 240,
-          "price_max_cny": 360,
-          "seat_hint": "硬卧优先",
-          "service_ref": "西宁始发进藏 Z6801 类",
-          "comfort": "hard_sleeper",
-          "source": "mock",
-          "as_of": "2026-09-22T19:20:00+08:00"
-        }
-      ],
-      "why": "与最综合方案使用同一组参考腿，但把西宁窗口明确定位为休息和补给，不把景点当成必须完成的任务。"
-    },
-    {
-      "id": "plan-more-xian-flight",
-      "kind": "xian-flight",
-      "label": "西安空铁",
-      "plan_ref": "plan-fastest",
-      "summary": {
-        "route_text": "徐州 → 西安 → 拉萨",
-        "duration_min": 740,
-        "duration_text": "约 12 小时 20 分（含换乘）",
-        "transfers": 1,
-        "price_ref_cny": 1130,
-        "price_text": "参考价约 ¥1,130"
-      },
-      "price_ref_cny": 1130,
-      "price_min_cny": 950,
-      "price_max_cny": 1370,
-      "price_label": "参考价约 ¥950–1,370",
-      "transfers": [
-        {
-          "hub_city": "西安",
-          "from_leg_id": "leg-xz-xian-g",
-          "to_leg_id": "leg-xian-lxa-flight",
-          "buffer_min": 270,
-          "buffer_text": "约 4 小时 30 分",
-          "kind": "同城换乘",
-          "tip": "优先完成车站到机场接驳，不安排景点",
-          "transfer_play": null
-        }
-      ],
-      "legs": [
-        {
-          "id": "leg-xz-xian-g",
-          "mode": "train",
-          "from_city": "徐州",
-          "to_city": "西安",
-          "from_station": "徐州东站",
-          "to_station": "西安北站",
-          "dep_at": "2026-10-01T07:30:00+08:00",
-          "arr_at": "2026-10-01T12:10:00+08:00",
-          "duration_min": 280,
-          "price_ref_cny": 480,
-          "price_min_cny": 450,
-          "price_max_cny": 520,
-          "seat_hint": "二等座",
-          "service_ref": "G 字头（参考）",
-          "comfort": "second_class",
-          "source": "mock",
-          "as_of": "2026-09-22T19:20:00+08:00"
-        },
-        {
-          "id": "leg-xian-lxa-flight",
-          "mode": "flight",
-          "from_city": "西安",
-          "to_city": "拉萨",
-          "from_station": "西安咸阳国际机场",
-          "to_station": "拉萨贡嘎机场",
-          "dep_at": "2026-10-01T16:40:00+08:00",
-          "arr_at": "2026-10-01T19:50:00+08:00",
-          "duration_min": 190,
-          "price_ref_cny": 650,
-          "price_min_cny": 500,
-          "price_max_cny": 850,
-          "seat_hint": "经济舱",
-          "service_ref": "航司直飞（参考）",
-          "comfort": "economy",
-          "source": "mock",
-          "as_of": "2026-09-22T19:20:00+08:00"
-        }
-      ],
-      "why": "与最快方案同一空铁组合，作为更多方案入口展示；适合先锁定高铁和航班时间，再自行评估接驳风险。"
-    }
-  ]
+  "morePlans": []
 }
