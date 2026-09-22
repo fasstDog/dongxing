@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>邪修交通</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="status-bar">
+      <span class="status-time" id="statusTime">18:54</span>
+      <span class="status-icons">●●● Wi‑Fi 🔋</span>
+    </div>
+
+    <!-- ========== 查询页 ========== -->
+    <section id="page-query" class="page active">
+      <header class="nav-bar">
+        <h1 class="nav-title">邪修交通</h1>
+        <button type="button" class="nav-link" data-go="about">关于</button>
+      </header>
+      <div class="page-body">
+        <p class="hero-tagline">帮你找到直达之外那条更聪明的路</p>
+        <p class="sub-hint">只推荐路线，不卖票 · 购票跳转 12306 / OTA</p>
+
+        <div class="card form-card">
+          <div class="od-row">
+            <div class="field grow">
+              <label>出发地</label>
+              <input id="fromCity" type="text" value="徐州" placeholder="城市 / 站点" />
+            </div>
+            <button type="button" class="swap-btn" id="btnSwap" title="交换">⇄</button>
+            <div class="field grow">
+              <label>目的地</label>
+              <input id="toCity" type="text" value="拉萨" placeholder="城市 / 站点" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>出发日期</label>
+            <div class="date-row">
+              <input id="departDate" type="date" disabled />
+              <label class="chip-toggle">
+                <input type="checkbox" id="dateFlexible" checked />
+                <span>日期灵活</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>路径城市 <span class="muted">（可选·有序·最多3个）</span></label>
+            <div id="viaList" class="via-list"></div>
+            <button type="button" class="btn-ghost" id="btnAddVia">＋ 添加途经城市</button>
+            <p class="tiny-hint">填写后按「出发 → 途经 → 到达」分段拼方案；不填则系统自动邪修。</p>
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" id="btnSearch">开始邪修</button>
+      </div>
+    </section>
+
+    <!-- ========== 结果页 ========== -->
+    <section id="page-results" class="page">
+      <header class="nav-bar">
+        <button type="button" class="nav-back" data-go="query">‹</button>
+        <h1 class="nav-title" id="resultsTitle">徐州 → 拉萨</h1>
+        <span class="nav-spacer"></span>
+      </header>
+      <div class="page-body">
+        <div id="pathBanner" class="path-banner hidden"></div>
+        <div id="modeToggle" class="mode-toggle hidden">
+          <button type="button" class="mode-btn active" data-mode="user">按你的路径</button>
+          <button type="button" class="mode-btn" data-mode="auto">系统自动邪修</button>
+        </div>
+        <p class="ref-note" id="resultsMeta">参考价 · 日期灵活 · 只推荐不卖票</p>
+
+        <div id="mainCards" class="main-cards"></div>
+
+        <h2 class="section-title">更多方案</h2>
+        <div id="moreList" class="more-list"></div>
+      </div>
+    </section>
+
+    <!-- ========== 方案详情 ========== -->
+    <section id="page-detail" class="page">
+      <header class="nav-bar">
+        <button type="button" class="nav-back" data-go="results">‹</button>
+        <h1 class="nav-title">方案详情</h1>
+        <span class="nav-spacer"></span>
+      </header>
+      <div class="page-body" id="detailBody"></div>
+    </section>
+
+    <!-- ========== 关于 ========== -->
+    <section id="page-about" class="page">
+      <header class="nav-bar">
+        <button type="button" class="nav-back" data-go="query">‹</button>
+        <h1 class="nav-title">关于 / 免责声明</h1>
+        <span class="nav-spacer"></span>
+      </header>
+      <div class="page-body about-body">
+        <div class="card">
+          <h2>邪修交通是什么？</h2>
+          <p>输入出发地与目的地（可选日期、可选路径城市），推荐比直达更聪明的高铁 / 动车 / 飞机组合走法；讲清楚怎么去、为什么这样推；换乘时间长则告诉你怎么玩。</p>
+          <p><strong>只推荐路线，不卖票。</strong>购票请通过分段「去购票」跳转 12306 / 航司 / OTA，以购票平台实际票价、时刻与余票为准。</p>
+        </div>
+        <div class="card">
+          <h2>免责声明</h2>
+          <ul class="disc">
+            <li>本产品展示的价格、时刻、席别均为<strong>参考信息</strong>，不构成购票承诺。</li>
+            <li>本产品<strong>不售票、不收款、不代抢票、不处理退改签</strong>。</li>
+            <li>换乘缓冲与景点建议仅供参考，请预留足够接驳与安检时间，以现场情况为准。</li>
+            <li>高原线路请自行评估身体状况与进藏政策要求。</li>
+          </ul>
+        </div>
+        <div class="card muted-card">
+          <p class="tiny-hint">原型演示 · 静态 mock 数据 · 无后端</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden" role="status"></div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
