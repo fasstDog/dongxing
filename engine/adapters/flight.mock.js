@@ -229,7 +229,22 @@ function mainCli() {
   }
 }
 
+/**
+ * Adapter-facing async contract (same as train.mock).
+ * @param {{ from: string, to: string, date?: string|null, after_at?: string|null }} query
+ * @returns {Promise<object[]>}
+ */
+async function searchLegs({ from, to, date, after_at } = {}) {
+  return search({
+    from_city: from,
+    to_city: to,
+    date: date || undefined,
+    after_at: after_at || undefined,
+  });
+}
+
 module.exports = {
+  searchLegs,
   search,
   clearCache,
   configure,
