@@ -1,10 +1,15 @@
 const { loadAdaptedPlans } = require('../../utils/adapt-plans');
 
 const LOADING_MS = 700;
+const SAMPLE_OD = {
+  xz: { fromCity: '徐州', toCity: '拉萨' },
+  sh: { fromCity: '上海', toCity: '成都' },
+  bj: { fromCity: '北京', toCity: '武汉' }
+};
 
 Page({
   data: {
-    status: 'loading', // loading | ok | empty | error
+    status: 'loading',
     plans: [],
     odLine: '',
     notice: '',
@@ -20,18 +25,15 @@ Page({
     const toCity = decodeURIComponent(options.to || '拉萨');
     const viasRaw = options.vias ? decodeURIComponent(options.vias) : '';
     const vias = viasRaw ? viasRaw.split(',').filter(Boolean) : [];
-    const demoEmpty = options.demoEmpty === '1';
-    const demoError = options.demoError === '1';
-    const viaPart = vias.length ? '（途经 ' + vias.join('、') + '）' : '';
     this.setData({
       fromCity: fromCity,
       toCity: toCity,
       vias: vias,
-      demoEmpty: demoEmpty,
-      demoError: demoError,
-      odLine: fromCity + ' → ' + toCity + viaPart,
+      demoEmpty: options.demoEmpty === '1',
+      demoError: options.demoError === '1',
+      odLine: fromCity + ' → ' + toCity + (vias.length ? '（途经 ' + vias.join('、') + '）' : ''),
       notice: vias.length
-        ? '已记录途经：' + vias.join('、') + '（本脚手架仍按 OD 读 mock 三主卡）'
+        ? '已记录途经：' + vias.join('、') + '（脚手架仍按 OD 读 mock）'
         : '只推荐不卖票 · mock 三主卡'
     });
     this.runLoad();
@@ -41,77 +43,62 @@ Page({
     const fromCity = this.data.fromCity;
     const toCity = this.data.toCity;
     this.setData({ status: 'loading', plans: [] });
-
-    const finish = (status, plans) => {
-      this.setData({
-        status: status,
-        plans: plans || []
-      });
-    };
-
     setTimeout(() => {
       if (this.data.demoError) {
-        finish('error', []);
+        this.setData({ status: 'error', plans: [] });
         return;
       }
       if (this.data.demoEmpty) {
-        finish('empty', []);
+        this.setData({ status: 'empty', plans: [] });
         return;
       }
       loadAdaptedPlans(fromCity, toCity)
         .then((adapted) => {
           if (!adapted.ok) {
-            finish('error', []);
+            this.setData({ status: 'error', plans: [] });
             return;
           }
           if (!adapted.main || !adapted.main.length) {
-            finish('empty', []);
+            this.setData({ status: 'empty', plans: [] });
             return;
           }
-          finish('ok', adapted.main);
+          getApp().globalData.lastPlans = adapted.main;
+          this.setData({ status: 'ok', plans: adapted.main });
         })
-        .catch(() => {
-          finish('error', []);
-        });
+        .catch(() => this.setData({ status: 'error', plans: [] }));
     }, LOADING_MS);
   },
 
-  onRetry() {
-    this.runLoad();
-  },
+  onRetry() { this.runLoad(); },
 
   onBackQuery() {
     wx.navigateBack({
-      fail: () => {
-        wx.redirectTo({ url: '/pages/query/query' });
-      }
+      fail: () => wx.redirectTo({ url: '/pages/query/query' })
     });
   },
 
   onEmptySample(e) {
-    const od = e.currentTarget.dataset.od;
-    let fromCity = '徐州';
-    let toCity = '拉萨';
-    if (od === 'sh') {
-      fromCity = '上海';
-      toCity = '成都';
-    }
+    const s = SAMPLE_OD[e.currentTarget.dataset.od] || SAMPLE_OD.xz;
     this.setData({
-      fromCity: fromCity,
-      toCity: toCity,
+      fromCity: s.fromCity,
+      toCity: s.toCity,
       vias: [],
       demoEmpty: false,
       demoError: false,
-      odLine: fromCity + ' → ' + toCity,
+      odLine: s.fromCity + ' → ' + s.toCity,
       notice: '示例 OD · mock 三主卡'
     });
-    getApp().globalData.lastQuery = {
-      fromCity: fromCity,
-      toCity: toCity,
-      vias: [],
-      demoEmpty: false,
-      demoError: false
-    };
     this.runLoad();
+  },
+
+  onOpenDetail(e) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    const q = [
+      'id=' + encodeURIComponent(id),
+      'from=' + encodeURIComponent(this.data.fromCity),
+      'to=' + encodeURIComponent(this.data.toCity)
+    ].join('&');
+    wx.navigateTo({ url: '/pages/detail/detail?' + q });
   }
 });

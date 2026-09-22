@@ -4,6 +4,7 @@ App({
   },
   globalData: {
     disclaimer: '只推荐路线，不卖票。价格与时刻为参考 mock。',
-    lastQuery: null
+    lastQuery: null,
+    lastPlans: null
   }
 });

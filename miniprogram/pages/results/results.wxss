@@ -1,96 +1,19 @@
-.od-line {
-  margin: 16rpx 8rpx 8rpx;
-  font-size: 30rpx;
-  font-weight: 600;
-}
-
-.state-wrap {
-  padding: 80rpx 24rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.empty-desc {
-  margin: 16rpx 24rpx 24rpx;
-  color: #969799;
-  font-size: 24rpx;
-  line-height: 1.5;
-  text-align: center;
-}
-
-.empty-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-  width: 100%;
-  padding: 0 32rpx;
-  box-sizing: border-box;
-}
-
-.plan-card {
-  background: #fff;
-  border-radius: 16rpx;
-  margin: 16rpx 0;
-  padding: 24rpx;
-  box-shadow: 0 2rpx 12rpx rgba(100, 101, 102, 0.08);
-}
-
-.plan-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16rpx;
-}
-
-.price-wrap {
-  text-align: right;
-}
-
-.price {
-  font-size: 34rpx;
-  font-weight: 600;
-  color: #323233;
-}
-
-.price-note {
-  display: block;
-  font-size: 20rpx;
-  color: #969799;
-}
-
-.route {
-  margin-top: 16rpx;
-  font-size: 28rpx;
-  color: #323233;
-}
-
-.meta {
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: #646566;
-}
-
-.dot {
-  margin: 0 8rpx;
-  color: #c8c9cc;
-}
-
-.vs {
-  margin-top: 12rpx;
-  font-size: 24rpx;
-  color: #ed6a0c;
-}
-
-.why {
-  margin-top: 12rpx;
-  font-size: 24rpx;
-  color: #646566;
-  line-height: 1.5;
-}
-
-.hint {
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: #07c160;
-}
+.od-line { margin: 16rpx 8rpx 8rpx; font-size: 30rpx; font-weight: 600; }
+.state-wrap { padding: 80rpx 24rpx; display: flex; flex-direction: column; align-items: center; }
+.empty-desc { margin: 16rpx 24rpx 24rpx; color: #969799; font-size: 24rpx; line-height: 1.5; text-align: center; }
+.empty-actions { display: flex; flex-direction: column; gap: 16rpx; width: 100%; padding: 0 32rpx; box-sizing: border-box; }
+.plan-card { background: #fff; border-radius: 16rpx; margin: 16rpx 0; padding: 24rpx; box-shadow: 0 2rpx 12rpx rgba(100,101,102,0.08); }
+.plan-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16rpx; }
+.tags { display: flex; flex-wrap: wrap; gap: 8rpx; align-items: center; }
+.mini-tag { margin-left: 0; }
+.price-wrap { text-align: right; }
+.price { font-size: 34rpx; font-weight: 600; color: #323233; }
+.price-note { display: block; font-size: 20rpx; color: #969799; }
+.route { margin-top: 16rpx; font-size: 28rpx; }
+.meta { margin-top: 8rpx; font-size: 24rpx; color: #646566; }
+.dot { margin: 0 8rpx; color: #c8c9cc; }
+.vs { margin-top: 12rpx; font-size: 24rpx; color: #ed6a0c; }
+.why { margin-top: 12rpx; font-size: 24rpx; color: #646566; line-height: 1.5; }
+.hint { margin-top: 8rpx; font-size: 24rpx; color: #07c160; }
+.card-foot { margin-top: 12rpx; font-size: 22rpx; }
+.muted { color: #969799; }

@@ -1,5 +1,11 @@
 const Toast = require('@vant/weapp/toast/toast');
 
+const SAMPLES = {
+  xz: { fromCity: '徐州', toCity: '拉萨' },
+  sh: { fromCity: '上海', toCity: '成都' },
+  bj: { fromCity: '北京', toCity: '武汉' }
+};
+
 Page({
   data: {
     fromCity: '徐州',
@@ -8,22 +14,13 @@ Page({
     date: '2026-10-01',
     vias: [],
     demoEmpty: false,
-    demoError: false,
-    disclaimer: '只推荐路线，不卖票。价格与时刻为参考 mock。'
+    demoError: false
   },
 
-  onFromChange(e) {
-    this.setData({ fromCity: e.detail });
-  },
-  onToChange(e) {
-    this.setData({ toCity: e.detail });
-  },
-  onDateChange(e) {
-    this.setData({ date: e.detail });
-  },
-  onFlexibleChange(e) {
-    this.setData({ dateFlexible: !!e.detail });
-  },
+  onFromChange(e) { this.setData({ fromCity: e.detail }); },
+  onToChange(e) { this.setData({ toCity: e.detail }); },
+  onDateChange(e) { this.setData({ date: e.detail }); },
+  onFlexibleChange(e) { this.setData({ dateFlexible: !!e.detail }); },
 
   onViaChange(e) {
     const i = e.currentTarget.dataset.index;
@@ -49,48 +46,27 @@ Page({
 
   onDemoEmpty(e) {
     const on = !!e.detail;
-    this.setData({
-      demoEmpty: on,
-      demoError: on ? false : this.data.demoError
-    });
+    this.setData({ demoEmpty: on, demoError: on ? false : this.data.demoError });
   },
   onDemoError(e) {
     const on = !!e.detail;
-    this.setData({
-      demoError: on,
-      demoEmpty: on ? false : this.data.demoEmpty
-    });
+    this.setData({ demoError: on, demoEmpty: on ? false : this.data.demoEmpty });
   },
 
   onSample(e) {
-    const od = e.currentTarget.dataset.od;
-    if (od === 'sh') {
-      this.setData({
-        fromCity: '上海',
-        toCity: '成都',
-        vias: [],
-        dateFlexible: true,
-        demoEmpty: false,
-        demoError: false
-      });
-    } else {
-      this.setData({
-        fromCity: '徐州',
-        toCity: '拉萨',
-        vias: [],
-        dateFlexible: true,
-        demoEmpty: false,
-        demoError: false
-      });
-    }
+    const s = SAMPLES[e.currentTarget.dataset.od] || SAMPLES.xz;
+    this.setData({
+      fromCity: s.fromCity,
+      toCity: s.toCity,
+      vias: [],
+      dateFlexible: true,
+      demoEmpty: false,
+      demoError: false
+    });
   },
 
   cleanedVias() {
-    return this.data.vias
-      .map(function (v) {
-        return String(v || '').trim();
-      })
-      .filter(Boolean);
+    return this.data.vias.map(function (v) { return String(v || '').trim(); }).filter(Boolean);
   },
 
   onSearch() {
@@ -115,7 +91,6 @@ Page({
         return;
       }
     }
-
     const query = {
       fromCity: fromCity,
       toCity: toCity,
@@ -126,7 +101,6 @@ Page({
       demoError: this.data.demoError
     };
     getApp().globalData.lastQuery = query;
-
     const q = [
       'from=' + encodeURIComponent(fromCity),
       'to=' + encodeURIComponent(toCity),

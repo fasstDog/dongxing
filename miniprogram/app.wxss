@@ -4,12 +4,10 @@ page {
   font-size: 28rpx;
   box-sizing: border-box;
 }
-
 .page {
   padding: 24rpx;
   padding-bottom: 48rpx;
 }
-
 .disclaimer {
   margin-top: 24rpx;
   color: #969799;
@@ -17,26 +15,17 @@ page {
   line-height: 1.5;
   text-align: center;
 }
-
-.card-cheap {
-  border-left: 8rpx solid #07c160;
-}
-.card-fast {
-  border-left: 8rpx solid #ee0a24;
-}
-.card-balanced {
-  border-left: 8rpx solid #1989fa;
-}
-
 .section-title {
   margin: 16rpx 8rpx 12rpx;
   font-size: 26rpx;
   color: #969799;
 }
-
 .tiny-hint {
   margin: 8rpx 0 0;
   font-size: 22rpx;
   color: #c8c9cc;
   line-height: 1.4;
 }
+.card-cheap { border-left: 8rpx solid #07c160; }
+.card-fast { border-left: 8rpx solid #ee0a24; }
+.card-balanced { border-left: 8rpx solid #1989fa; }

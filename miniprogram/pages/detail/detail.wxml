@@ -1,0 +1,87 @@
+<view class="page" wx:if="{{ plan }}">
+  <view class="header card-{{ plan.type }}">
+    <view class="tags">
+      <van-tag type="{{ plan.tagType }}" round>{{ plan.typeLabel }}</van-tag>
+      <van-tag wx:if="{{ plan.hasTransfer }}" plain type="primary">换乘</van-tag>
+      <van-tag wx:if="{{ plan.hasFlight }}" plain type="warning">飞机</van-tag>
+    </view>
+    <view class="price">{{ plan.price }}<text class="price-note">{{ plan.priceNote || '参考价' }}</text></view>
+    <view class="meta">
+      <text>{{ plan.duration }}</text>
+      <text class="dot">·</text>
+      <text>换乘 {{ plan.transfers }} 次</text>
+    </view>
+    <view class="route">{{ plan.routeOneLine }}</view>
+    <view class="vs" wx:if="{{ plan.vsDirect }}">vs直达：{{ plan.vsDirect }}</view>
+  </view>
+
+  <view class="block-title">怎么去</view>
+  <view class="timeline block">
+    <block wx:for="{{ plan.timeline }}" wx:key="index">
+      <view class="tl-item" wx:if="{{ item.isXfer }}">
+        <view class="tl-badge xfer">换</view>
+        <view class="tl-body">
+          <view class="tl-title">{{ item.city }} · {{ item.xferLabel }}</view>
+          <view class="tl-desc" wx:if="{{ item.buffer }}">缓冲 {{ item.buffer }}</view>
+          <view class="tl-desc">{{ item.tip }}</view>
+        </view>
+      </view>
+      <view class="tl-item" wx:else>
+        <view class="tl-badge {{ item.isFlight ? 'flight' : 'train' }}">{{ item.modeLabel }}</view>
+        <view class="tl-body">
+          <view class="tl-title">{{ item.from }} → {{ item.to }}</view>
+          <view class="tl-desc" wx:if="{{ item.serviceRef || item.duration || item.timeRange }}">
+            <text wx:if="{{ item.serviceRef }}">{{ item.serviceRef }}</text>
+            <text wx:if="{{ item.duration }}"> · {{ item.duration }}</text>
+            <text wx:if="{{ item.timeRange }}"> · {{ item.timeRange }}</text>
+          </view>
+          <view class="tl-desc" wx:if="{{ item.seatHint || item.price }}">
+            <text wx:if="{{ item.seatHint }}">席别参考：{{ item.seatHint }}</text>
+            <text wx:if="{{ item.price }}"> · 价格参考 {{ item.price }}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+    <view wx:if="{{ !plan.timeline.length }}" class="muted pad">暂无行程段（mock）</view>
+  </view>
+
+  <view class="block-title">为什么</view>
+  <view class="block why">{{ plan.whyDetail || plan.why }}</view>
+
+  <block wx:if="{{ plan.play.length }}">
+    <view class="block-title">怎么玩</view>
+    <van-cell-group inset>
+      <van-cell
+        wx:for="{{ plan.play }}"
+        wx:key="index"
+        title="{{ item.name }}"
+        label="{{ item.distText }}{{ item.suggestText ? ' · ' + item.suggestText : '' }}{{ item.ok ? ' · ' + item.ok : '' }}"
+      />
+    </van-cell-group>
+  </block>
+  <view wx:elif="{{ plan.playHint }}" class="block muted">怎么玩提示：{{ plan.playHint }}（空窗不够长时不硬推景点）</view>
+
+  <view class="block-title">去购票</view>
+  <van-cell-group inset>
+    <van-cell title="我们不卖票" label="去 12306 / 航司 / OTA 自己买。价格、时刻都是参考，不保证有票。" />
+    <van-cell
+      wx:for="{{ plan.buyLegs }}"
+      wx:key="index"
+      title="第 {{ index + 1 }} 段 · {{ item.name }}"
+      label="{{ item.sub }}"
+      center
+    >
+      <van-button slot="right-icon" size="small" type="primary" round data-name="{{ item.name }}" bind:click="onBuy">去购票</van-button>
+    </van-cell>
+  </van-cell-group>
+
+  <view class="disclaimer">只推荐路线，不卖票。</view>
+  <van-toast id="van-toast" />
+</view>
+
+<view class="page" wx:else>
+  <van-empty description="方案找不到了，先回结果看看">
+    <van-button round type="primary" bind:click="onBackResults">回结果</van-button>
+  </van-empty>
+  <van-toast id="van-toast" />
+</view>

@@ -1,11 +1,11 @@
 {
-  "navigationBarTitleText": "方案结果",
+  "navigationBarTitleText": "方案详情",
   "usingComponents": {
     "van-tag": "@vant/weapp/tag/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
     "van-button": "@vant/weapp/button/index",
-    "van-loading": "@vant/weapp/loading/index",
     "van-empty": "@vant/weapp/empty/index",
-    "van-notice-bar": "@vant/weapp/notice-bar/index",
     "van-toast": "@vant/weapp/toast/index"
   }
 }

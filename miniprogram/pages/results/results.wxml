@@ -1,20 +1,11 @@
 <view class="page">
-  <van-notice-bar
-    wx:if="{{ notice }}"
-    left-icon="volume-o"
-    text="{{ notice }}"
-    color="#ed6a0c"
-    background="#fffbe8"
-  />
-
+  <van-notice-bar wx:if="{{ notice }}" left-icon="volume-o" text="{{ notice }}" color="#ed6a0c" background="#fffbe8" />
   <view class="od-line" wx:if="{{ odLine }}">{{ odLine }}</view>
 
-  <!-- loading -->
   <view class="state-wrap" wx:if="{{ status === 'loading' }}">
     <van-loading type="spinner" size="24px" vertical>正在邪修组合…</van-loading>
   </view>
 
-  <!-- error -->
   <view class="state-wrap" wx:elif="{{ status === 'error' }}">
     <van-empty image="error" description="这趟没查到，多半是数据暂不可用">
       <view class="empty-desc">价格、时刻都是参考，不保证有票。也可以改条件再查。</view>
@@ -25,7 +16,6 @@
     </van-empty>
   </view>
 
-  <!-- empty -->
   <view class="state-wrap" wx:elif="{{ status === 'empty' }}">
     <van-empty description="这趟暂时拼不出方案">
       <view class="empty-desc">可能是城市名不好认、日期太偏，或这条线我们还没覆盖好。价格时刻都是参考，不保证有票。</view>
@@ -33,22 +23,28 @@
         <van-button round plain type="primary" block bind:click="onBackQuery">改查询条件</van-button>
         <van-button round plain type="primary" block data-od="xz" bind:click="onEmptySample">看看示例：徐州→拉萨</van-button>
         <van-button round plain type="primary" block data-od="sh" bind:click="onEmptySample">看看示例：上海→成都</van-button>
+        <van-button round plain type="primary" block data-od="bj" bind:click="onEmptySample">看看示例：北京→武汉</van-button>
       </view>
     </van-empty>
   </view>
 
-  <!-- cards -->
   <block wx:elif="{{ status === 'ok' }}">
     <view
       wx:for="{{ plans }}"
       wx:key="id"
       class="plan-card card-{{ item.type }}"
+      data-id="{{ item.id }}"
+      bindtap="onOpenDetail"
     >
       <view class="plan-head">
-        <van-tag type="{{ item.tagType }}" round>{{ item.typeLabel }}</van-tag>
+        <view class="tags">
+          <van-tag type="{{ item.tagType }}" round>{{ item.typeLabel }}</van-tag>
+          <van-tag wx:if="{{ item.hasTransfer }}" plain type="primary" class="mini-tag">换乘</van-tag>
+          <van-tag wx:if="{{ item.hasFlight }}" plain type="warning" class="mini-tag">飞机</van-tag>
+        </view>
         <view class="price-wrap">
           <text class="price">{{ item.price }}</text>
-          <text class="price-note" wx:if="{{ item.priceNote }}">{{ item.priceNote }}</text>
+          <text class="price-note">{{ item.priceNote || '参考价' }}</text>
         </view>
       </view>
       <view class="route">{{ item.routeOneLine }}</view>
@@ -60,6 +56,7 @@
       <view class="vs" wx:if="{{ item.vsDirect }}">vs直达：{{ item.vsDirect }}</view>
       <view class="why" wx:if="{{ item.why }}">{{ item.why }}</view>
       <view class="hint" wx:if="{{ item.playHint }}">怎么玩：{{ item.playHint }}</view>
+      <view class="card-foot muted">点按看详情</view>
     </view>
   </block>
 
