@@ -2,39 +2,36 @@
 
 静态微信小程序风格移动端 Web 原型（约 390px 宽，桌面居中）。**只推荐路线，不卖票**。无后端、无真实 API。
 
-产品依据：`/workspace/邪修交通-产品需求整理.md`
+产品与技术拍板：[`docs/技术与设计拍板.md`](docs/技术与设计拍板.md)、[`docs/产品需求整理.md`](docs/产品需求整理.md)。
+
+## UI 技术（开源优先）
+
+- **Vant 4** + **Vue 3**，均通过 **CDN** 引入（无构建步骤）。
+- **禁止自研设计系统**；交互以 Vant 组件为准（NavBar、Field、Button、Tag、Cell、Steps、Toast、Empty、Loading、Tabs、NoticeBar 等）。
+- `css/styles.css` 仅保留手机外框、布局，以及三主卡类型色（最省钱 / 最快 / 最综合）轻量修饰。
+- 后续小程序可迁 **Vant Weapp**。详见 [`docs/技术与设计拍板.md`](docs/技术与设计拍板.md)。
+
+```html
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/vant@4/lib/index.css" />
+<script src="https://fastly.jsdelivr.net/npm/vue@3"></script>
+<script src="https://fastly.jsdelivr.net/npm/vant@4/lib/vant.min.js"></script>
+```
 
 ## 如何打开
 
-1. 用浏览器直接打开本目录下的 `index.html`（双击或拖入浏览器）。
-2. 或在本目录起静态服务，例如：
-   ```bash
-   cd /workspace/xiexiu-traffic-prototype && python3 -m http.server 8765
-   ```
-   然后访问 `http://127.0.0.1:8765/`
-3. 建议用手机模式 / 窄窗查看；宽屏下会显示手机外框效果。
+1. 浏览器直接打开 `index.html`（需能访问 CDN）。
+2. 或：`python3 -m http.server 8765` 后访问 `http://127.0.0.1:8765/`
+3. 建议手机模式 / 窄窗；宽屏有手机外框。
 
 ## 屏幕地图
 
 | 页面 | 说明 |
 |------|------|
-| **查询页** | 出发地、目的地、可选日期（含「日期灵活」）、有序路径城市（最多 3，可添加/删除）。副文案说明只推荐不卖票。按钮「开始邪修」。默认：徐州 → 拉萨，日期灵活；途经默认空，点「添加」可一键带出西宁。 |
-| **结果页** | OD 标题；有途经时显示路径条 +「按你的路径 / 系统自动邪修」切换。三主卡：最省钱 / 最快 / 最综合。下方「更多方案」。点击进入详情。 |
-| **方案详情** | 怎么去（时间轴）、为什么、怎么玩（缓冲够才有）、分段「去购票」→ Toast 提示跳转 12306/OTA。 |
-| **关于** | 产品说明与免责声明（查询页右上角进入）。 |
-
-## 文件结构
-
-```
-xiexiu-traffic-prototype/
-├── index.html      # 入口
-├── css/styles.css  # 样式
-├── js/app.js       # 导航 + 徐州→拉萨 mock 数据
-├── README.md
-└── DEMO.md         # 演示点击路径
-```
+| **查询页** | 出发/目的地、日期灵活、有序途经最多 3。「开始邪修」。默认徐州 → 拉萨。 |
+| **结果页** | 短 Loading → 三主卡 + 更多；途经时 NoticeBar + Tabs。Empty/Error 可演示（目的地「空」「错」）。 |
+| **方案详情** | 怎么去（Steps）、为什么、怎么玩、分段去购票 → Toast。 |
+| **关于** | 说明与免责声明。 |
 
 ## 说明
 
-- 价格、时刻均为 **参考** mock，用于利益相关方演示。
-- 无登录、支付、账号。
+- 价格、时刻为 **参考** mock。无登录、支付；不调用真实票务 API。

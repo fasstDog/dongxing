@@ -1,30 +1,16 @@
 /**
- * 邪修交通 · 交互原型
+ * 邪修交通 · 交互原型（Vue 3 + Vant 4 CDN）
  * 静态 mock，无后端 / 无真实购票
  */
 (function () {
   "use strict";
 
-  // ---------- State ----------
-  const state = {
-    from: "徐州",
-    to: "拉萨",
-    dateFlexible: true,
-    date: "",
-    vias: [], // up to 3
-    resultMode: "auto", // "user" | "auto"
-    currentPlanId: null,
-  };
-
-  // ---------- Mock: 徐州 → 拉萨 ----------
-  // Direct baseline for "vs" copy
   const DIRECT = {
     price: "硬座约 ¥397 · 硬卧约 ¥760+",
     duration: "约 40–45 小时",
     note: "Z 字头过路车，硬座久坐、硬卧过路票难抢",
   };
 
-  /** 系统自动邪修（无途经 / 或切换到自动） */
   const PLANS_AUTO = {
     main: [
       {
@@ -208,7 +194,6 @@
     ],
   };
 
-  /** 指定路径：经西宁（用户填了途经） */
   const PLANS_VIA_XINING = {
     main: [
       {
@@ -389,7 +374,6 @@
     ],
   };
 
-  /** 系统自动（当用户有途经但切换「系统自动邪修」时展示略不同的标签感） */
   const PLANS_AUTO_ALT = {
     main: [
       {
@@ -410,391 +394,263 @@
     more: PLANS_AUTO.more.map((m, i) => ({ ...m, id: "alt-more-" + i })),
   };
 
-  // ---------- DOM helpers ----------
-  const $ = (sel, root) => (root || document).querySelector(sel);
-  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  const TAG_COLORS = {
+    cheap: "#0d9f6e",
+    fast: "#e85d04",
+    balanced: "#5b4cdb",
+  };
 
-  function showToast(msg, ms) {
-    const el = $("#toast");
-    el.textContent = msg;
-    el.classList.remove("hidden");
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => el.classList.add("hidden"), ms || 2800);
-  }
+  const { createApp, computed, ref, nextTick } = Vue;
 
-  function go(pageId) {
-    $$(".page").forEach((p) => p.classList.remove("active"));
-    const page = $("#page-" + pageId);
-    if (page) page.classList.add("active");
-    page && (page.querySelector(".page-body") || page).scrollTop;
-    const body = page && page.querySelector(".page-body");
-    if (body) body.scrollTop = 0;
-  }
+  createApp({
+    setup() {
+      const page = ref("query");
+      const from = ref("徐州");
+      const to = ref("拉萨");
+      const dateFlexible = ref(true);
+      const date = ref("");
+      const vias = ref([]);
+      const resultMode = ref("auto");
+      const currentPlanId = ref(null);
+      const resultsStatus = ref("idle"); // idle | loading | ok | empty | error
+      const errorMsg = ref("查询失败，请稍后重试");
+      const statusTime = ref("--:--");
 
-  // ---------- Query page: vias ----------
-  function renderVias() {
-    const list = $("#viaList");
-    list.innerHTML = "";
-    state.vias.forEach((city, i) => {
-      const row = document.createElement("div");
-      row.className = "via-item";
-      row.innerHTML =
-        '<span class="via-ord">' +
-        (i + 1) +
-        '</span><input type="text" data-via-idx="' +
-        i +
-        '" value="' +
-        escapeAttr(city) +
-        '" placeholder="途经城市，如 西宁" /><button type="button" class="via-del" data-del-via="' +
-        i +
-        '" aria-label="删除">×</button>';
-      list.appendChild(row);
-    });
-    $("#btnAddVia").disabled = state.vias.length >= 3;
-  }
+      try {
+        const now = new Date();
+        statusTime.value =
+          String(now.getHours()).padStart(2, "0") +
+          ":" +
+          String(now.getMinutes()).padStart(2, "0");
+      } catch (_) {}
 
-  function escapeAttr(s) {
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/"/g, "&quot;")
-      .replace(/</g, "&lt;");
-  }
+      function go(id) {
+        page.value = id;
+        nextTick(() => {
+          const body = document.querySelector(".page:not([style*='display: none']) .page-body");
+          // scroll active page body
+          document.querySelectorAll(".page-body").forEach((el) => {
+            if (el.offsetParent !== null) el.scrollTop = 0;
+          });
+        });
+      }
 
-  function escapeHtml(s) {
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-  }
+      function swapOd() {
+        const a = from.value;
+        from.value = to.value;
+        to.value = a;
+      }
 
-  // ---------- Results ----------
-  function tagClass(type) {
-    if (type === "cheap") return "tag-cheap";
-    if (type === "fast") return "tag-fast";
-    return "tag-balanced";
-  }
+      function toggleFlexible() {
+        dateFlexible.value = !dateFlexible.value;
+        if (dateFlexible.value) date.value = "";
+      }
 
-  function getPlanBundles() {
-    const hasVia = state.vias.some((v) => v && v.trim());
-    if (!hasVia) {
-      return { plans: PLANS_AUTO, showToggle: false, mode: "auto" };
-    }
-    if (state.resultMode === "user") {
-      return { plans: PLANS_VIA_XINING, showToggle: true, mode: "user" };
-    }
-    return { plans: PLANS_AUTO_ALT, showToggle: true, mode: "auto" };
-  }
+      function addVia() {
+        if (vias.value.length >= 3) return;
+        vias.value.push(vias.value.length === 0 ? "西宁" : "");
+      }
 
-  function findPlan(id) {
-    const bundles = [PLANS_AUTO, PLANS_VIA_XINING, PLANS_AUTO_ALT];
-    for (const b of bundles) {
-      const p = b.main.find((x) => x.id === id);
-      if (p) return p;
-      for (const m of b.more) {
-        if (m.id === id) {
-          return b.main.find((x) => x.id === m.planRef) || b.main[0];
+      function removeVia(i) {
+        vias.value.splice(i, 1);
+      }
+
+      function cleanedVias() {
+        return vias.value.map((v) => (v || "").trim()).filter(Boolean);
+      }
+
+      function getPlanBundles() {
+        const hasVia = cleanedVias().length > 0;
+        if (!hasVia) {
+          return { plans: PLANS_AUTO, showToggle: false, mode: "auto" };
+        }
+        if (resultMode.value === "user") {
+          return { plans: PLANS_VIA_XINING, showToggle: true, mode: "user" };
+        }
+        return { plans: PLANS_AUTO_ALT, showToggle: true, mode: "auto" };
+      }
+
+      function findPlan(id) {
+        const bundles = [PLANS_AUTO, PLANS_VIA_XINING, PLANS_AUTO_ALT];
+        for (const b of bundles) {
+          const p = b.main.find((x) => x.id === id);
+          if (p) return p;
+          for (const m of b.more) {
+            if (m.id === id) {
+              return b.main.find((x) => x.id === m.planRef) || b.main[0];
+            }
+          }
+        }
+        return PLANS_AUTO.main[0];
+      }
+
+      const resultsTitle = computed(() => {
+        return (from.value || "出发地") + " → " + (to.value || "目的地");
+      });
+
+      const pathBanner = computed(() => {
+        const list = cleanedVias();
+        if (!list.length || resultsStatus.value === "loading") return "";
+        return "路径：" + [from.value].concat(list).concat([to.value]).join(" → ");
+      });
+
+      const showModeToggle = computed(() => {
+        return (
+          cleanedVias().length > 0 &&
+          (resultsStatus.value === "ok" || resultsStatus.value === "empty")
+        );
+      });
+
+      const resultsMeta = computed(() => {
+        const dateLine = dateFlexible.value
+          ? "日期灵活"
+          : date.value
+            ? "出发 " + date.value
+            : "日期未定";
+        return (
+          "参考价 · " +
+          dateLine +
+          " · 只推荐不卖票 · 对照直达：" +
+          DIRECT.duration
+        );
+      });
+
+      const sortedMain = computed(() => {
+        if (resultsStatus.value !== "ok") return [];
+        const { plans } = getPlanBundles();
+        const order = ["cheap", "fast", "balanced"];
+        return order
+          .map((t) => plans.main.find((p) => p.type === t))
+          .filter(Boolean);
+      });
+
+      const morePlans = computed(() => {
+        if (resultsStatus.value !== "ok") return [];
+        return getPlanBundles().plans.more;
+      });
+
+      const currentPlan = computed(() => {
+        if (!currentPlanId.value) return null;
+        return findPlan(currentPlanId.value);
+      });
+
+      const timelineActive = computed(() => {
+        const p = currentPlan.value;
+        if (!p || !p.timeline) return 0;
+        return Math.max(0, p.timeline.length - 1);
+      });
+
+      function tagType(type) {
+        if (type === "cheap") return "success";
+        if (type === "fast") return "warning";
+        return "primary";
+      }
+
+      function tagColor(type) {
+        return TAG_COLORS[type] || TAG_COLORS.balanced;
+      }
+
+      function onModeChange() {
+        // resultMode already updated by v-model
+        if (resultsStatus.value === "ok") {
+          // force recompute — computed already depends on resultMode
         }
       }
-    }
-    return PLANS_AUTO.main[0];
-  }
 
-  function renderResults() {
-    const from = state.from || "出发地";
-    const to = state.to || "目的地";
-    $("#resultsTitle").textContent = from + " → " + to;
-
-    const vias = state.vias.map((v) => v.trim()).filter(Boolean);
-    const banner = $("#pathBanner");
-    const toggle = $("#modeToggle");
-
-    if (vias.length) {
-      banner.classList.remove("hidden");
-      banner.textContent =
-        "路径：" + [from].concat(vias).concat([to]).join(" → ");
-      toggle.classList.remove("hidden");
-      $$(".mode-btn", toggle).forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.mode === state.resultMode);
-      });
-    } else {
-      banner.classList.add("hidden");
-      toggle.classList.add("hidden");
-      state.resultMode = "auto";
-    }
-
-    const dateLine = state.dateFlexible
-      ? "日期灵活"
-      : state.date
-        ? "出发 " + state.date
-        : "日期未定";
-    $("#resultsMeta").textContent =
-      "参考价 · " + dateLine + " · 只推荐不卖票 · 对照直达：" + DIRECT.duration;
-
-    const { plans } = getPlanBundles();
-    const main = $("#mainCards");
-    main.innerHTML = "";
-    // Order: 最省钱 / 最快 / 最综合 visually — PRD says three cards; keep cheap, fast, balanced order for scan
-    const order = ["cheap", "fast", "balanced"];
-    const sorted = order
-      .map((t) => plans.main.find((p) => p.type === t))
-      .filter(Boolean);
-
-    sorted.forEach((p) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "plan-card";
-      btn.dataset.planId = p.id;
-      btn.innerHTML =
-        '<div class="card-top"><span class="tag ' +
-        tagClass(p.type) +
-        '">' +
-        escapeHtml(p.typeLabel) +
-        '</span><span class="plan-price">' +
-        escapeHtml(p.price) +
-        "<small>" +
-        escapeHtml(p.priceNote || "参考价") +
-        "</small></span></div>" +
-        '<div class="plan-meta"><span>时长 <strong>' +
-        escapeHtml(p.duration) +
-        "</strong></span><span>换乘 <strong>" +
-        p.transfers +
-        " 次</strong></span></div>" +
-        '<div class="plan-route">' +
-        escapeHtml(p.routeOneLine) +
-        "</div>" +
-        '<div class="plan-vs">' +
-        escapeHtml(p.vsDirect) +
-        "</div>" +
-        '<div class="plan-why">' +
-        escapeHtml(p.why) +
-        "</div>" +
-        (p.playHint
-          ? '<div class="plan-play">🎟 ' + escapeHtml(p.playHint) + "</div>"
-          : "");
-      main.appendChild(btn);
-    });
-
-    const more = $("#moreList");
-    more.innerHTML = "";
-    plans.more.forEach((m) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "more-item";
-      btn.dataset.planId = m.planRef || m.id;
-      btn.innerHTML =
-        '<span class="tag tag-more">' +
-        escapeHtml(m.typeLabel) +
-        '</span><div class="more-main"><div class="more-title">' +
-        escapeHtml(m.title) +
-        '</div><div class="more-sub">' +
-        escapeHtml(m.sub) +
-        '</div></div><span class="more-price">' +
-        escapeHtml(m.price) +
-        '</span><span class="chev">›</span>';
-      more.appendChild(btn);
-    });
-  }
-
-  // ---------- Detail ----------
-  function renderDetail(planId) {
-    const p = findPlan(planId);
-    state.currentPlanId = p.id;
-    const body = $("#detailBody");
-
-    let timelineHtml = '<div class="timeline">';
-    (p.timeline || []).forEach((seg) => {
-      if (seg.xfer) {
-        timelineHtml +=
-          '<div class="tl-xfer"><div class="tl-xfer-box"><strong>' +
-          escapeHtml(seg.city) +
-          " · " +
-          escapeHtml(seg.kind) +
-          "</strong><br/>缓冲 " +
-          escapeHtml(seg.buffer) +
-          "<br/>" +
-          escapeHtml(seg.tip) +
-          "</div></div>";
-      } else {
-        timelineHtml +=
-          '<div class="tl-leg"><span class="tl-mode ' +
-          escapeAttr(seg.modeClass || "") +
-          '">' +
-          escapeHtml(seg.mode) +
-          '</span><div class="tl-stations">' +
-          escapeHtml(seg.from) +
-          " → " +
-          escapeHtml(seg.to) +
-          '</div><div class="tl-info">' +
-          escapeHtml(seg.train) +
-          " · " +
-          escapeHtml(seg.time) +
-          "<br/>建议席别：" +
-          escapeHtml(seg.seat) +
-          " · 参考价 " +
-          escapeHtml(seg.price) +
-          "</div></div>";
-      }
-    });
-    timelineHtml += "</div>";
-
-    let playHtml = "";
-    if (p.play && p.play.length) {
-      playHtml =
-        '<div class="detail-section"><h3><span class="dot" style="background:var(--balanced)"></span>怎么玩</h3>';
-      p.play.forEach((poi) => {
-        playHtml +=
-          '<div class="play-card"><h4>' +
-          escapeHtml(poi.name) +
-          "</h4><p>" +
-          escapeHtml(poi.dist) +
-          " · " +
-          escapeHtml(poi.suggest) +
-          "<br/>" +
-          escapeHtml(poi.ok) +
-          "</p></div>";
-      });
-      playHtml += "</div>";
-    }
-
-    let buyHtml =
-      '<div class="detail-section"><h3><span class="dot"></span>去购票</h3><p class="tiny-hint" style="margin:0 0 12px">本产品不卖票。点击后原型将提示跳转 12306 / 航司 / OTA。</p>';
-    (p.buyLegs || []).forEach((leg, i) => {
-      buyHtml +=
-        '<div class="leg-buy"><div class="leg-buy-info"><div class="name">第 ' +
-        (i + 1) +
-        " 段 · " +
-        escapeHtml(leg.name) +
-        '</div><div class="sub">' +
-        escapeHtml(leg.sub) +
-        '</div></div><button type="button" class="btn-buy" data-buy="' +
-        i +
-        '">去购票</button></div>';
-    });
-    buyHtml += "</div>";
-
-    body.innerHTML =
-      '<div class="detail-header-card"><span class="tag ' +
-      tagClass(p.type) +
-      '">' +
-      escapeHtml(p.typeLabel) +
-      '</span><div class="plan-price">' +
-      escapeHtml(p.price) +
-      "<small>" +
-      escapeHtml(p.priceNote || "参考价") +
-      '</small></div><div class="plan-meta"><span>' +
-      escapeHtml(p.duration) +
-      "</span><span>换乘 " +
-      p.transfers +
-      ' 次</span></div><div class="plan-route" style="margin-top:6px">' +
-      escapeHtml(p.routeOneLine) +
-      "</div></div>" +
-      '<div class="detail-section"><h3><span class="dot"></span>怎么去</h3>' +
-      timelineHtml +
-      "</div>" +
-      '<div class="detail-section"><h3><span class="dot" style="background:var(--cheap)"></span>为什么</h3><p class="why-text">' +
-      escapeHtml(p.whyDetail || p.why) +
-      "</p></div>" +
-      playHtml +
-      buyHtml;
-  }
-
-  // ---------- Events ----------
-  function bind() {
-    // Status time
-    try {
-      const now = new Date();
-      $("#statusTime").textContent =
-        String(now.getHours()).padStart(2, "0") +
-        ":" +
-        String(now.getMinutes()).padStart(2, "0");
-    } catch (_) {}
-
-    // Nav
-    document.body.addEventListener("click", (e) => {
-      const goBtn = e.target.closest("[data-go]");
-      if (goBtn) {
-        go(goBtn.dataset.go);
-        return;
-      }
-
-      const planBtn = e.target.closest("[data-plan-id]");
-      if (planBtn) {
-        renderDetail(planBtn.dataset.planId);
+      function openDetail(planId) {
+        currentPlanId.value = planId;
         go("detail");
-        return;
       }
 
-      const buy = e.target.closest("[data-buy]");
-      if (buy) {
-        showToast(
-          "原型演示：此处将跳转 12306 / 航司 / OTA 购票。\n邪修交通只推荐路线，不卖票、不收款。"
-        );
-        return;
+      function onBuy() {
+        vant.showToast({
+          message:
+            "原型演示：此处将跳转 12306 / 航司 / OTA 购票。\n邪修交通只推荐路线，不卖票、不收款。",
+          duration: 2800,
+        });
       }
 
-      const del = e.target.closest("[data-del-via]");
-      if (del) {
-        const idx = Number(del.dataset.delVia);
-        state.vias.splice(idx, 1);
-        renderVias();
-        return;
+      function runSearch() {
+        const f = (from.value || "").trim() || "徐州";
+        const t = (to.value || "").trim() || "拉萨";
+        from.value = f;
+        to.value = t;
+        vias.value = cleanedVias();
+
+        resultsStatus.value = "loading";
+        go("results");
+
+        // Simulate short loading
+        setTimeout(() => {
+          if (f === t) {
+            resultsStatus.value = "error";
+            errorMsg.value = "出发地与目的地不能相同，请修改后重试";
+            return;
+          }
+          // Demo hook: type「空」as destination to preview empty state
+          if (t === "空" || t.toLowerCase() === "empty") {
+            resultsStatus.value = "empty";
+            return;
+          }
+          // Demo hook: type「错」to preview error
+          if (t === "错" || t.toLowerCase() === "error") {
+            resultsStatus.value = "error";
+            errorMsg.value = "网络异常（演示），请稍后重试";
+            return;
+          }
+
+          resultMode.value = vias.value.length ? "user" : "auto";
+          const { plans } = getPlanBundles();
+          if (!plans.main || !plans.main.length) {
+            resultsStatus.value = "empty";
+            return;
+          }
+          resultsStatus.value = "ok";
+        }, 700);
       }
 
-      const modeBtn = e.target.closest(".mode-btn");
-      if (modeBtn && modeBtn.dataset.mode) {
-        state.resultMode = modeBtn.dataset.mode;
-        renderResults();
-        return;
+      function onSearch() {
+        runSearch();
       }
-    });
 
-    $("#viaList").addEventListener("input", (e) => {
-      const inp = e.target.closest("input[data-via-idx]");
-      if (!inp) return;
-      state.vias[Number(inp.dataset.viaIdx)] = inp.value;
-    });
+      function retrySearch() {
+        runSearch();
+      }
 
-    $("#btnAddVia").addEventListener("click", () => {
-      if (state.vias.length >= 3) return;
-      // Prefill first empty via with 西宁 to make demo easy
-      state.vias.push(state.vias.length === 0 ? "西宁" : "");
-      renderVias();
-      const inputs = $$("#viaList input");
-      const last = inputs[inputs.length - 1];
-      if (last) last.focus();
-    });
-
-    $("#btnSwap").addEventListener("click", () => {
-      const a = $("#fromCity").value;
-      $("#fromCity").value = $("#toCity").value;
-      $("#toCity").value = a;
-    });
-
-    const flex = $("#dateFlexible");
-    const dateInp = $("#departDate");
-    flex.addEventListener("change", () => {
-      dateInp.disabled = flex.checked;
-      if (flex.checked) dateInp.value = "";
-    });
-
-    $("#btnSearch").addEventListener("click", () => {
-      state.from = ($("#fromCity").value || "").trim() || "徐州";
-      state.to = ($("#toCity").value || "").trim() || "拉萨";
-      state.dateFlexible = flex.checked;
-      state.date = dateInp.value;
-      state.vias = state.vias.map((v) => (v || "").trim());
-      // Drop empty vias for logic but keep UI? trim empties for path
-      const cleaned = state.vias.filter(Boolean);
-      // Keep UI in sync if user left blanks
-      state.vias = cleaned;
-      renderVias();
-      state.resultMode = cleaned.length ? "user" : "auto";
-      renderResults();
-      go("results");
-    });
-  }
-
-  // Init
-  renderVias();
-  bind();
+      return {
+        page,
+        from,
+        to,
+        dateFlexible,
+        date,
+        vias,
+        resultMode,
+        resultsStatus,
+        errorMsg,
+        statusTime,
+        resultsTitle,
+        pathBanner,
+        showModeToggle,
+        resultsMeta,
+        sortedMain,
+        morePlans,
+        currentPlan,
+        timelineActive,
+        go,
+        swapOd,
+        toggleFlexible,
+        addVia,
+        removeVia,
+        tagType,
+        tagColor,
+        onModeChange,
+        openDetail,
+        onBuy,
+        onSearch,
+        retrySearch,
+      };
+    },
+  })
+    .use(vant)
+    .mount("#app");
 })();

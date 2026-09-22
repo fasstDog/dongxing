@@ -4,125 +4,260 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>邪修交通</title>
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/vant@4/lib/index.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <div class="phone-frame">
+  <div id="app" class="phone-frame">
     <div class="status-bar">
-      <span class="status-time" id="statusTime">18:54</span>
+      <span class="status-time">{{ statusTime }}</span>
       <span class="status-icons">●●● Wi‑Fi 🔋</span>
     </div>
 
-    <!-- ========== 查询页 ========== -->
-    <section id="page-query" class="page active">
-      <header class="nav-bar">
-        <h1 class="nav-title">邪修交通</h1>
-        <button type="button" class="nav-link" data-go="about">关于</button>
-      </header>
+    <!-- 查询页 -->
+    <section v-show="page === 'query'" class="page">
+      <van-nav-bar title="邪修交通" fixed placeholder>
+        <template #right>
+          <span class="nav-action" @click="go('about')">关于</span>
+        </template>
+      </van-nav-bar>
       <div class="page-body">
         <p class="hero-tagline">帮你找到直达之外那条更聪明的路</p>
         <p class="sub-hint">只推荐路线，不卖票 · 购票跳转 12306 / OTA</p>
 
-        <div class="card form-card">
-          <div class="od-row">
-            <div class="field grow">
-              <label>出发地</label>
-              <input id="fromCity" type="text" value="徐州" placeholder="城市 / 站点" />
-            </div>
-            <button type="button" class="swap-btn" id="btnSwap" title="交换">⇄</button>
-            <div class="field grow">
-              <label>目的地</label>
-              <input id="toCity" type="text" value="拉萨" placeholder="城市 / 站点" />
-            </div>
-          </div>
+        <van-cell-group inset class="form-group">
+          <van-field v-model="from" label="出发地" placeholder="城市 / 站点" clearable>
+            <template #button>
+              <van-button size="small" type="primary" plain hairline round @click="swapOd">⇄</van-button>
+            </template>
+          </van-field>
+          <van-field v-model="to" label="目的地" placeholder="城市 / 站点" clearable />
+          <van-field
+            v-model="date"
+            type="date"
+            label="出发日期"
+            placeholder="选择日期"
+            :disabled="dateFlexible"
+            :readonly="dateFlexible"
+          >
+            <template #button>
+              <van-tag
+                :type="dateFlexible ? 'primary' : 'default'"
+                round
+                size="medium"
+                class="flex-chip"
+                @click="toggleFlexible"
+              >日期灵活</van-tag>
+            </template>
+          </van-field>
+        </van-cell-group>
 
-          <div class="field">
-            <label>出发日期</label>
-            <div class="date-row">
-              <input id="departDate" type="date" disabled />
-              <label class="chip-toggle">
-                <input type="checkbox" id="dateFlexible" checked />
-                <span>日期灵活</span>
-              </label>
-            </div>
+        <van-cell-group inset class="form-group via-group">
+          <van-cell title="路径城市" label="可选 · 有序 · 最多 3 个" />
+          <div v-for="(city, i) in vias" :key="'via-' + i" class="via-row">
+            <van-tag type="primary" plain round class="via-ord">{{ i + 1 }}</van-tag>
+            <van-field v-model="vias[i]" placeholder="途经城市，如 西宁" clearable class="via-field" />
+            <van-button size="small" type="danger" plain hairline icon="cross" @click="removeVia(i)" />
           </div>
-
-          <div class="field">
-            <label>路径城市 <span class="muted">（可选·有序·最多3个）</span></label>
-            <div id="viaList" class="via-list"></div>
-            <button type="button" class="btn-ghost" id="btnAddVia">＋ 添加途经城市</button>
+          <div class="via-actions">
+            <van-button block plain hairline type="primary" icon="plus" :disabled="vias.length >= 3" @click="addVia">
+              添加途经城市
+            </van-button>
             <p class="tiny-hint">填写后按「出发 → 途经 → 到达」分段拼方案；不填则系统自动邪修。</p>
           </div>
-        </div>
+        </van-cell-group>
 
-        <button type="button" class="btn-primary" id="btnSearch">开始邪修</button>
+        <div class="search-wrap">
+          <van-button type="primary" block round size="large" @click="onSearch">开始邪修</van-button>
+        </div>
       </div>
     </section>
 
-    <!-- ========== 结果页 ========== -->
-    <section id="page-results" class="page">
-      <header class="nav-bar">
-        <button type="button" class="nav-back" data-go="query">‹</button>
-        <h1 class="nav-title" id="resultsTitle">徐州 → 拉萨</h1>
-        <span class="nav-spacer"></span>
-      </header>
+    <!-- 结果页 -->
+    <section v-show="page === 'results'" class="page">
+      <van-nav-bar :title="resultsTitle" left-arrow fixed placeholder @click-left="go('query')" />
       <div class="page-body">
-        <div id="pathBanner" class="path-banner hidden"></div>
-        <div id="modeToggle" class="mode-toggle hidden">
-          <button type="button" class="mode-btn active" data-mode="user">按你的路径</button>
-          <button type="button" class="mode-btn" data-mode="auto">系统自动邪修</button>
+        <van-notice-bar
+          v-if="pathBanner"
+          left-icon="guide-o"
+          :text="pathBanner"
+          color="#5b4cdb"
+          background="#eeebff"
+        />
+        <van-tabs
+          v-if="showModeToggle"
+          v-model:active="resultMode"
+          type="card"
+          shrink
+          class="mode-tabs"
+          @change="onModeChange"
+        >
+          <van-tab title="按你的路径" name="user" />
+          <van-tab title="系统自动邪修" name="auto" />
+        </van-tabs>
+        <p class="ref-note">{{ resultsMeta }}</p>
+
+        <div v-if="resultsStatus === 'loading'" class="state-box">
+          <van-loading vertical type="spinner" color="#1989fa">正在邪修路线…</van-loading>
         </div>
-        <p class="ref-note" id="resultsMeta">参考价 · 日期灵活 · 只推荐不卖票</p>
+        <van-empty v-else-if="resultsStatus === 'empty'" image="search" description="暂无可用方案">
+          <van-button round type="primary" class="retry-btn" @click="go('query')">返回修改查询</van-button>
+        </van-empty>
+        <van-empty v-else-if="resultsStatus === 'error'" image="error" :description="errorMsg">
+          <van-button round type="primary" class="retry-btn" @click="retrySearch">重试</van-button>
+        </van-empty>
 
-        <div id="mainCards" class="main-cards"></div>
+        <template v-else-if="resultsStatus === 'ok'">
+          <div class="main-cards">
+            <div
+              v-for="p in sortedMain"
+              :key="p.id"
+              class="plan-card"
+              :class="'plan-' + p.type"
+              @click="openDetail(p.id)"
+            >
+              <div class="card-top">
+                <van-tag :color="tagColor(p.type)" plain round>{{ p.typeLabel }}</van-tag>
+                <div class="plan-price">{{ p.price }}<small>{{ p.priceNote || '参考价' }}</small></div>
+              </div>
+              <div class="plan-meta">
+                <span>时长 <strong>{{ p.duration }}</strong></span>
+                <span>换乘 <strong>{{ p.transfers }} 次</strong></span>
+              </div>
+              <div class="plan-route">{{ p.routeOneLine }}</div>
+              <div class="plan-vs">{{ p.vsDirect }}</div>
+              <div class="plan-why">{{ p.why }}</div>
+              <div v-if="p.playHint" class="plan-play">
+                <van-tag plain size="medium" color="#5b4cdb">{{ p.playHint }}</van-tag>
+              </div>
+            </div>
+          </div>
 
-        <h2 class="section-title">更多方案</h2>
-        <div id="moreList" class="more-list"></div>
+          <h2 class="section-title">更多方案</h2>
+          <van-cell-group inset>
+            <van-cell
+              v-for="m in morePlans"
+              :key="m.id"
+              is-link
+              :title="m.title"
+              :label="m.sub"
+              :value="m.price"
+              @click="openDetail(m.planRef || m.id)"
+            >
+              <template #icon>
+                <van-tag plain type="default" class="more-tag">{{ m.typeLabel }}</van-tag>
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </template>
       </div>
     </section>
 
-    <!-- ========== 方案详情 ========== -->
-    <section id="page-detail" class="page">
-      <header class="nav-bar">
-        <button type="button" class="nav-back" data-go="results">‹</button>
-        <h1 class="nav-title">方案详情</h1>
-        <span class="nav-spacer"></span>
-      </header>
-      <div class="page-body" id="detailBody"></div>
+    <!-- 方案详情 -->
+    <section v-show="page === 'detail'" class="page">
+      <van-nav-bar title="方案详情" left-arrow fixed placeholder @click-left="go('results')" />
+      <div class="page-body" v-if="currentPlan">
+        <div class="detail-header-card" :class="'plan-' + currentPlan.type">
+          <van-tag :color="tagColor(currentPlan.type)" plain round>{{ currentPlan.typeLabel }}</van-tag>
+          <div class="plan-price">{{ currentPlan.price }}<small>{{ currentPlan.priceNote || '参考价' }}</small></div>
+          <div class="plan-meta">
+            <span>{{ currentPlan.duration }}</span>
+            <span>换乘 {{ currentPlan.transfers }} 次</span>
+          </div>
+          <div class="plan-route">{{ currentPlan.routeOneLine }}</div>
+        </div>
+
+        <van-cell-group inset class="detail-block">
+          <van-cell title="怎么去" icon="logistics" />
+          <div class="timeline-wrap">
+            <van-steps direction="vertical" :active="timelineActive" active-color="#1989fa">
+              <template v-for="(seg, idx) in currentPlan.timeline" :key="'tl-' + idx">
+                <van-step v-if="seg.xfer">
+                  <template #active-icon><van-icon name="exchange" color="#5b4cdb" /></template>
+                  <template #inactive-icon><van-icon name="exchange" color="#5b4cdb" /></template>
+                  <h4 class="tl-title">{{ seg.city }} · {{ seg.kind }}</h4>
+                  <p class="tl-desc">缓冲 {{ seg.buffer }}</p>
+                  <p class="tl-desc">{{ seg.tip }}</p>
+                </van-step>
+                <van-step v-else>
+                  <h4 class="tl-title">
+                    <van-tag
+                      size="medium"
+                      :type="seg.modeClass === 'flight' ? 'warning' : 'primary'"
+                      :plain="seg.modeClass === 'hardseat'"
+                      class="tl-mode-tag"
+                    >{{ seg.mode }}</van-tag>
+                    {{ seg.from }} → {{ seg.to }}
+                  </h4>
+                  <p class="tl-desc">{{ seg.train }} · {{ seg.time }}</p>
+                  <p class="tl-desc">建议席别：{{ seg.seat }} · 参考价 {{ seg.price }}</p>
+                </van-step>
+              </template>
+            </van-steps>
+          </div>
+        </van-cell-group>
+
+        <van-cell-group inset class="detail-block">
+          <van-cell title="为什么" icon="info-o" />
+          <div class="why-pad"><p class="why-text">{{ currentPlan.whyDetail || currentPlan.why }}</p></div>
+        </van-cell-group>
+
+        <van-cell-group v-if="currentPlan.play && currentPlan.play.length" inset class="detail-block">
+          <van-cell title="怎么玩" icon="location-o" />
+          <van-cell
+            v-for="(poi, pi) in currentPlan.play"
+            :key="'poi-' + pi"
+            :title="poi.name"
+            :label="poi.dist + ' · ' + poi.suggest + ' · ' + poi.ok"
+          />
+        </van-cell-group>
+
+        <van-cell-group inset class="detail-block">
+          <van-cell title="去购票" label="本产品不卖票。跳转 12306 / 航司 / OTA。" icon="shop-o" />
+          <van-cell
+            v-for="(leg, li) in currentPlan.buyLegs"
+            :key="'buy-' + li"
+            :title="'第 ' + (li + 1) + ' 段 · ' + leg.name"
+            :label="leg.sub"
+            center
+          >
+            <template #right-icon>
+              <van-button size="small" type="primary" round @click.stop="onBuy(leg)">去购票</van-button>
+            </template>
+          </van-cell>
+        </van-cell-group>
+      </div>
     </section>
 
-    <!-- ========== 关于 ========== -->
-    <section id="page-about" class="page">
-      <header class="nav-bar">
-        <button type="button" class="nav-back" data-go="query">‹</button>
-        <h1 class="nav-title">关于 / 免责声明</h1>
-        <span class="nav-spacer"></span>
-      </header>
+    <!-- 关于 -->
+    <section v-show="page === 'about'" class="page">
+      <van-nav-bar title="关于 / 免责声明" left-arrow fixed placeholder @click-left="go('query')" />
       <div class="page-body about-body">
-        <div class="card">
-          <h2>邪修交通是什么？</h2>
-          <p>输入出发地与目的地（可选日期、可选路径城市），推荐比直达更聪明的高铁 / 动车 / 飞机组合走法；讲清楚怎么去、为什么这样推；换乘时间长则告诉你怎么玩。</p>
-          <p><strong>只推荐路线，不卖票。</strong>购票请通过分段「去购票」跳转 12306 / 航司 / OTA，以购票平台实际票价、时刻与余票为准。</p>
-        </div>
-        <div class="card">
-          <h2>免责声明</h2>
-          <ul class="disc">
-            <li>本产品展示的价格、时刻、席别均为<strong>参考信息</strong>，不构成购票承诺。</li>
-            <li>本产品<strong>不售票、不收款、不代抢票、不处理退改签</strong>。</li>
-            <li>换乘缓冲与景点建议仅供参考，请预留足够接驳与安检时间，以现场情况为准。</li>
-            <li>高原线路请自行评估身体状况与进藏政策要求。</li>
-          </ul>
-        </div>
-        <div class="card muted-card">
-          <p class="tiny-hint">原型演示 · 静态 mock 数据 · 无后端</p>
-        </div>
+        <van-cell-group inset>
+          <van-cell title="邪修交通是什么？" />
+          <div class="about-pad">
+            <p>输入出发地与目的地（可选日期、可选路径城市），推荐比直达更聪明的高铁 / 动车 / 飞机组合走法；讲清楚怎么去、为什么这样推；换乘时间长则告诉你怎么玩。</p>
+            <p><strong>只推荐路线，不卖票。</strong>购票请通过分段「去购票」跳转 12306 / 航司 / OTA，以购票平台实际票价、时刻与余票为准。</p>
+          </div>
+        </van-cell-group>
+        <van-cell-group inset class="detail-block">
+          <van-cell title="免责声明" />
+          <div class="about-pad">
+            <ul class="disc">
+              <li>本产品展示的价格、时刻、席别均为<strong>参考信息</strong>，不构成购票承诺。</li>
+              <li>本产品<strong>不售票、不收款、不代抢票、不处理退改签</strong>。</li>
+              <li>换乘缓冲与景点建议仅供参考，请预留足够接驳与安检时间，以现场情况为准。</li>
+              <li>高原线路请自行评估身体状况与进藏政策要求。</li>
+            </ul>
+          </div>
+        </van-cell-group>
+        <p class="tiny-hint center">原型演示 · 静态 mock · Vant 4 · 无后端</p>
       </div>
     </section>
-
-    <!-- Toast -->
-    <div id="toast" class="toast hidden" role="status"></div>
   </div>
 
+  <script src="https://fastly.jsdelivr.net/npm/vue@3"></script>
+  <script src="https://fastly.jsdelivr.net/npm/vant@4/lib/vant.min.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
