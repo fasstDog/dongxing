@@ -1,0 +1,1039 @@
+{
+  "meta": {
+    "od": {
+      "from_city": "上海",
+      "to_city": "成都"
+    },
+    "note": "由 pipeline 程序生成；无实时余票；为什么文案为口语模板",
+    "legs_source": "legs-shanghai-chengdu.json",
+    "pois_source": "hub-pois.json",
+    "api": "docs/api-plans-contract.md"
+  },
+  "scenarios": {
+    "auto": {
+      "request": {
+        "from_city": "上海",
+        "to_city": "成都",
+        "date_flexible": true,
+        "date": "2026-10-01",
+        "vias": [],
+        "path_mode": "auto"
+      },
+      "response": {
+        "ok": true,
+        "error": null,
+        "meta": {
+          "request": {
+            "from_city": "上海",
+            "to_city": "成都",
+            "date_flexible": true,
+            "date": "2026-10-01",
+            "vias": [],
+            "path_mode": "auto"
+          },
+          "path_mode": "auto",
+          "data_source": "mock",
+          "as_of": "2026-09-22T19:40:00+08:00",
+          "disclaimer": "价格、时刻均为参考，以购票平台为准",
+          "generated_by": "engine/pipeline.js + human why templates",
+          "no_realtime_inventory": true
+        },
+        "direct_baseline": {
+          "price_ref_cny": 657,
+          "duration_min": 790,
+          "summary": "上海 → 成都",
+          "leg_id": "leg-sha-ctu-g-direct"
+        },
+        "path": {
+          "cities": [
+            "上海",
+            "成都"
+          ],
+          "hubs": [],
+          "note": "直达"
+        },
+        "main": [
+          {
+            "id": "sha-ctu-cheap",
+            "type": "cheap",
+            "type_label": "最省钱",
+            "price_ref_cny": 614,
+            "price_display": "¥540–800",
+            "price_note": "参考价",
+            "duration_min": 1500,
+            "duration_display": "约 25 小时",
+            "transfers": 1,
+            "route_one_line": "上海 → 武汉 → 成都",
+            "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
+            "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
+            "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "武汉"
+              ],
+              "user_via": false,
+              "price_ref_cny": 614,
+              "direct_price_ref_cny": 657,
+              "price_delta_cny": -43,
+              "duration_min": 1500,
+              "direct_duration_min": 790,
+              "duration_delta_min": 710,
+              "transfers": 1,
+              "comfort_score": null,
+              "playable": true,
+              "notes": []
+            },
+            "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
+            "path_note": "系统选枢纽：武汉",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "上海虹桥站",
+                "to_station": "武汉站",
+                "dep_at": "2026-10-01T07:20:00+08:00",
+                "arr_at": "2026-10-01T11:50:00+08:00",
+                "duration_min": 270,
+                "duration_display": "约 5 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 334,
+                "price_display": "约 ¥334",
+                "service_ref": "G 字头沪汉（参考）",
+                "leg_id": "leg-sha-whn-g",
+                "comfort": "second_class"
+              },
+              {
+                "kind": "xfer",
+                "city": "武汉",
+                "xfer_kind": "same_city",
+                "xfer_kind_label": "同城换乘",
+                "buffer_min": 530,
+                "buffer_display": "约 530 分钟",
+                "tip": "预留接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "汉口站",
+                "to_station": "成都西站",
+                "dep_at": "2026-10-01T20:40:00+08:00",
+                "arr_at": "2026-10-02T08:20:00+08:00",
+                "duration_min": 700,
+                "duration_display": "约 12 小时",
+                "seat_hint": "硬卧优先",
+                "price_ref_cny": 280,
+                "price_display": "约 ¥280",
+                "service_ref": "过夜普速/动卧类（参考）",
+                "leg_id": "leg-whn-ctu-overnight",
+                "comfort": "hard_sleeper"
+              }
+            ],
+            "play": [
+              {
+                "hub_city": "武汉",
+                "name": "黄鹤楼 / 户部巷一带",
+                "dist_text": "武昌老城，距武汉站约 13–16km",
+                "suggest_text": "建议 2–3 小时登楼 + 用餐",
+                "ok": "缓冲 ≥6 小时再考虑；节假日客流与返站交通需加余量",
+                "min_buffer_hours": 6
+              },
+              {
+                "hub_city": "武汉",
+                "name": "东湖听涛景区",
+                "dist_text": "武昌东湖，距武汉站约 7–10km",
+                "suggest_text": "建议 2–3 小时湖畔散步",
+                "ok": "缓冲 ≥5 小时可短逛；湖区较大，按固定返站点倒推",
+                "min_buffer_hours": 5
+              },
+              {
+                "hub_city": "武汉",
+                "name": "湖北省博物馆",
+                "dist_text": "武昌东湖路，距武汉站约 8–11km",
+                "suggest_text": "建议 2–3 小时参观",
+                "ok": "缓冲 ≥5 小时再考虑；先确认开放与预约，预留返站接驳",
+                "min_buffer_hours": 5
+              }
+            ],
+            "buy_legs": [
+              {
+                "name": "上海 → 武汉",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥334",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "武汉 → 成都",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥280",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "sha-ctu-fast",
+            "type": "fast",
+            "type_label": "最快",
+            "price_ref_cny": 831,
+            "price_display": "¥760–930",
+            "price_note": "参考价",
+            "duration_min": 750,
+            "duration_display": "约 13 小时",
+            "transfers": 1,
+            "route_one_line": "上海 → 西安 → 成都",
+            "vs_direct": "参考价大概贵 174 块，能少耗大约 1 小时",
+            "why": "经 西安 的高铁组合，门到门更短。",
+            "why_detail": "经 西安 的高铁组合，门到门更短。 参考价大概贵 174 块，能少耗大约 1 小时。价格、时刻都是参考，以购票平台为准。 西安空窗够长，下面写了怎么玩；不够长不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "西安"
+              ],
+              "user_via": false,
+              "price_ref_cny": 831,
+              "direct_price_ref_cny": 657,
+              "price_delta_cny": 174,
+              "duration_min": 750,
+              "direct_duration_min": 790,
+              "duration_delta_min": -40,
+              "transfers": 1,
+              "comfort_score": null,
+              "playable": true,
+              "notes": []
+            },
+            "play_hint": "西安可玩 · 站内 / 站前休息",
+            "path_note": "系统选枢纽：西安",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "上海虹桥站",
+                "to_station": "西安北站",
+                "dep_at": "2026-10-01T08:00:00+08:00",
+                "arr_at": "2026-10-01T14:20:00+08:00",
+                "duration_min": 380,
+                "duration_display": "约 6 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 568,
+                "price_display": "约 ¥568",
+                "service_ref": "G 字头沪西（参考）",
+                "leg_id": "leg-sha-xian-g",
+                "comfort": "second_class"
+              },
+              {
+                "kind": "xfer",
+                "city": "西安",
+                "xfer_kind": "same_station",
+                "xfer_kind_label": "同站换乘",
+                "buffer_min": 140,
+                "buffer_display": "约 140 分钟",
+                "tip": "预留接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "西安北站",
+                "to_station": "成都东站",
+                "dep_at": "2026-10-01T16:40:00+08:00",
+                "arr_at": "2026-10-01T20:30:00+08:00",
+                "duration_min": 230,
+                "duration_display": "约 4 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 263,
+                "price_display": "约 ¥263",
+                "service_ref": "G 字头西成（参考）",
+                "leg_id": "leg-xian-ctu-g",
+                "comfort": "second_class"
+              }
+            ],
+            "play": [
+              {
+                "hub_city": "西安",
+                "name": "站内 / 站前休息",
+                "dist_text": "西安北站内或枢纽商业区",
+                "suggest_text": "休息、补给；赶飞机优先留在枢纽",
+                "ok": "同站缓冲约 ≥2 小时：不硬推出城",
+                "min_buffer_hours": 2
+              }
+            ],
+            "buy_legs": [
+              {
+                "name": "上海 → 西安",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥568",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "西安 → 成都",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥263",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "sha-ctu-balanced",
+            "type": "balanced",
+            "type_label": "最综合",
+            "price_ref_cny": 657,
+            "price_display": "¥620–720",
+            "price_note": "参考价",
+            "duration_min": 790,
+            "duration_display": "约 13 小时",
+            "transfers": 0,
+            "route_one_line": "上海 → 成都",
+            "vs_direct": "参考价差不多，时长差不多",
+            "why": "直达走法，少换乘。",
+            "why_detail": "直达走法，少换乘。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。",
+            "why_facts": {
+              "hubs": [],
+              "user_via": false,
+              "price_ref_cny": 657,
+              "direct_price_ref_cny": 657,
+              "price_delta_cny": 0,
+              "duration_min": 790,
+              "direct_duration_min": 790,
+              "duration_delta_min": 0,
+              "transfers": 0,
+              "comfort_score": null,
+              "playable": false,
+              "notes": []
+            },
+            "play_hint": null,
+            "path_note": "直达",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "上海虹桥站",
+                "to_station": "成都东站",
+                "dep_at": "2026-10-01T06:40:00+08:00",
+                "arr_at": "2026-10-01T19:50:00+08:00",
+                "duration_min": 790,
+                "duration_display": "约 13 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 657,
+                "price_display": "约 ¥657",
+                "service_ref": "G 字头直达（参考）",
+                "leg_id": "leg-sha-ctu-g-direct",
+                "comfort": "second_class"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "上海 → 成都",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥657",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          }
+        ],
+        "more": [
+          {
+            "id": "sha-ctu-more-1",
+            "type_label": "其它组合",
+            "title": "上海 → 武汉 → 成都",
+            "sub": "系统选枢纽：武汉 · 约 ¥713",
+            "price_display": "¥713",
+            "plan_id": "plan-leg-sha-whn-g_leg-whn-ctu-g"
+          }
+        ]
+      }
+    },
+    "user_via_wuhan": {
+      "request": {
+        "from_city": "上海",
+        "to_city": "成都",
+        "date_flexible": true,
+        "date": "2026-10-01",
+        "vias": [
+          "武汉"
+        ],
+        "path_mode": "user"
+      },
+      "response": {
+        "ok": true,
+        "error": null,
+        "meta": {
+          "request": {
+            "from_city": "上海",
+            "to_city": "成都",
+            "date_flexible": true,
+            "date": "2026-10-01",
+            "vias": [
+              "武汉"
+            ],
+            "path_mode": "user"
+          },
+          "path_mode": "user",
+          "data_source": "mock",
+          "as_of": "2026-09-22T19:40:00+08:00",
+          "disclaimer": "价格、时刻均为参考，以购票平台为准",
+          "generated_by": "engine/pipeline.js + human why templates",
+          "no_realtime_inventory": true
+        },
+        "direct_baseline": {
+          "price_ref_cny": 614,
+          "duration_min": 1500,
+          "summary": "上海 → 武汉 → 成都",
+          "leg_id": "leg-sha-whn-g"
+        },
+        "path": {
+          "cities": [
+            "上海",
+            "成都"
+          ],
+          "hubs": [
+            null
+          ],
+          "note": "因你指定经 武汉"
+        },
+        "main": [
+          {
+            "id": "sha-ctu-cheap",
+            "type": "cheap",
+            "type_label": "最省钱",
+            "price_ref_cny": 614,
+            "price_display": "¥540–800",
+            "price_note": "参考价",
+            "duration_min": 1500,
+            "duration_display": "约 25 小时",
+            "transfers": 1,
+            "route_one_line": "上海 → 武汉 → 成都",
+            "vs_direct": "参考价差不多，时长差不多",
+            "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
+            "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "武汉"
+              ],
+              "user_via": false,
+              "price_ref_cny": 614,
+              "direct_price_ref_cny": 614,
+              "price_delta_cny": 0,
+              "duration_min": 1500,
+              "direct_duration_min": 1500,
+              "duration_delta_min": 0,
+              "transfers": 1,
+              "comfort_score": null,
+              "playable": true,
+              "notes": []
+            },
+            "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
+            "path_note": "因你指定经 武汉",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "上海虹桥站",
+                "to_station": "武汉站",
+                "dep_at": "2026-10-01T07:20:00+08:00",
+                "arr_at": "2026-10-01T11:50:00+08:00",
+                "duration_min": 270,
+                "duration_display": "约 5 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 334,
+                "price_display": "约 ¥334",
+                "service_ref": "G 字头沪汉（参考）",
+                "leg_id": "leg-sha-whn-g",
+                "comfort": "second_class"
+              },
+              {
+                "kind": "xfer",
+                "city": "武汉",
+                "xfer_kind": "same_city",
+                "xfer_kind_label": "同城换乘",
+                "buffer_min": 530,
+                "buffer_display": "约 530 分钟",
+                "tip": "预留接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "汉口站",
+                "to_station": "成都西站",
+                "dep_at": "2026-10-01T20:40:00+08:00",
+                "arr_at": "2026-10-02T08:20:00+08:00",
+                "duration_min": 700,
+                "duration_display": "约 12 小时",
+                "seat_hint": "硬卧优先",
+                "price_ref_cny": 280,
+                "price_display": "约 ¥280",
+                "service_ref": "过夜普速/动卧类（参考）",
+                "leg_id": "leg-whn-ctu-overnight",
+                "comfort": "hard_sleeper"
+              }
+            ],
+            "play": [
+              {
+                "hub_city": "武汉",
+                "name": "黄鹤楼 / 户部巷一带",
+                "dist_text": "武昌老城，距武汉站约 13–16km",
+                "suggest_text": "建议 2–3 小时登楼 + 用餐",
+                "ok": "缓冲 ≥6 小时再考虑；节假日客流与返站交通需加余量",
+                "min_buffer_hours": 6
+              },
+              {
+                "hub_city": "武汉",
+                "name": "东湖听涛景区",
+                "dist_text": "武昌东湖，距武汉站约 7–10km",
+                "suggest_text": "建议 2–3 小时湖畔散步",
+                "ok": "缓冲 ≥5 小时可短逛；湖区较大，按固定返站点倒推",
+                "min_buffer_hours": 5
+              },
+              {
+                "hub_city": "武汉",
+                "name": "湖北省博物馆",
+                "dist_text": "武昌东湖路，距武汉站约 8–11km",
+                "suggest_text": "建议 2–3 小时参观",
+                "ok": "缓冲 ≥5 小时再考虑；先确认开放与预约，预留返站接驳",
+                "min_buffer_hours": 5
+              }
+            ],
+            "buy_legs": [
+              {
+                "name": "上海 → 武汉",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥334",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "武汉 → 成都",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥280",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "sha-ctu-fast",
+            "type": "fast",
+            "type_label": "最快",
+            "price_ref_cny": 713,
+            "price_display": "¥640–810",
+            "price_note": "参考价",
+            "duration_min": 890,
+            "duration_display": "约 15 小时",
+            "transfers": 1,
+            "route_one_line": "上海 → 武汉 → 成都",
+            "vs_direct": "参考价大概贵 99 块，能少耗大约 10 小时",
+            "why": "经 武汉 的高铁组合，门到门更短。",
+            "why_detail": "经 武汉 的高铁组合，门到门更短。 参考价大概贵 99 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。 换乘以接驳为主，窗口不够长不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "武汉"
+              ],
+              "user_via": false,
+              "price_ref_cny": 713,
+              "direct_price_ref_cny": 614,
+              "price_delta_cny": 99,
+              "duration_min": 890,
+              "direct_duration_min": 1500,
+              "duration_delta_min": -610,
+              "transfers": 1,
+              "comfort_score": null,
+              "playable": false,
+              "notes": []
+            },
+            "play_hint": null,
+            "path_note": "因你指定经 武汉",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "上海虹桥站",
+                "to_station": "武汉站",
+                "dep_at": "2026-10-01T07:20:00+08:00",
+                "arr_at": "2026-10-01T11:50:00+08:00",
+                "duration_min": 270,
+                "duration_display": "约 5 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 334,
+                "price_display": "约 ¥334",
+                "service_ref": "G 字头沪汉（参考）",
+                "leg_id": "leg-sha-whn-g",
+                "comfort": "second_class"
+              },
+              {
+                "kind": "xfer",
+                "city": "武汉",
+                "xfer_kind": "same_station",
+                "xfer_kind_label": "同站换乘",
+                "buffer_min": 160,
+                "buffer_display": "约 160 分钟",
+                "tip": "预留接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "武汉站",
+                "to_station": "成都东站",
+                "dep_at": "2026-10-01T14:30:00+08:00",
+                "arr_at": "2026-10-01T22:10:00+08:00",
+                "duration_min": 460,
+                "duration_display": "约 8 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 379,
+                "price_display": "约 ¥379",
+                "service_ref": "G/D 汉蓉（参考）",
+                "leg_id": "leg-whn-ctu-g",
+                "comfort": "second_class"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "上海 → 武汉",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥334",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "武汉 → 成都",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥379",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "sha-ctu-balanced",
+            "type": "balanced",
+            "type_label": "最综合",
+            "price_ref_cny": 713,
+            "price_display": "¥640–810",
+            "price_note": "参考价",
+            "duration_min": 890,
+            "duration_display": "约 15 小时",
+            "transfers": 1,
+            "route_one_line": "上海 → 武汉 → 成都",
+            "vs_direct": "参考价大概贵 99 块，能少耗大约 10 小时",
+            "why": "经 武汉 拆段。综合看价格和时长。",
+            "why_detail": "经 武汉 拆段。综合看价格和时长。 参考价大概贵 99 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。 换乘以接驳为主，窗口不够长不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "武汉"
+              ],
+              "user_via": false,
+              "price_ref_cny": 713,
+              "direct_price_ref_cny": 614,
+              "price_delta_cny": 99,
+              "duration_min": 890,
+              "direct_duration_min": 1500,
+              "duration_delta_min": -610,
+              "transfers": 1,
+              "comfort_score": null,
+              "playable": false,
+              "notes": []
+            },
+            "play_hint": null,
+            "path_note": "因你指定经 武汉",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "上海虹桥站",
+                "to_station": "武汉站",
+                "dep_at": "2026-10-01T07:20:00+08:00",
+                "arr_at": "2026-10-01T11:50:00+08:00",
+                "duration_min": 270,
+                "duration_display": "约 5 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 334,
+                "price_display": "约 ¥334",
+                "service_ref": "G 字头沪汉（参考）",
+                "leg_id": "leg-sha-whn-g",
+                "comfort": "second_class"
+              },
+              {
+                "kind": "xfer",
+                "city": "武汉",
+                "xfer_kind": "same_station",
+                "xfer_kind_label": "同站换乘",
+                "buffer_min": 160,
+                "buffer_display": "约 160 分钟",
+                "tip": "预留接驳时间"
+              },
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "武汉站",
+                "to_station": "成都东站",
+                "dep_at": "2026-10-01T14:30:00+08:00",
+                "arr_at": "2026-10-01T22:10:00+08:00",
+                "duration_min": 460,
+                "duration_display": "约 8 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 379,
+                "price_display": "约 ¥379",
+                "service_ref": "G/D 汉蓉（参考）",
+                "leg_id": "leg-whn-ctu-g",
+                "comfort": "second_class"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "上海 → 武汉",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥334",
+                "mode": "train",
+                "deep_link_hint": null
+              },
+              {
+                "name": "武汉 → 成都",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥379",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          }
+        ],
+        "more": []
+      }
+    }
+  },
+  "request": {
+    "from_city": "上海",
+    "to_city": "成都",
+    "date_flexible": true,
+    "date": "2026-10-01",
+    "vias": [],
+    "path_mode": "auto"
+  },
+  "response": {
+    "ok": true,
+    "error": null,
+    "meta": {
+      "request": {
+        "from_city": "上海",
+        "to_city": "成都",
+        "date_flexible": true,
+        "date": "2026-10-01",
+        "vias": [],
+        "path_mode": "auto"
+      },
+      "path_mode": "auto",
+      "data_source": "mock",
+      "as_of": "2026-09-22T19:40:00+08:00",
+      "disclaimer": "价格、时刻均为参考，以购票平台为准",
+      "generated_by": "engine/pipeline.js + human why templates",
+      "no_realtime_inventory": true
+    },
+    "direct_baseline": {
+      "price_ref_cny": 657,
+      "duration_min": 790,
+      "summary": "上海 → 成都",
+      "leg_id": "leg-sha-ctu-g-direct"
+    },
+    "path": {
+      "cities": [
+        "上海",
+        "成都"
+      ],
+      "hubs": [],
+      "note": "直达"
+    },
+    "main": [
+      {
+        "id": "sha-ctu-cheap",
+        "type": "cheap",
+        "type_label": "最省钱",
+        "price_ref_cny": 614,
+        "price_display": "¥540–800",
+        "price_note": "参考价",
+        "duration_min": 1500,
+        "duration_display": "约 25 小时",
+        "transfers": 1,
+        "route_one_line": "上海 → 武汉 → 成都",
+        "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
+        "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
+        "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
+        "why_facts": {
+          "hubs": [
+            "武汉"
+          ],
+          "user_via": false,
+          "price_ref_cny": 614,
+          "direct_price_ref_cny": 657,
+          "price_delta_cny": -43,
+          "duration_min": 1500,
+          "direct_duration_min": 790,
+          "duration_delta_min": 710,
+          "transfers": 1,
+          "comfort_score": null,
+          "playable": true,
+          "notes": []
+        },
+        "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
+        "path_note": "系统选枢纽：武汉",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "高铁",
+            "from_station": "上海虹桥站",
+            "to_station": "武汉站",
+            "dep_at": "2026-10-01T07:20:00+08:00",
+            "arr_at": "2026-10-01T11:50:00+08:00",
+            "duration_min": 270,
+            "duration_display": "约 5 小时",
+            "seat_hint": "二等座",
+            "price_ref_cny": 334,
+            "price_display": "约 ¥334",
+            "service_ref": "G 字头沪汉（参考）",
+            "leg_id": "leg-sha-whn-g",
+            "comfort": "second_class"
+          },
+          {
+            "kind": "xfer",
+            "city": "武汉",
+            "xfer_kind": "same_city",
+            "xfer_kind_label": "同城换乘",
+            "buffer_min": 530,
+            "buffer_display": "约 530 分钟",
+            "tip": "预留接驳时间"
+          },
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "火车",
+            "from_station": "汉口站",
+            "to_station": "成都西站",
+            "dep_at": "2026-10-01T20:40:00+08:00",
+            "arr_at": "2026-10-02T08:20:00+08:00",
+            "duration_min": 700,
+            "duration_display": "约 12 小时",
+            "seat_hint": "硬卧优先",
+            "price_ref_cny": 280,
+            "price_display": "约 ¥280",
+            "service_ref": "过夜普速/动卧类（参考）",
+            "leg_id": "leg-whn-ctu-overnight",
+            "comfort": "hard_sleeper"
+          }
+        ],
+        "play": [
+          {
+            "hub_city": "武汉",
+            "name": "黄鹤楼 / 户部巷一带",
+            "dist_text": "武昌老城，距武汉站约 13–16km",
+            "suggest_text": "建议 2–3 小时登楼 + 用餐",
+            "ok": "缓冲 ≥6 小时再考虑；节假日客流与返站交通需加余量",
+            "min_buffer_hours": 6
+          },
+          {
+            "hub_city": "武汉",
+            "name": "东湖听涛景区",
+            "dist_text": "武昌东湖，距武汉站约 7–10km",
+            "suggest_text": "建议 2–3 小时湖畔散步",
+            "ok": "缓冲 ≥5 小时可短逛；湖区较大，按固定返站点倒推",
+            "min_buffer_hours": 5
+          },
+          {
+            "hub_city": "武汉",
+            "name": "湖北省博物馆",
+            "dist_text": "武昌东湖路，距武汉站约 8–11km",
+            "suggest_text": "建议 2–3 小时参观",
+            "ok": "缓冲 ≥5 小时再考虑；先确认开放与预约，预留返站接驳",
+            "min_buffer_hours": 5
+          }
+        ],
+        "buy_legs": [
+          {
+            "name": "上海 → 武汉",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥334",
+            "mode": "train",
+            "deep_link_hint": null
+          },
+          {
+            "name": "武汉 → 成都",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥280",
+            "mode": "train",
+            "deep_link_hint": null
+          }
+        ]
+      },
+      {
+        "id": "sha-ctu-fast",
+        "type": "fast",
+        "type_label": "最快",
+        "price_ref_cny": 831,
+        "price_display": "¥760–930",
+        "price_note": "参考价",
+        "duration_min": 750,
+        "duration_display": "约 13 小时",
+        "transfers": 1,
+        "route_one_line": "上海 → 西安 → 成都",
+        "vs_direct": "参考价大概贵 174 块，能少耗大约 1 小时",
+        "why": "经 西安 的高铁组合，门到门更短。",
+        "why_detail": "经 西安 的高铁组合，门到门更短。 参考价大概贵 174 块，能少耗大约 1 小时。价格、时刻都是参考，以购票平台为准。 西安空窗够长，下面写了怎么玩；不够长不会硬推景点。",
+        "why_facts": {
+          "hubs": [
+            "西安"
+          ],
+          "user_via": false,
+          "price_ref_cny": 831,
+          "direct_price_ref_cny": 657,
+          "price_delta_cny": 174,
+          "duration_min": 750,
+          "direct_duration_min": 790,
+          "duration_delta_min": -40,
+          "transfers": 1,
+          "comfort_score": null,
+          "playable": true,
+          "notes": []
+        },
+        "play_hint": "西安可玩 · 站内 / 站前休息",
+        "path_note": "系统选枢纽：西安",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "高铁",
+            "from_station": "上海虹桥站",
+            "to_station": "西安北站",
+            "dep_at": "2026-10-01T08:00:00+08:00",
+            "arr_at": "2026-10-01T14:20:00+08:00",
+            "duration_min": 380,
+            "duration_display": "约 6 小时",
+            "seat_hint": "二等座",
+            "price_ref_cny": 568,
+            "price_display": "约 ¥568",
+            "service_ref": "G 字头沪西（参考）",
+            "leg_id": "leg-sha-xian-g",
+            "comfort": "second_class"
+          },
+          {
+            "kind": "xfer",
+            "city": "西安",
+            "xfer_kind": "same_station",
+            "xfer_kind_label": "同站换乘",
+            "buffer_min": 140,
+            "buffer_display": "约 140 分钟",
+            "tip": "预留接驳时间"
+          },
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "高铁",
+            "from_station": "西安北站",
+            "to_station": "成都东站",
+            "dep_at": "2026-10-01T16:40:00+08:00",
+            "arr_at": "2026-10-01T20:30:00+08:00",
+            "duration_min": 230,
+            "duration_display": "约 4 小时",
+            "seat_hint": "二等座",
+            "price_ref_cny": 263,
+            "price_display": "约 ¥263",
+            "service_ref": "G 字头西成（参考）",
+            "leg_id": "leg-xian-ctu-g",
+            "comfort": "second_class"
+          }
+        ],
+        "play": [
+          {
+            "hub_city": "西安",
+            "name": "站内 / 站前休息",
+            "dist_text": "西安北站内或枢纽商业区",
+            "suggest_text": "休息、补给；赶飞机优先留在枢纽",
+            "ok": "同站缓冲约 ≥2 小时：不硬推出城",
+            "min_buffer_hours": 2
+          }
+        ],
+        "buy_legs": [
+          {
+            "name": "上海 → 西安",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥568",
+            "mode": "train",
+            "deep_link_hint": null
+          },
+          {
+            "name": "西安 → 成都",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥263",
+            "mode": "train",
+            "deep_link_hint": null
+          }
+        ]
+      },
+      {
+        "id": "sha-ctu-balanced",
+        "type": "balanced",
+        "type_label": "最综合",
+        "price_ref_cny": 657,
+        "price_display": "¥620–720",
+        "price_note": "参考价",
+        "duration_min": 790,
+        "duration_display": "约 13 小时",
+        "transfers": 0,
+        "route_one_line": "上海 → 成都",
+        "vs_direct": "参考价差不多，时长差不多",
+        "why": "直达走法，少换乘。",
+        "why_detail": "直达走法，少换乘。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。",
+        "why_facts": {
+          "hubs": [],
+          "user_via": false,
+          "price_ref_cny": 657,
+          "direct_price_ref_cny": 657,
+          "price_delta_cny": 0,
+          "duration_min": 790,
+          "direct_duration_min": 790,
+          "duration_delta_min": 0,
+          "transfers": 0,
+          "comfort_score": null,
+          "playable": false,
+          "notes": []
+        },
+        "play_hint": null,
+        "path_note": "直达",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "高铁",
+            "from_station": "上海虹桥站",
+            "to_station": "成都东站",
+            "dep_at": "2026-10-01T06:40:00+08:00",
+            "arr_at": "2026-10-01T19:50:00+08:00",
+            "duration_min": 790,
+            "duration_display": "约 13 小时",
+            "seat_hint": "二等座",
+            "price_ref_cny": 657,
+            "price_display": "约 ¥657",
+            "service_ref": "G 字头直达（参考）",
+            "leg_id": "leg-sha-ctu-g-direct",
+            "comfort": "second_class"
+          }
+        ],
+        "play": null,
+        "buy_legs": [
+          {
+            "name": "上海 → 成都",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥657",
+            "mode": "train",
+            "deep_link_hint": null
+          }
+        ]
+      }
+    ],
+    "more": [
+      {
+        "id": "sha-ctu-more-1",
+        "type_label": "其它组合",
+        "title": "上海 → 武汉 → 成都",
+        "sub": "系统选枢纽：武汉 · 约 ¥713",
+        "price_display": "¥713",
+        "plan_id": "plan-leg-sha-whn-g_leg-whn-ctu-g"
+      }
+    ]
+  }
+}
