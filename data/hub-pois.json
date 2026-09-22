@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "note": "TransferPlay 独立表；按 hub_city 查询。西宁为样板城（3～6 条已满）。",
+    "source": "mock",
+    "as_of": "2026-09-22T19:20:00+08:00",
+    "hubs_ref": "docs/hubs-mvp.md"
+  },
+  "pois": [
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "站内 / 站前休息",
+      "dist_text": "西宁站内或出站口周边",
+      "dist_km": 0.3,
+      "suggest_hours": 1,
+      "suggest_text": "休息、补给、不远逛",
+      "min_buffer_hours": 2,
+      "back_ok_note": "同站缓冲约 ≥2 小时：优先休息与下一程安检，不硬推景点"
+    },
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "东关清真大寺一带",
+      "dist_text": "城区内，距西宁站约 5–8km",
+      "dist_km": 6,
+      "suggest_hours": 1.5,
+      "suggest_text": "1–2 小时轻逛 + 用餐",
+      "min_buffer_hours": 3,
+      "back_ok_note": "同城缓冲 ≥3 小时较合适；预留回站打车与安检"
+    },
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "青海省博物馆",
+      "dist_text": "城东，距西宁站约 4–6km",
+      "dist_km": 5,
+      "suggest_hours": 1.5,
+      "suggest_text": "建议 1.5–2 小时（含交通）",
+      "min_buffer_hours": 3,
+      "back_ok_note": "闭馆日勿去；缓冲紧时改站前休息"
+    },
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "南山公园 / 凤凰台一带",
+      "dist_text": "市区南侧，距西宁站约 6–9km",
+      "dist_km": 7,
+      "suggest_hours": 2,
+      "suggest_text": "建议 2 小时轻行",
+      "min_buffer_hours": 3,
+      "back_ok_note": "海拔与坡度适中；勿排太满以免误车"
+    },
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "塔尔寺",
+      "dist_text": "湟中，距西宁城区约 25km",
+      "dist_km": 25,
+      "suggest_hours": 2.5,
+      "suggest_text": "建议游玩 2–3 小时（不含往返）",
+      "min_buffer_hours": 6,
+      "back_ok_note": "缓冲 ≥6 小时较从容；打车往返并提前回站安检；过夜更稳"
+    },
+    {
+      "hub_city": "西宁",
+      "anchor_station": "西宁站",
+      "name": "湟源丹噶尔古城（半日向）",
+      "dist_text": "湟源方向，距西宁约 50km 级",
+      "dist_km": 50,
+      "suggest_hours": 4,
+      "suggest_text": "半日往返，含交通约 4–5 小时",
+      "min_buffer_hours": 6,
+      "back_ok_note": "仅过夜或 ≥6～8 小时窗口考虑；多数换乘不推荐硬排"
+    },
+    {
+      "hub_city": "西安",
+      "anchor_station": "西安北站",
+      "name": "大雁塔 / 大唐不夜城一带",
+      "dist_text": "市区，距西安北站约 15–20km",
+      "dist_km": 18,
+      "suggest_hours": 2,
+      "suggest_text": "建议 2 小时轻逛",
+      "min_buffer_hours": 3,
+      "back_ok_note": "同城缓冲 ≥3 小时可短逛；赶飞机请改接驳休息"
+    },
+    {
+      "hub_city": "西安",
+      "anchor_station": "西安北站",
+      "name": "兵马俑（临潼）",
+      "dist_text": "距西安北站约 40–50km",
+      "dist_km": 45,
+      "suggest_hours": 3.5,
+      "suggest_text": "建议半日 3–4 小时（含交通）",
+      "min_buffer_hours": 6,
+      "back_ok_note": "缓冲 ≥6 小时再考虑；接驳机场/车站需留足时间"
+    }
+  ]
+}
