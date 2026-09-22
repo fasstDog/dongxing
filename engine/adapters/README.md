@@ -2,7 +2,7 @@
 
 约定见 [`docs/data-sources.md`](../../docs/data-sources.md) §8。
 
-`index.js` re-exports the async engine contract:
+`index.js` **合并**火车 + 航班 mock，对外仍是同一契约：
 
 ```js
 const { searchLegs } = require('./engine/adapters');
