@@ -12,7 +12,7 @@
   let directBaseline = {
     price: "硬座约 ¥397 · 硬卧约 ¥760+",
     duration: "约 40–45 小时",
-    note: "Z 字头过路车，硬座久坐、硬卧过路票难抢",
+    note: "Z 字头过路车：硬座久坐，硬卧过路票不好抢",
   };
 
   /** @type {null | { auto?: object, user_via_xining?: object, auto_alt?: object }} */
@@ -409,7 +409,7 @@
       function onBuy() {
         vant.showToast({
           message:
-            "原型演示：此处将跳转 12306 / 航司 / OTA 购票。\n邪修交通只推荐路线，不卖票、不收款。",
+            "演示：这里会跳去 12306 / 航司 / OTA。\n邪修交通只推荐路线，不卖票、不收款。",
           duration: 2800,
         });
       }

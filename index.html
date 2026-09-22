@@ -217,7 +217,7 @@
                     {{ seg.from }} → {{ seg.to }}
                   </h4>
                   <p class="tl-desc">{{ seg.train }} · {{ seg.time }}</p>
-                  <p class="tl-desc">建议席别：{{ seg.seat }} · 参考价 {{ seg.price }}</p>
+                  <p class="tl-desc">席别参考：{{ seg.seat }} · 价格参考 {{ seg.price }}</p>
                 </van-step>
               </template>
             </van-steps>
@@ -240,7 +240,7 @@
         </van-cell-group>
 
         <van-cell-group inset class="detail-block">
-          <van-cell title="去购票" label="本产品不卖票。跳转 12306 / 航司 / OTA。" icon="shop-o" />
+          <van-cell title="去购票" label="我们不卖票。去 12306 / 航司 / OTA 自己买。" icon="shop-o" />
           <van-cell
             v-for="(leg, li) in currentPlan.buyLegs"
             :key="'buy-' + li"
@@ -263,18 +263,18 @@
         <van-cell-group inset>
           <van-cell title="邪修交通是什么？" />
           <div class="about-pad">
-            <p>输入出发地与目的地（可选日期、可选路径城市），推荐比直达更聪明的高铁 / 动车 / 飞机组合走法；讲清楚怎么去、为什么这样推；换乘时间长则告诉你怎么玩。</p>
-            <p><strong>只推荐路线，不卖票。</strong>购票请通过分段「去购票」跳转 12306 / 航司 / OTA，以购票平台实际票价、时刻与余票为准。</p>
+            <p>填出发地和目的地（日期、途经城市可选），帮你拼比直达更划算或更好受的走法：高铁 / 动车 / 飞机怎么搭。说清楚怎么去、为什么这样推；换乘空得够长，再告诉你怎么玩。</p>
+            <p><strong>只推荐路线，不卖票。</strong>分段点「去购票」跳去 12306 / 航司 / OTA；票价、时刻、有没有票，都以那边为准。</p>
           </div>
         </van-cell-group>
         <van-cell-group inset class="detail-block">
           <van-cell title="免责声明" />
           <div class="about-pad">
             <ul class="disc">
-              <li>本产品展示的价格、时刻、席别均为<strong>参考信息</strong>，不构成购票承诺。</li>
-              <li>本产品<strong>不售票、不收款、不代抢票、不处理退改签</strong>。</li>
-              <li>换乘缓冲与景点建议仅供参考，请预留足够接驳与安检时间，以现场情况为准。</li>
-              <li>高原线路请自行评估身体状况与进藏政策要求。</li>
+              <li>这里展示的价格、时刻、席别都是<strong>参考</strong>，不承诺能买到。</li>
+              <li>我们<strong>不卖票、不收款、不帮抢票、也不管退改签</strong>。</li>
+              <li>换乘空窗和景点建议仅供参考；接驳和安检时间自己多留点，以现场为准。</li>
+              <li>高原线请自己掂量身体，并核对进藏政策。</li>
             </ul>
           </div>
         </van-cell-group>
