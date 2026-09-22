@@ -269,3 +269,25 @@ MVP：默认最多 **1 次中转**进三主卡；途经个数 ≤ 3。
 ---
 
 *与 `docs/data-contract-mock.md`、`docs/技术与设计拍板.md` 冲突时：数据字段以后者为数据源约定、产品原则以拍板与 PRD 为准；本文件管引擎出入参。*
+
+---
+
+## 10. Node pipeline（`engine/pipeline.js`）→ 本 API / 前端
+
+`searchPlans` 冒烟：`node engine/search-pipeline-demo.js`。返回形与 §3 略有不同；前端 `js/app.js` 的 `normalizePipelineResponse` 做薄映射后仍走 Vant 适配（`adaptPlan`）。
+
+| pipeline 字段 | API / 前端 |
+|---------------|------------|
+| `main.cheapest` / `fastest` / `balanced`（对象槽） | `main[]` 项，`type` = `cheap` / `fast` / `balanced`，`type_label` = 最省钱 / 最快 / 最综合 |
+| `more[]` 完整 plan（同 `buildPlan`） | `more[]` MoreItem：`title`←`label`，`price_display`←`¥`+`price_ref_cny`，`plan_id`←`id` |
+| `price_ref_cny` / `summary.price_text` | `price_ref_cny` / `price_display`（无区间时单值） |
+| `duration_min` / `summary.duration_min` | `duration_min` / `duration_display`（约 N 小时） |
+| `label` / `summary.route_text` | `route_one_line` |
+| `path_note` | `path_note`；短 `why` 回退用 |
+| `legs[]` + `transfers[]`（MCT：`kind`/`buffer_min`） | 合成 `timeline[]`（`kind: leg` / `xfer`）与 `buy_legs[]` |
+| `play[]`（含 `back_ok_note`） | `play[]`（`ok` ← `back_ok_note`） |
+| `play_hint` | `play_hint` |
+
+Mock 文件 `data/mock/plans-*.json` 已是 §3 数组形 `main`，映射为 no-op。裸 pipeline JSON（无 `scenarios` 包装）也可被 `ensurePlansLoaded` 读成 `auto` 场景。
+
+样例 OD：`plans-xuzhou-lhasa.json`、`plans-shanghai-chengdu.json`（及对应 `legs-*.json`）。上海→成都可用 `node engine/export-shanghai-chengdu.js` 重导。

@@ -17,18 +17,22 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '../..');
-const DEFAULT_LEGS_PATH = path.join(ROOT, 'data', 'mock', 'legs-xuzhou-lhasa.json');
+const DEFAULT_LEGS_DIR = path.join(ROOT, 'data', 'mock');
+const DEFAULT_LEGS_PATH = path.join(DEFAULT_LEGS_DIR, 'legs-xuzhou-lhasa.json');
 const DEFAULT_TTL_MS = 15 * 60 * 1000;
 
 /** @type {Map<string, { expires: number, legs: object[] }>} */
 const cache = new Map();
 
-let legsPath = DEFAULT_LEGS_PATH;
+/** Single-file override; null = merge all data/mock/legs-*.json */
+let legsPath = null;
+let legsDir = DEFAULT_LEGS_DIR;
 let ttlMs = DEFAULT_TTL_MS;
 
 function configure(opts) {
   if (!opts || typeof opts !== 'object') return;
   if (opts.legsPath) legsPath = path.resolve(opts.legsPath);
+  if (opts.legsDir) legsDir = path.resolve(opts.legsDir);
   if (typeof opts.ttlMs === 'number' && opts.ttlMs >= 0) ttlMs = opts.ttlMs;
 }
 
@@ -40,15 +44,48 @@ function cacheKey(fromCity, toCity, date, afterAt) {
   return [fromCity, toCity, date || '*', afterAt || '*'].join('|');
 }
 
+function readLegsFile(filePath) {
+  const raw = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  const list = Array.isArray(raw.legs) ? raw.legs : Array.isArray(raw) ? raw : [];
+  return list.filter((l) => l && l.mode === 'train');
+}
+
+/** Load train legs from one file or all data/mock/legs-*.json. */
 function loadAllLegs() {
-  if (!fs.existsSync(legsPath)) {
-    const err = new Error('LEGS_NOT_FOUND: ' + legsPath);
+  if (legsPath) {
+    if (!fs.existsSync(legsPath)) {
+      const err = new Error('LEGS_NOT_FOUND: ' + legsPath);
+      err.code = 'LEGS_NOT_FOUND';
+      throw err;
+    }
+    return readLegsFile(legsPath);
+  }
+  if (!fs.existsSync(legsDir)) {
+    const err = new Error('LEGS_DIR_NOT_FOUND: ' + legsDir);
     err.code = 'LEGS_NOT_FOUND';
     throw err;
   }
-  const raw = JSON.parse(fs.readFileSync(legsPath, 'utf8'));
-  const list = Array.isArray(raw.legs) ? raw.legs : Array.isArray(raw) ? raw : [];
-  return list.filter((l) => l && l.mode === 'train');
+  const files = fs
+    .readdirSync(legsDir)
+    .filter((f) => /^legs-.*\.json$/.test(f))
+    .sort();
+  if (!files.length) {
+    if (fs.existsSync(DEFAULT_LEGS_PATH)) return readLegsFile(DEFAULT_LEGS_PATH);
+    const err = new Error('LEGS_NOT_FOUND: no legs-*.json in ' + legsDir);
+    err.code = 'LEGS_NOT_FOUND';
+    throw err;
+  }
+  const out = [];
+  const seen = new Set();
+  for (const f of files) {
+    for (const leg of readLegsFile(path.join(legsDir, f))) {
+      const key = leg.id || [leg.from_city, leg.to_city, leg.dep_at, leg.service_ref].join('|');
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(leg);
+    }
+  }
+  return out;
 }
 
 function pad(n) {
