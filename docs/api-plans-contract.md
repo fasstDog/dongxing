@@ -1,11 +1,25 @@
 # 方案生成 API 约定（mock / v1）
 
 > 状态：**定稿草案（规则引擎，2026-09-22）**  
-> 消费：`docs/data-contract-mock.md` 的 `Leg` / `PlayPoi`  
+> 消费：`docs/data-contract-mock.md` 的 `Leg` / `TransferPlay`（数据文件：`data/mock/legs-*.json`、`data/hub-pois.json`）  
 > 产出：前端三主卡 + 详情（怎么去 · 为什么 · 怎么玩 · 购票段）  
 > 原则：**程序算计划**；价格/时刻为参考；**模型禁止生成车次与票价**。
 
 ---
+
+## 0. 数据文件布局（与数据内容约定）
+
+| 文件 | 内容 |
+|------|------|
+| `data/mock/legs-xuzhou-lhasa.json` | `{ meta, legs: Leg[] }`，冒烟 OD |
+| `data/hub-pois.json` | `{ meta, pois: TransferPlay[] }`，按 `hub_city` 查 |
+| `docs/schemas/leg.schema.json` | Leg |
+| `docs/schemas/transfer-play.schema.json` | TransferPlay |
+
+展示价区间用 Leg 的 `price_min_cny` / `price_max_cny`（勿再用 `price_range` 对象）。
+
+---
+
 
 ## 1. 端点（MVP）
 
@@ -94,7 +108,7 @@
 | `type` | `"cheap"` \| `"fast"` \| `"balanced"` | 三主卡槽位 |
 | `type_label` | string | `最省钱` / `最快` / `最综合` |
 | `price_ref_cny` | int | 各段 `price_ref_cny` 之和（打分同源） |
-| `price_display` | string | 展示串，如 `¥520–680`（可由 range 合成） |
+| `price_display` | string | 展示串，如 `¥520–680`（可由各段 `price_min_cny`/`price_max_cny` 合成） |
 | `price_note` | string | 默认 `参考价` |
 | `duration_min` | int | 门到门：各段时长 + 换乘缓冲 |
 | `duration_display` | string | 如 `约 32–36 小时` |
@@ -216,7 +230,7 @@
 1. 取 `Leg`（mock JSON / 后续真源）；直达作 `direct_baseline`。  
 2. 定链：`path_mode=user` → `from + vias + to`；`auto` → 死枢纽表候选（见 `docs/hubs-mvp.md`）插 1 个中转（MVP）。  
 3. 枚举分段组合；粗 MCT：同站 / 同城最小缓冲（配置常数，默认同站 60min、同城 180min，可调）。  
-4. 丢弃不达标组合；缓冲 ≥ POI.`min_buffer_hours` 才挂 `play`。  
+4. 丢弃不达标组合；缓冲 ≥ TransferPlay.`min_buffer_hours` 才挂 `play`。  
 5. 打分：`cheap` = 最低 `price_ref` 和（可加 `duration_min` 上限）；`fast` = 最短总时长；`balanced` = 价 + 时 + 换乘 + comfort 加权。  
 6. 填充 `Plan` 展示字段与 `why_facts`；`service_ref` **原样透传**。
 
@@ -250,7 +264,7 @@ MVP：默认最多 **1 次中转**进三主卡；途经个数 ≤ 3。
 - `fast`：徐州→西安（G）+ 西安飞拉萨  
 - `balanced`：徐州→西宁 + 西宁→拉萨，且西宁缓冲够时可挂塔尔寺等 POI  
 
-具体数值以 `data/mock/xuzhou-lhasa.json` 枚举结果为准，**不以本文写死票价**。
+具体数值以 `data/mock/legs-xuzhou-lhasa.json` + `data/hub-pois.json` 枚举结果为准，**不以本文写死票价**。
 
 ---
 
