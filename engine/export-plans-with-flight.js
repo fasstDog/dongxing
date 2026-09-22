@@ -251,6 +251,7 @@ async function exportOd(cfg) {
     to: cfg.to,
     date: cfg.date,
     vias: [],
+    extraHubs: cfg.extraHubs || [],
   });
   const via = cfg.viaCity
     ? await searchPlans({ from: cfg.from, to: cfg.to, date: cfg.date, vias: [cfg.viaCity] })
@@ -315,7 +316,7 @@ async function exportOd(cfg) {
 }
 
 (async () => {
-  const only = process.argv[2] || 'all'; // all | xz-lxa | sha-ctu | bj-wh
+  const only = process.argv[2] || 'all'; // all | xz-lxa | sha-ctu | bj-wh | cd-cq
   const want = (key) => only === 'all' || only === key;
 
   const jobs = [
@@ -357,6 +358,20 @@ async function exportOd(cfg) {
       outMock: 'data/mock/plans-beijing-wuhan.json',
       outRoot: 'data/plans-beijing-wuhan.json',
       idPrefix: 'bj-wh',
+    },
+    {
+      key: 'cd-cq',
+      name: '成都→重庆',
+      from: '成都',
+      to: '重庆',
+      date: '2026-10-01',
+      viaCity: '遂宁',
+      viaKey: 'user_via_suining',
+      extraHubs: ['遂宁', '内江'],
+      legsFile: 'data/mock/legs-chengdu-chongqing.json',
+      outMock: 'data/mock/plans-chengdu-chongqing.json',
+      outRoot: 'data/plans-chengdu-chongqing.json',
+      idPrefix: 'cd-cq',
     },
   ];
 
