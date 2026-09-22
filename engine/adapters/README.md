@@ -12,8 +12,9 @@ const legs = await searchLegs({ from, to, date });
 | 文件 | 说明 |
 |------|------|
 | `train.mock.js` | 火车 mock：读 `data/mock/legs-*.json`，单机内存缓存 |
+| `flight.mock.js` | 航班 mock：同契约，仅 `mode=flight`；默认合并徐拉+沪蓉腿表 |
 | `train.<vendor>.js` | （后续）合规火车源；密钥只走环境变量 |
-| `flight.*` | （更晚）航班第二优先 |
+| `flight.<vendor>.js` | （后续）合规航班源 |
 
 `train.mock.js` currently supports the 徐州→拉萨 snapshot. It returns `Leg[]`
 with the shape in [`docs/data-contract-mock.md`](../../docs/data-contract-mock.md)
@@ -39,4 +40,9 @@ The lower-level mock CLI remains available:
 ```bash
 node engine/adapters/train.mock.js 徐州 西宁 2026-10-01
 node engine/adapters/train.mock.js 西宁 拉萨 --after 2026-10-02T14:40:00+08:00
+```
+
+```bash
+node engine/adapters/flight.mock.js 西安 拉萨
+node engine/adapters/flight.mock.js 上海 成都 2026-10-08
 ```
