@@ -4,9 +4,10 @@
       "from_city": "上海",
       "to_city": "成都"
     },
-    "note": "pipeline + train/flight mock；最快含空铁/直飞；无实时余票",
+    "note": "由 pipeline 程序生成；无实时余票；为什么文案为口语模板",
     "legs_source": "legs-shanghai-chengdu.json",
-    "pois_source": "hub-pois.json"
+    "pois_source": "hub-pois.json",
+    "api": "docs/api-plans-contract.md"
   },
   "scenarios": {
     "auto": {
@@ -34,9 +35,8 @@
           "data_source": "mock",
           "as_of": "2026-09-22T19:40:00+08:00",
           "disclaimer": "价格、时刻均为参考，以购票平台为准",
-          "generated_by": "engine/export-plans-with-flight.js",
-          "no_realtime_inventory": true,
-          "adapters": "train.mock+flight.mock"
+          "generated_by": "engine/pipeline.js + human why templates",
+          "no_realtime_inventory": true
         },
         "direct_baseline": {
           "price_ref_cny": 657,
@@ -50,7 +50,7 @@
             "成都"
           ],
           "hubs": [
-            "武汉"
+            null
           ],
           "note": "系统选枢纽：武汉"
         },
@@ -69,6 +69,22 @@
             "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
             "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
             "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "武汉"
+              ],
+              "user_via": false,
+              "price_ref_cny": 614,
+              "direct_price_ref_cny": 657,
+              "price_delta_cny": -43,
+              "duration_min": 1500,
+              "direct_duration_min": 790,
+              "duration_delta_min": 710,
+              "transfers": 1,
+              "comfort_score": null,
+              "playable": true,
+              "notes": []
+            },
             "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
             "path_note": "系统选枢纽：武汉",
             "timeline": [
@@ -169,8 +185,24 @@
             "transfers": 0,
             "route_one_line": "上海 → 成都",
             "vs_direct": "参考价大概贵 123 块，能少耗大约 10 小时",
-            "why": "飞机直达，门到门通常最快，票价浮动大。",
-            "why_detail": "飞机直达，门到门通常最快，票价浮动大。 参考价大概贵 123 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。",
+            "why": "上海直飞成都，一趟飞机到，少折腾。参考价以航司/OTA为准。",
+            "why_detail": "直达走法，少换乘。 参考价大概贵 123 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。",
+            "why_facts": {
+              "hubs": [],
+              "user_via": false,
+              "price_ref_cny": 780,
+              "direct_price_ref_cny": 657,
+              "price_delta_cny": 123,
+              "duration_min": 190,
+              "direct_duration_min": 790,
+              "duration_delta_min": -600,
+              "transfers": 0,
+              "comfort_score": null,
+              "playable": false,
+              "notes": [
+                "空铁混搭"
+              ]
+            },
             "play_hint": null,
             "path_note": "直达",
             "timeline": [
@@ -216,6 +248,22 @@
             "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
             "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
             "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "武汉"
+              ],
+              "user_via": false,
+              "price_ref_cny": 614,
+              "direct_price_ref_cny": 657,
+              "price_delta_cny": -43,
+              "duration_min": 1500,
+              "direct_duration_min": 790,
+              "duration_delta_min": 710,
+              "transfers": 1,
+              "comfort_score": null,
+              "playable": true,
+              "notes": []
+            },
             "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
             "path_note": "系统选枢纽：武汉",
             "timeline": [
@@ -370,9 +418,8 @@
           "data_source": "mock",
           "as_of": "2026-09-22T19:40:00+08:00",
           "disclaimer": "价格、时刻均为参考，以购票平台为准",
-          "generated_by": "engine/export-plans-with-flight.js",
-          "no_realtime_inventory": true,
-          "adapters": "train.mock+flight.mock"
+          "generated_by": "engine/pipeline.js + human why templates",
+          "no_realtime_inventory": true
         },
         "direct_baseline": {
           "price_ref_cny": 614,
@@ -386,13 +433,13 @@
             "成都"
           ],
           "hubs": [
-            "武汉"
+            null
           ],
           "note": "因你指定经 武汉"
         },
         "main": [
           {
-            "id": "sha-ctu-via-cheap",
+            "id": "sha-ctu-cheap",
             "type": "cheap",
             "type_label": "最省钱",
             "price_ref_cny": 614,
@@ -405,6 +452,22 @@
             "vs_direct": "参考价差不多，时长差不多",
             "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
             "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "武汉"
+              ],
+              "user_via": false,
+              "price_ref_cny": 614,
+              "direct_price_ref_cny": 614,
+              "price_delta_cny": 0,
+              "duration_min": 1500,
+              "direct_duration_min": 1500,
+              "duration_delta_min": 0,
+              "transfers": 1,
+              "comfort_score": null,
+              "playable": true,
+              "notes": []
+            },
             "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
             "path_note": "因你指定经 武汉",
             "timeline": [
@@ -494,7 +557,7 @@
             ]
           },
           {
-            "id": "sha-ctu-via-fast",
+            "id": "sha-ctu-fast",
             "type": "fast",
             "type_label": "最快",
             "price_ref_cny": 713,
@@ -505,8 +568,24 @@
             "transfers": 1,
             "route_one_line": "上海 → 武汉 → 成都",
             "vs_direct": "参考价大概贵 99 块，能少耗大约 10 小时",
-            "why": "经 武汉 的高铁组合，门到门更短。",
+            "why": "上海直飞成都，一趟飞机到，少折腾。参考价以航司/OTA为准。",
             "why_detail": "经 武汉 的高铁组合，门到门更短。 参考价大概贵 99 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。 换乘以接驳为主，窗口不够长不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "武汉"
+              ],
+              "user_via": false,
+              "price_ref_cny": 713,
+              "direct_price_ref_cny": 614,
+              "price_delta_cny": 99,
+              "duration_min": 890,
+              "direct_duration_min": 1500,
+              "duration_delta_min": -610,
+              "transfers": 1,
+              "comfort_score": null,
+              "playable": false,
+              "notes": []
+            },
             "play_hint": null,
             "path_note": "因你指定经 武汉",
             "timeline": [
@@ -571,7 +650,7 @@
             ]
           },
           {
-            "id": "sha-ctu-via-balanced",
+            "id": "sha-ctu-balanced",
             "type": "balanced",
             "type_label": "最综合",
             "price_ref_cny": 614,
@@ -584,6 +663,22 @@
             "vs_direct": "参考价差不多，时长差不多",
             "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
             "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
+            "why_facts": {
+              "hubs": [
+                "武汉"
+              ],
+              "user_via": false,
+              "price_ref_cny": 614,
+              "direct_price_ref_cny": 614,
+              "price_delta_cny": 0,
+              "duration_min": 1500,
+              "direct_duration_min": 1500,
+              "duration_delta_min": 0,
+              "transfers": 1,
+              "comfort_score": null,
+              "playable": true,
+              "notes": []
+            },
             "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
             "path_note": "因你指定经 武汉",
             "timeline": [
@@ -701,9 +796,8 @@
       "data_source": "mock",
       "as_of": "2026-09-22T19:40:00+08:00",
       "disclaimer": "价格、时刻均为参考，以购票平台为准",
-      "generated_by": "engine/export-plans-with-flight.js",
-      "no_realtime_inventory": true,
-      "adapters": "train.mock+flight.mock"
+      "generated_by": "engine/pipeline.js + human why templates",
+      "no_realtime_inventory": true
     },
     "direct_baseline": {
       "price_ref_cny": 657,
@@ -717,7 +811,7 @@
         "成都"
       ],
       "hubs": [
-        "武汉"
+        null
       ],
       "note": "系统选枢纽：武汉"
     },
@@ -736,6 +830,22 @@
         "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
         "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
         "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
+        "why_facts": {
+          "hubs": [
+            "武汉"
+          ],
+          "user_via": false,
+          "price_ref_cny": 614,
+          "direct_price_ref_cny": 657,
+          "price_delta_cny": -43,
+          "duration_min": 1500,
+          "direct_duration_min": 790,
+          "duration_delta_min": 710,
+          "transfers": 1,
+          "comfort_score": null,
+          "playable": true,
+          "notes": []
+        },
         "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
         "path_note": "系统选枢纽：武汉",
         "timeline": [
@@ -836,8 +946,24 @@
         "transfers": 0,
         "route_one_line": "上海 → 成都",
         "vs_direct": "参考价大概贵 123 块，能少耗大约 10 小时",
-        "why": "飞机直达，门到门通常最快，票价浮动大。",
-        "why_detail": "飞机直达，门到门通常最快，票价浮动大。 参考价大概贵 123 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。",
+        "why": "上海直飞成都，一趟飞机到，少折腾。参考价以航司/OTA为准。",
+        "why_detail": "直达走法，少换乘。 参考价大概贵 123 块，能少耗大约 10 小时。价格、时刻都是参考，以购票平台为准。",
+        "why_facts": {
+          "hubs": [],
+          "user_via": false,
+          "price_ref_cny": 780,
+          "direct_price_ref_cny": 657,
+          "price_delta_cny": 123,
+          "duration_min": 190,
+          "direct_duration_min": 790,
+          "duration_delta_min": -600,
+          "transfers": 0,
+          "comfort_score": null,
+          "playable": false,
+          "notes": [
+            "空铁混搭"
+          ]
+        },
         "play_hint": null,
         "path_note": "直达",
         "timeline": [
@@ -883,6 +1009,22 @@
         "vs_direct": "参考价大概省 43 块，多花大约 12 小时",
         "why": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。",
         "why_detail": "经 武汉 拆段。多一趟换乘，窗口够的话能顺路逛逛。 参考价大概省 43 块，多花大约 12 小时。价格、时刻都是参考，以购票平台为准。 武汉空窗够长，下面写了怎么玩；不够长不会硬推景点。",
+        "why_facts": {
+          "hubs": [
+            "武汉"
+          ],
+          "user_via": false,
+          "price_ref_cny": 614,
+          "direct_price_ref_cny": 657,
+          "price_delta_cny": -43,
+          "duration_min": 1500,
+          "direct_duration_min": 790,
+          "duration_delta_min": 710,
+          "transfers": 1,
+          "comfort_score": null,
+          "playable": true,
+          "notes": []
+        },
         "play_hint": "武汉可玩 · 黄鹤楼 / 户部巷一带",
         "path_note": "系统选枢纽：武汉",
         "timeline": [
