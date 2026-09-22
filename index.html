@@ -70,6 +70,17 @@
         <div class="search-wrap">
           <van-button type="primary" block round size="large" @click="onSearch">开始邪修</van-button>
         </div>
+
+        <div class="demo-switches" aria-label="原型演示开关">
+          <label class="demo-switch">
+            <input type="checkbox" v-model="demoEmpty" @change="onDemoEmpty" />
+            <span>演示：无方案</span>
+          </label>
+          <label class="demo-switch">
+            <input type="checkbox" v-model="demoError" @change="onDemoError" />
+            <span>演示：加载失败</span>
+          </label>
+        </div>
       </div>
     </section>
 
@@ -97,14 +108,30 @@
         </van-tabs>
         <p class="ref-note">{{ resultsMeta }}</p>
 
-        <div v-if="resultsStatus === 'loading'" class="state-box">
-          <van-loading vertical type="spinner" color="#1989fa">正在邪修路线…</van-loading>
+                <div v-if="resultsStatus === 'loading'" class="state-box">
+          <van-loading vertical type="spinner" color="#1989fa">正在邪修组合…</van-loading>
         </div>
-        <van-empty v-else-if="resultsStatus === 'empty'" image="search" description="暂无可用方案">
-          <van-button round type="primary" class="retry-btn" @click="go('query')">返回修改查询</van-button>
+        <van-empty
+          v-else-if="resultsStatus === 'empty'"
+          image="search"
+          description="这趟暂时拼不出方案"
+        >
+          <p class="state-desc">可能是城市名不好认、日期太偏，或这条线我们还没覆盖好。价格时刻都是参考，不保证有票。</p>
+          <div class="state-actions">
+            <van-button round type="primary" block class="retry-btn" @click="go('query')">改查询条件</van-button>
+            <van-button round plain type="primary" block class="retry-btn" @click="loadExample">看看示例：徐州→拉萨</van-button>
+          </div>
         </van-empty>
-        <van-empty v-else-if="resultsStatus === 'error'" image="error" :description="errorMsg">
-          <van-button round type="primary" class="retry-btn" @click="retrySearch">重试</van-button>
+        <van-empty
+          v-else-if="resultsStatus === 'error'"
+          image="error"
+          description="这趟没查到，多半是数据暂不可用"
+        >
+          <p class="state-desc">{{ errorMsg }}</p>
+          <div class="state-actions">
+            <van-button round type="primary" block class="retry-btn" @click="retrySearch">再试一次</van-button>
+            <van-button round plain type="primary" block class="retry-btn" @click="go('query')">改条件</van-button>
+          </div>
         </van-empty>
 
         <template v-else-if="resultsStatus === 'ok'">

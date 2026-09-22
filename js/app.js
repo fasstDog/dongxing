@@ -413,7 +413,9 @@
       const resultMode = ref("auto");
       const currentPlanId = ref(null);
       const resultsStatus = ref("idle"); // idle | loading | ok | empty | error
-      const errorMsg = ref("查询失败，请稍后重试");
+      const errorMsg = ref("这趟没查到，多半是数据暂不可用");
+      const demoEmpty = ref(false);
+      const demoError = ref(false);
       const statusTime = ref("--:--");
 
       try {
@@ -447,8 +449,30 @@
       }
 
       function addVia() {
-        if (vias.value.length >= 3) return;
+        if (vias.value.length >= 3) {
+          vant.showToast("途经最多 3 个");
+          return;
+        }
         vias.value.push(vias.value.length === 0 ? "西宁" : "");
+      }
+
+      function onDemoEmpty() {
+        if (demoEmpty.value) demoError.value = false;
+      }
+
+      function onDemoError() {
+        if (demoError.value) demoEmpty.value = false;
+      }
+
+      function loadExample() {
+        from.value = "徐州";
+        to.value = "拉萨";
+        dateFlexible.value = true;
+        date.value = "";
+        vias.value = [];
+        demoEmpty.value = false;
+        demoError.value = false;
+        runSearch({ forceOk: true });
       }
 
       function removeVia(i) {
@@ -558,6 +582,13 @@
       }
 
       function openDetail(planId) {
+        const p = findPlan(planId);
+        if (!p) {
+          vant.showToast("方案找不到了，先回结果看看");
+          if (resultsStatus.value === "ok") go("results");
+          else go("query");
+          return;
+        }
         currentPlanId.value = planId;
         go("detail");
       }
@@ -570,32 +601,52 @@
         });
       }
 
-      function runSearch() {
-        const f = (from.value || "").trim() || "徐州";
-        const t = (to.value || "").trim() || "拉萨";
-        from.value = f;
-        to.value = t;
+      function runSearch(opts) {
+        opts = opts || {};
+        const f = (from.value || "").trim();
+        const t = (to.value || "").trim();
+
+        if (!opts.forceOk) {
+          if (!f || !t) {
+            vant.showToast("先填出发地和目的地");
+            return;
+          }
+          if (f === t) {
+            vant.showToast("出发和到达不能是同一个地方");
+            return;
+          }
+          const vs = cleanedVias();
+          for (const v of vs) {
+            if (v === f || v === t) {
+              vant.showToast("途经别和出发/到达重复");
+              return;
+            }
+          }
+        }
+
+        from.value = f || "徐州";
+        to.value = t || "拉萨";
         vias.value = cleanedVias();
 
         resultsStatus.value = "loading";
         go("results");
 
-        // Simulate short loading
+        const mode = opts.forceOk
+          ? null
+          : demoEmpty.value
+            ? "empty"
+            : demoError.value
+              ? "error"
+              : null;
+
         setTimeout(() => {
-          if (f === t) {
-            resultsStatus.value = "error";
-            errorMsg.value = "出发地与目的地不能相同，请修改后重试";
-            return;
-          }
-          // Demo hook: type「空」as destination to preview empty state
-          if (t === "空" || t.toLowerCase() === "empty") {
+          if (mode === "empty") {
             resultsStatus.value = "empty";
             return;
           }
-          // Demo hook: type「错」to preview error
-          if (t === "错" || t.toLowerCase() === "error") {
+          if (mode === "error") {
             resultsStatus.value = "error";
-            errorMsg.value = "网络异常（演示），请稍后重试";
+            errorMsg.value = "这趟没查到，多半是数据暂不可用";
             return;
           }
 
@@ -648,6 +699,11 @@
         onBuy,
         onSearch,
         retrySearch,
+        demoEmpty,
+        demoError,
+        onDemoEmpty,
+        onDemoError,
+        loadExample,
       };
     },
   })
