@@ -198,24 +198,73 @@ def why_facts(legs: list[dict], hubs: list[str], user_via: bool, direct: dict | 
 
 
 def render_why(facts: dict, route: str) -> tuple[str, str, str]:
-    """return why, why_detail, vs_direct"""
-    hubs = "、".join(facts["hubs"]) if facts["hubs"] else "直达"
+    """return why, why_detail, vs_direct — 口语，避免工程腔。"""
+    hubs = "、".join(facts["hubs"]) if facts["hubs"] else ""
     pd, dd = facts.get("price_delta_cny"), facts.get("duration_delta_min")
-    vs = "相对直达的参考对照见详情"
+
+    def money(n):
+        n = abs(int(n))
+        if n >= 100:
+            return f"大概{n} 块"
+        return f"大约 {n} 元"
+
+    def time_words(mins):
+        mins = abs(int(mins))
+        h = mins // 60
+        if h <= 0:
+            return "一会儿"
+        if h >= 20:
+            return f"将近 {h // 24 * 24 or h} 小时" if h >= 24 else f"大约 {h} 小时"
+        return f"大约 {h} 小时"
+
+    vs = "和直达比，还得看当天票价和时刻"
     if pd is not None and dd is not None:
-        price_bit = "更省" if pd < 0 else ("接近" if abs(pd) < 30 else "更贵")
-        time_bit = "更短" if dd < 0 else ("接近" if abs(dd) < 120 else "更长")
-        vs = f"参考价比直达{price_bit}约 {abs(pd)} 元；时长{time_bit}约 {abs(dd) // 60} 小时"
-    if facts["user_via"]:
-        why = f"按你指定经 {hubs} 分段组合：{route}。程序按参考价与时长打分，不编造车次余票。"
-    elif facts["hubs"]:
-        why = f"系统选枢纽 {hubs} 拆段：{route}。综合参考价、时长与舒适度。"
+        if abs(pd) < 40 and abs(dd) < 90:
+            vs = "参考价和时长跟直达差不多"
+        else:
+            price_part = (
+                f"参考价大概省 {money(pd).replace('大概','').replace('大约 ','')}"
+                if pd < 0
+                else (f"参考价大概贵 {money(pd).replace('大概','').replace('大约 ','')}" if abs(pd) >= 40 else "参考价差不多")
+            )
+            # simplify
+            if pd < -30:
+                price_part = f"参考价大概省 {abs(pd)} 块"
+            elif pd > 30:
+                price_part = f"参考价大概贵 {abs(pd)} 块"
+            else:
+                price_part = "参考价差不多"
+            if dd < -60:
+                time_part = f"能少耗 {time_words(dd)}"
+            elif dd > 60:
+                time_part = f"多花 {time_words(dd)}"
+            else:
+                time_part = "时长差不多"
+            vs = f"{price_part}，{time_part}"
+
+    notes = set(facts.get("notes") or [])
+    if not facts["hubs"]:
+        why = "直达最省事。当「对照」看就行，久坐的话舒适度一般。"
+        if "hardseat" in str(facts.get("comfort_score")):
+            pass
+        why = "直达方案，总价往往好看，但要接受长时间在车上。"
+    elif facts["user_via"]:
+        why = f"按你指定经 {hubs} 走。分段比价，不编造余票。"
+    elif "空铁混搭" in notes:
+        why = f"经 {hubs} 空铁混搭。比纯火车直达贵一些，但往往能少耗不少时间。"
+    elif "始发进藏" in notes:
+        why = f"经 {hubs} 拆两段火车。比直达硬座贵一点，但换乘够长能顺路逛逛。"
     else:
-        why = f"直达对照方案：{route}。总价偏低但久坐，仅作「最省钱」候选。"
-    detail = why + " " + vs + "。价格、时刻均为参考，以购票平台为准。"
-    if facts["playable"]:
-        detail += " 换乘缓冲达标，已附「怎么玩」建议；不够长则不会硬推景点。"
+        why = f"经 {hubs} 拆一段。综合看价格、时长和坐着舒不舒服。"
+
+    detail = why + " " + vs + "。价格、时刻都是参考，以购票平台为准。"
+    if facts.get("playable"):
+        hub0 = facts["hubs"][0] if facts["hubs"] else "中转城"
+        detail += f" {hub0}空窗够长，下面写了怎么玩；不够长不会硬推景点。"
+    elif facts["hubs"]:
+        detail += " 换乘以接驳为主，窗口不够长不会硬推景点。"
     return why, detail, vs
+
 
 
 def plan_from_legs(
