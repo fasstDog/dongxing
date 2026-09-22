@@ -263,7 +263,7 @@ async function searchChainCities(cities, date) {
  * @param {{ from: string, to: string, date?: string|null, vias?: string[] }} q
  * @returns {Promise<{ ok: boolean, reason?: string, main: object, more: object[], meta?: object }>}
  */
-async function searchPlans({ from, to, date, vias } = {}) {
+async function searchPlans({ from, to, date, vias, extraHubs } = {}) {
   const fromCity = from != null ? String(from).trim() : '';
   const toCity = to != null ? String(to).trim() : '';
   const viaList = (Array.isArray(vias) ? vias : [])
@@ -315,9 +315,12 @@ async function searchPlans({ from, to, date, vias } = {}) {
       pushChain([leg], '直达');
     }
 
-    // 1-transfer via MVP hubs
-    for (const hub of HUBS_MVP) {
-      if (hub === fromCity || hub === toCity) continue;
+    // 1-transfer via MVP hubs (+ optional extraHubs for short-haul 邪修样例)
+    const hubList = HUBS_MVP.concat(Array.isArray(extraHubs) ? extraHubs : []);
+    const seenHub = new Set();
+    for (const hub of hubList) {
+      if (!hub || seenHub.has(hub) || hub === fromCity || hub === toCity) continue;
+      seenHub.add(hub);
       const left = await safeSearchLegs(fromCity, hub, dateStr || undefined, null);
       if (!left.length) continue;
       for (const a of left) {
