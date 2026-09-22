@@ -186,10 +186,14 @@ function chainPassesMct(legs) {
 
 /**
  * Safe searchLegs wrapper — empty array on missing OD / errors (no throw).
+ * Prefer after_at for hop 2+ so overnight mock dates stay coherent.
  */
-async function safeSearchLegs(from, to, date) {
+async function safeSearchLegs(from, to, date, afterAt) {
   try {
-    const legs = await searchLegs({ from, to, date: date || undefined });
+    const q = { from, to };
+    if (afterAt) q.after_at = afterAt;
+    else if (date) q.date = date;
+    const legs = await searchLegs(q);
     return Array.isArray(legs) ? legs : [];
   } catch (_e) {
     return [];
@@ -227,17 +231,32 @@ function combineHops(hopOptions, maxPlans) {
  */
 async function searchChainCities(cities, date) {
   if (cities.length < 2) return [];
-  const hopOptions = [];
-  let hopDate = date || undefined;
-  for (let i = 0; i < cities.length - 1; i++) {
-    const legs = await safeSearchLegs(cities[i], cities[i + 1], hopDate);
-    if (!legs.length) return [];
-    hopOptions.push(legs);
-    // next hop: use earliest arrival day among options as search date seed
-    const arrDays = legs.map((l) => ymdOf(l.arr_at)).filter(Boolean).sort();
-    hopDate = arrDays[0] || hopDate;
+  // First hop: date anchor. Later hops: after_at = prior leg arr_at (product via combine).
+  const first = await safeSearchLegs(cities[0], cities[1], date || undefined, null);
+  if (!first.length) return [];
+  if (cities.length === 2) return first.map((l) => [l]);
+
+  const out = [];
+  async function extend(acc, cityIdx) {
+    if (cityIdx >= cities.length - 1) {
+      if (chainPassesMct(acc)) out.push(acc.slice());
+      return;
+    }
+    const fromC = cities[cityIdx];
+    const toC = cities[cityIdx + 1];
+    const prev = acc[acc.length - 1];
+    const nextLegs = await safeSearchLegs(fromC, toC, null, prev.arr_at);
+    for (const leg of nextLegs) {
+      if (!checkConnection(prev, leg).ok) continue;
+      await extend(acc.concat([leg]), cityIdx + 1);
+      if (out.length >= 32) return;
+    }
   }
-  return combineHops(hopOptions);
+  for (const leg of first) {
+    await extend([leg], 1);
+    if (out.length >= 32) break;
+  }
+  return out;
 }
 
 /**
@@ -299,22 +318,12 @@ async function searchPlans({ from, to, date, vias } = {}) {
     // 1-transfer via MVP hubs
     for (const hub of HUBS_MVP) {
       if (hub === fromCity || hub === toCity) continue;
-      const left = await safeSearchLegs(fromCity, hub, dateStr || undefined);
+      const left = await safeSearchLegs(fromCity, hub, dateStr || undefined, null);
       if (!left.length) continue;
-      // Group by arrival day so second-leg date is coherent
-      const byArrDay = new Map();
       for (const a of left) {
-        const day = ymdOf(a.arr_at) || dateStr || '';
-        if (!byArrDay.has(day)) byArrDay.set(day, []);
-        byArrDay.get(day).push(a);
-      }
-      for (const [arrDay, leftLegs] of byArrDay) {
-        const right = await safeSearchLegs(hub, toCity, arrDay || dateStr || undefined);
-        if (!right.length) continue;
-        for (const a of leftLegs) {
-          for (const b of right) {
-            pushChain([a, b], '系统选枢纽：' + hub);
-          }
+        const right = await safeSearchLegs(hub, toCity, null, a.arr_at);
+        for (const b of right) {
+          pushChain([a, b], '系统选枢纽：' + hub);
         }
       }
     }
