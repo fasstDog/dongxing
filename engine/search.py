@@ -1,3 +1,4 @@
+# FROZEN: 只迁不新写；新功能只进 engine/src TypeScript
 #!/usr/bin/env python3
 """邪修交通 · mock 规则引擎：取腿 → 定链 → MCT → 打分 → 三主卡。不臆造车次/票价。"""
 from __future__ import annotations
