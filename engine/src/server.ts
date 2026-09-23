@@ -6,6 +6,7 @@
  */
 import http from 'http';
 import { URL } from 'url';
+import type { PlansSearchRequest, PlansSearchResponse } from '@dongxing/shared';
 // allowJs CJS modules
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { searchPlans } = require('./pipeline.js') as {
@@ -30,16 +31,10 @@ const { toPlansSearchResponse } = require('./to-api-response.js') as {
 const PORT = Number(process.env.PORT || 8787);
 const HOST = process.env.HOST || '127.0.0.1';
 
-type SearchBody = {
-  from_city?: string;
-  to_city?: string;
+/** @deprecated use PlansSearchRequest; kept for body parse flexibility */
+type SearchBody = PlansSearchRequest & {
   from?: string;
   to?: string;
-  date?: string | null;
-  date_flexible?: boolean;
-  vias?: string[];
-  path_mode?: string;
-  extra_hubs?: string[];
 };
 
 function readJson(req: http.IncomingMessage): Promise<SearchBody> {
@@ -57,7 +52,7 @@ function readJson(req: http.IncomingMessage): Promise<SearchBody> {
     });
     req.on('end', () => {
       const raw = Buffer.concat(chunks).toString('utf8');
-      if (!raw) return resolve({});
+      if (!raw) return resolve({} as SearchBody);
       try {
         resolve(JSON.parse(raw) as SearchBody);
       } catch {
