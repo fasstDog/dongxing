@@ -1,3 +1,4 @@
+const { DISCLAIMER } = require('@dongxing/shared');
 const Toast = require('@vant/weapp/toast/toast');
 
 const DATA_NOTE =
@@ -5,6 +6,7 @@ const DATA_NOTE =
 
 Page({
   data: {
+    disclaimer: DISCLAIMER,
     versionHint: 'v0.2.0-miniprogram · 原型演示 · 静态 mock · 无后端'
   },
 

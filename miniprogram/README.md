@@ -61,3 +61,12 @@ miniprogram/
 
 关闭远程：设 `useRemoteApi: false`。
 
+
+## 共享契约包
+
+```bash
+cd miniprogram && npm install
+# 微信开发者工具：工具 → 构建 npm
+```
+
+依赖 `@dongxing/shared`（`packages/shared`）提供 `PLAN_TYPE_LABELS` / `DISCLAIMER` 与 TS 类型；改字段先改 `docs/api-plans-contract.md`。

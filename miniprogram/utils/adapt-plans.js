@@ -3,6 +3,7 @@
  */
 const config = require('./config');
 const { searchPlansRemote } = require('./api-plans');
+const { PLAN_TYPE_LABELS, DISCLAIMER } = require('@dongxing/shared');
 
 const MOCK = {
   '徐州|拉萨': require('../data/plans-xuzhou-lhasa.json'),
@@ -110,7 +111,7 @@ function adaptPlan(plan) {
   return {
     id: plan.id,
     type: type,
-    typeLabel: plan.type_label || plan.typeLabel || '',
+    typeLabel: plan.type_label || plan.typeLabel || PLAN_TYPE_LABELS[type] || '',
     tagType: TAG_TYPE[type] || 'primary',
     price: plan.price_display || plan.price || '',
     priceNote: plan.price_note || plan.priceNote || '参考价',
@@ -235,6 +236,8 @@ function findAdaptedPlan(fromCity, toCity, planId) {
 
 module.exports = {
   TAG_TYPE: TAG_TYPE,
+  PLAN_TYPE_LABELS: PLAN_TYPE_LABELS,
+  DISCLAIMER: DISCLAIMER,
   MOCK_KEYS: Object.keys(MOCK),
   plansKeyForOd: plansKeyForOd,
   getRawForOd: getRawForOd,
