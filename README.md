@@ -1,4 +1,6 @@
-# 邪修交通
+# 懂行（dongxing）
+
+> 产品曾用名「邪修交通」；仓库原名 `xiexiu-traffic-prototype`，现为 `fasstDog/dongxing`。
 
 **只推荐路线，不卖票。** 出计划由程序算（规则引擎），模型不编车次/票价。正式前端 = **微信小程序（Vant Weapp）**。
 
@@ -34,7 +36,7 @@
 
 | Tag | 说明 |
 |-----|------|
-| [`v0.2.0-miniprogram`](https://github.com/fasstDog/xiexiu-traffic-prototype/releases/tag/v0.2.0-miniprogram) | 三线样例 + 小程序查询/三主卡/详情壳 |
+| [`v0.2.0-miniprogram`](https://github.com/fasstDog/dongxing/releases/tag/v0.2.0-miniprogram) | 三线样例 + 小程序查询/三主卡/详情壳 |
 | `v0.1.1` | Web 空铁「最快」演示闭环 |
 | `v0.1.0-prototype` | 首个可点击原型 |
 
