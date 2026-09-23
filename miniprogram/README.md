@@ -4,6 +4,8 @@
 
 > **只推荐路线，不卖票。** 「去购票」仅 Toast：`将跳转12306/OTA，不卖票`。
 
+> 正式客户端另有 **官方 React Native** App（iOS+Android），与本小程序共享 TS 契约/引擎 API；RN **不是**小程序交付路径。详见 [`docs/ADR-客户端-ReactNative.md`](../docs/ADR-客户端-ReactNative.md)。
+
 ## 打开方式
 
 `project.config.json` 在 **`miniprogram/`** 内。用微信开发者工具 **打开本目录**（不要打开仓库根）。

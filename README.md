@@ -4,7 +4,7 @@
 
 **只推荐路线，不卖票。** 出计划由程序算（规则引擎），模型不编车次/票价。  
 **语言：全栈 TypeScript only**（禁止新增 Python；`engine/*.py` 冻结待迁）。  
-**正式客户端：微信小程序（Vant Weapp，独立运行时）+ React Native（仅 iOS / Android）**。共享 TS 契约与引擎 API；Win / macOS / Web / tvOS / Linux / Alita **不进产品范围**。
+**正式客户端仅两端：微信小程序（Vant Weapp，独立运行时）+ 官方 React Native App（iOS + Android）**；共享 TS 契约 / 引擎 API / 可抽出逻辑；**RN 不是小程序交付路径**。Win / macOS / Web / tvOS / Linux / Proton Native / Alita **不进产品范围**。
 
 ## 系统架构（当前优先）
 
@@ -13,8 +13,8 @@
 | 文档 | 内容 |
 |------|------|
 | [`docs/邪修交通-系统架构设计_v1.0.md`](docs/邪修交通-系统架构设计_v1.0.md) | **总架构 v1.0**（懂行；原则/红线、核心链路、分阶段） |
-| [`docs/ADR-技术栈-TS与多端.md`](docs/ADR-技术栈-TS与多端.md) | **锁定**：TS only + 小程序 / RN 多端 |
-| [`docs/ADR-客户端-ReactNative.md`](docs/ADR-客户端-ReactNative.md) | **锁定**：RN 仅 iOS+Android；小程序独立运行时 |
+| [`docs/ADR-技术栈-TS与多端.md`](docs/ADR-技术栈-TS与多端.md) | **锁定**：TS only；正式端=小程序 + 官方 RN（仅 iOS/Android） |
+| [`docs/ADR-客户端-ReactNative.md`](docs/ADR-客户端-ReactNative.md) | **App 壳**：官方 RN；非 Alita/小程序路径；桌面等非交付 |
 | [`docs/架构-产品与体验.md`](docs/架构-产品与体验.md) | 产品边界、信息架构、三态 |
 | [`docs/架构-规则引擎.md`](docs/架构-规则引擎.md) | 取腿→定链→MCT→打分、API（TS） |
 | [`docs/架构-数据与内容.md`](docs/架构-数据与内容.md) | 适配器、资产、mock→真源 |
@@ -28,7 +28,8 @@
 | 路径 | 角色 |
 |------|------|
 | `miniprogram/` | **正式客户端之一**：微信小程序脚手架（Vant Weapp）。打开说明：[`miniprogram/README.md`](miniprogram/README.md) |
-| `packages/shared` | **`@dongxing/shared`**：Leg / TransferPlay / PlansSearch*，小程序与 RN 共用 |
+| `packages/shared` | **`@dongxing/shared`**：Leg / TransferPlay / PlansSearch*，小程序与 RN App 共用 |
+| `packages/app`（目标） | **官方 React Native** App（iOS + Android） |
 | `engine/` | 规则引擎（TS：`src/` + `npm run server`；`*.py` / 旧 CJS **冻结**） |
 | `data/` | mock 腿与 plans、枢纽 POI |
 | `index.html` + `css/` + `js/` | **静态 Web 示意原型 — 已冻结，禁止再加功能/改交互** |
