@@ -3,7 +3,8 @@
 > 状态：**契约稳定 + M1 服务壳已通（规则引擎，2026-09-23）**  
 > 消费：`docs/data-contract-mock.md` 的 `Leg` / `TransferPlay`（数据文件：`data/mock/legs-*.json`、`data/hub-pois.json`）  
 > 产出：前端三主卡 + 详情（怎么去 · 为什么 · 怎么玩 · 购票段）  
-> 原则：**程序算计划**；价格/时刻为参考；**模型禁止生成车次与票价**。
+> 原则：**程序算计划**；价格/时刻为参考；**模型禁止生成车次与票价**。  
+> **文档口径：** 只写最终交付契约；工程分步不改变字段语义。
 
 ---
 
@@ -21,7 +22,7 @@
 ---
 
 
-## 1. 端点（MVP）
+## 1. 端点
 
 | 项 | 值 |
 |----|-----|
@@ -32,7 +33,7 @@
 本地服务壳（mock adapters，零依赖）：
 
 ```bash
-PORT=8787 node engine/server.js
+cd engine && PORT=8787 npm run server
 curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
   -H 'content-type: application/json' \
   -d '{"from_city":"徐州","to_city":"拉萨","date":"2026-10-01"}'
@@ -40,7 +41,7 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 
 | 文件 | 说明 |
 |------|------|
-| `engine/server.js` | `GET /health`、`POST /v1/plans/search` |
+| `engine/src/server.ts`（`npm run server`） | `GET /health`、`POST /v1/plans/search` |
 | `engine/to-api-response.js` | pipeline → PlansSearchResponse（cheap/fast/balanced） |
 
 仍可用预导出 JSON 离线演示；小程序 M1 改打本服务即可。
@@ -55,7 +56,7 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 | `to_city` | string | 是 | 到达城市 |
 | `date_flexible` | boolean | 否 | 默认 `true`；为 true 时忽略具体日期或仅作宽松约束 |
 | `date` | string \| null | 否 | `YYYY-MM-DD`（本地日历日）；`date_flexible=true` 时可 null |
-| `vias` | string[] | 否 | **有序**途经城市，MVP 最多 3；空 = 自动选枢纽 |
+| `vias` | string[] | 否 | **有序**途经城市，最多 3；空 = 自动选枢纽 |
 | `path_mode` | `"auto"` \| `"user"` | 否 | 有途经时：前端「系统自动邪修 / 按你的路径」。无途经时忽略，视为 `auto` |
 
 ```json
@@ -190,7 +191,7 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 | `name` | string | 如 `徐州 → 西宁` |
 | `sub` | string | 跳转说明 + 参考价 |
 | `mode` | `"train"` \| `"flight"` | 前端选 12306 vs 航司/OTA 文案 |
-| `deep_link_hint` | string \| null | MVP 可 null；仅示意不卖票 |
+| `deep_link_hint` | string \| null | 可 null；仅示意不卖票（不做支付） |
 
 ### 4.4 `MoreItem`
 
@@ -242,13 +243,13 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 ## 7. 引擎流水线（实现约束）
 
 1. 取 `Leg`（mock JSON / 后续真源）；直达作 `direct_baseline`。  
-2. 定链：`path_mode=user` → `from + vias + to`；`auto` → 死枢纽表候选（见 `docs/hubs.md`）插 1 个中转（MVP）。  
+2. 定链：`path_mode=user` → `from + vias + to`；`auto` → 死枢纽表候选（见 `docs/hubs.md`）按枢纽表生成中转链（支持多段；实现可先上线 1 中转再扩）。  
 3. 枚举分段组合；粗 MCT：同站 / 同城最小缓冲（配置常数，默认同站 60min、同城 180min，可调）。  
 4. 丢弃不达标组合；缓冲 ≥ TransferPlay.`min_buffer_hours` 才挂 `play`。  
 5. 打分：`cheap` = 最低 `price_ref` 和（可加 `duration_min` 上限）；`fast` = 最短总时长；`balanced` = 价 + 时 + 换乘 + comfort 加权。  
 6. 填充 `Plan` 展示字段与 `why_facts`；`service_ref` **原样透传**。
 
-MVP：默认最多 **1 次中转**进三主卡；途经个数 ≤ 3。
+途经个数 ≤ 3；三主卡为完整可行链（直达或多段中转）。实现排期可先交付 1 中转枚举，但不改变本契约语义。
 
 ---
 
