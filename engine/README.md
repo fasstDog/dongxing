@@ -47,3 +47,14 @@ node engine/search-pipeline-demo.js
 ```
 
 无新依赖；mock OD 不足时返回 `{ ok:false, reason, main, more:[] }`。不含 LLM / 实时余票。
+
+
+## HTTP 服务壳（M1）
+
+```bash
+PORT=8787 node engine/server.js
+```
+
+- `GET /health`
+- `POST /v1/plans/search` — 契约见 `docs/api-plans-contract.md`
+- 仍走 mock adapters；无实时余票；程序算计划
