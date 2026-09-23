@@ -47,23 +47,25 @@
 
 ## 引擎演示（mock，开发用）
 
-M1 本地服务壳（小程序优先打真接口，失败回落本地 JSON）：
+M1 本地服务壳（**TypeScript**；小程序/App 共用 `POST /v1/plans/search`，失败可回落本地 JSON）：
 
 ```bash
-PORT=8787 node engine/server.js
-# POST /v1/plans/search · GET /health
+cd engine && npm install && PORT=8787 npm run server
+# 入口：src/server.ts · POST /v1/plans/search · GET /health（dongxing-plans）
 ```
 
-开发者工具需勾选「不校验合法域名」。
+微信开发者工具需勾选「不校验合法域名」。`engine/*.py` 与根目录旧 CJS **冻结**，新功能只进 `engine/src/`（TS）。
+
+导出 / 冒烟（过渡期仍可用）：
 
 ```bash
 node engine/export-plans-with-flight.js          # 重导样例 plans
 node engine/export-plans-with-flight.js bj-wh    # 京广
 node engine/export-plans-with-flight.js cd-cq    # 成渝
-node engine/search-pipeline-demo.js
+cd engine && npm run demo
 ```
 
-详情见 [`engine/README.md`](engine/README.md)。**不含实时余票**；密钥与违规爬取禁止。
+详见 [`engine/README.md`](engine/README.md)、[`docs/ADR-技术栈-TS与多端.md`](docs/ADR-技术栈-TS与多端.md)。**不含实时余票**；密钥与违规爬取禁止。
 
 ## 协作
 
