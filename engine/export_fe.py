@@ -1,3 +1,4 @@
+# FROZEN: 只迁不新写；新功能只进 engine/src TypeScript
 """导出前端 mock-plan-response.v1 → data/plans-*.json。"""
 from __future__ import annotations
 
