@@ -31,7 +31,7 @@
   </view>
 
   <view class="data-preview">{{ versionHint }}</view>
-  <view class="disclaimer">只推荐路线，不卖票。价格、时刻都是参考，不保证有票。</view>
+  <view class="disclaimer">只推荐路线，不卖票。{{disclaimer}}</view>
 
   <van-toast id="van-toast" />
 </view>
