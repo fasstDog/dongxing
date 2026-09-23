@@ -42,6 +42,15 @@
 
 ## 引擎演示（mock，开发用）
 
+M1 本地服务壳（小程序优先打真接口，失败回落本地 JSON）：
+
+```bash
+PORT=8787 node engine/server.js
+# POST /v1/plans/search · GET /health
+```
+
+开发者工具需勾选「不校验合法域名」。
+
 ```bash
 node engine/export-plans-with-flight.js          # 重导样例 plans
 node engine/export-plans-with-flight.js bj-wh    # 京广
