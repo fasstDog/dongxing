@@ -1,3 +1,4 @@
+# FROZEN: 只迁不新写；新功能只进 engine/src TypeScript
 """打分与主卡挑选（纯函数，无 I/O）。"""
 from __future__ import annotations
 
