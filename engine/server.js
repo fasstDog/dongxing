@@ -1,3 +1,4 @@
+/** FROZEN CJS — 新改动请进 engine/src/*.ts；运行: cd engine && npm run server */
 #!/usr/bin/env node
 /**
  * M1 服务壳：POST /v1/plans/search → pipeline.searchPlans（仍 mock）
