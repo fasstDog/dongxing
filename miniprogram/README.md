@@ -51,3 +51,13 @@ miniprogram/
 ## 免责声明
 
 本项目**只推荐不卖票**，不提供购票、支付、账号登录。价格、时刻均为参考，不保证有票。
+
+## 接引擎 API（M1）
+
+1. 本机启动：`PORT=8787 node engine/server.js`
+2. 小程序 `utils/config.js`：`useRemoteApi: true`，`apiBase: 'http://127.0.0.1:8787'`
+3. 微信开发者工具勾选「不校验合法域名、web-view…」
+4. 查询后结果页优先 `POST /v1/plans/search`；网络失败回落 `data/plans-*.json`
+
+关闭远程：设 `useRemoteApi: false`。
+

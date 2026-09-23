@@ -53,18 +53,25 @@ Page({
         this.setData({ status: 'empty', plans: [] });
         return;
       }
-      loadAdaptedPlans(fromCity, toCity)
+      loadAdaptedPlans(fromCity, toCity, { vias: this.data.vias })
         .then((adapted) => {
-          if (!adapted.ok) {
+          const main = (adapted && adapted.main) || [];
+          const code = adapted && adapted.error && (adapted.error.code || adapted.error);
+          if (adapted && adapted.ok === false && main.length === 0) {
+            // 业务无方案 → 空态；传输/内部错误才走失败
+            if (code === 'NO_FEASIBLE' || code === 'NO_LEGS' || !code) {
+              this.setData({ status: 'empty', plans: [] });
+              return;
+            }
             this.setData({ status: 'error', plans: [] });
             return;
           }
-          if (!adapted.main || !adapted.main.length) {
+          if (!main.length) {
             this.setData({ status: 'empty', plans: [] });
             return;
           }
-          getApp().globalData.lastPlans = adapted.main;
-          this.setData({ status: 'ok', plans: adapted.main });
+          getApp().globalData.lastPlans = main;
+          this.setData({ status: 'ok', plans: main });
         })
         .catch(() => this.setData({ status: 'error', plans: [] }));
     }, LOADING_MS);

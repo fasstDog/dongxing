@@ -1,6 +1,9 @@
 /**
  * snake_case API / scenarios JSON → UI camelCase（三主卡 + 详情）
  */
+const config = require('./config');
+const { searchPlansRemote } = require('./api-plans');
+
 const MOCK = {
   '徐州|拉萨': require('../data/plans-xuzhou-lhasa.json'),
   '上海|成都': require('../data/plans-shanghai-chengdu.json'),
@@ -169,12 +172,50 @@ function adaptResponse(raw, scenarioKey) {
   };
 }
 
-function loadAdaptedPlans(fromCity, toCity, scenarioKey) {
+function loadLocalAdaptedPlans(fromCity, toCity, scenarioKey) {
   const raw = getRawForOd(fromCity, toCity);
   if (!raw) {
-    return Promise.resolve({ ok: true, main: [], error: null });
+    return Promise.resolve({ ok: true, main: [], error: null, source: 'empty' });
   }
-  return Promise.resolve(adaptResponse(raw, scenarioKey));
+  const adapted = adaptResponse(raw, scenarioKey);
+  adapted.source = 'local';
+  return Promise.resolve(adapted);
+}
+
+/**
+ * M1：优先打引擎 POST /v1/plans/search；失败回落本地 JSON。
+ * opts: { vias?, dateFlexible?, date?, scenarioKey?, preferLocal? }
+ */
+function loadAdaptedPlans(fromCity, toCity, opts) {
+  opts = opts || {};
+  const scenarioKey = typeof opts === 'string' ? opts : opts.scenarioKey;
+  const preferLocal = typeof opts === 'object' && opts.preferLocal;
+  const vias = typeof opts === 'object' && Array.isArray(opts.vias) ? opts.vias : [];
+
+  if (preferLocal || !config.useRemoteApi) {
+    return loadLocalAdaptedPlans(fromCity, toCity, scenarioKey);
+  }
+
+  return searchPlansRemote({
+    fromCity: fromCity,
+    toCity: toCity,
+    vias: vias,
+    dateFlexible: opts.dateFlexible,
+    date: opts.date
+  })
+    .then(function (body) {
+      const adapted = adaptResponse(body, scenarioKey);
+      adapted.source = 'api';
+      // 契约 ok:false（如无可行方案）交给结果页走空/失败，不回落本地以免错 OD 混数据
+      return adapted;
+    })
+    .catch(function () {
+      return loadLocalAdaptedPlans(fromCity, toCity, scenarioKey).then(function (adapted) {
+        adapted.source = adapted.source || 'local';
+        adapted.fallback = true;
+        return adapted;
+      });
+    });
 }
 
 function findPlan(fromCity, toCity, planId) {
