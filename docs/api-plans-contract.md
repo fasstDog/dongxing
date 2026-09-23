@@ -242,7 +242,7 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 ## 7. 引擎流水线（实现约束）
 
 1. 取 `Leg`（mock JSON / 后续真源）；直达作 `direct_baseline`。  
-2. 定链：`path_mode=user` → `from + vias + to`；`auto` → 死枢纽表候选（见 `docs/hubs-mvp.md`）插 1 个中转（MVP）。  
+2. 定链：`path_mode=user` → `from + vias + to`；`auto` → 死枢纽表候选（见 `docs/hubs.md`）插 1 个中转（MVP）。  
 3. 枚举分段组合；粗 MCT：同站 / 同城最小缓冲（配置常数，默认同站 60min、同城 180min，可调）。  
 4. 丢弃不达标组合；缓冲 ≥ TransferPlay.`min_buffer_hours` 才挂 `play`。  
 5. 打分：`cheap` = 最低 `price_ref` 和（可加 `duration_min` 上限）；`fast` = 最短总时长；`balanced` = 价 + 时 + 换乘 + comfort 加权。  
