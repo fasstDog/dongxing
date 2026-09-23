@@ -43,12 +43,12 @@
     </block>
     <view class="via-actions">
       <van-button block plain hairline type="primary" icon="plus" disabled="{{ vias.length >= 3 }}" bind:click="onAddVia">添加途经城市</van-button>
-      <view class="tiny-hint">不填则系统自动邪修；最多 3 个。</view>
+      <view class="tiny-hint">不填则系统自动选枢纽；最多 3 个。</view>
     </view>
   </van-cell-group>
 
   <view class="search-wrap">
-    <van-button type="primary" block round size="large" bind:click="onSearch">开始邪修</van-button>
+    <van-button type="primary" block round size="large" bind:click="onSearch">开始推荐</van-button>
   </view>
 
   <view class="samples">

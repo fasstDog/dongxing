@@ -2,7 +2,7 @@
   "name": "xiexiu-traffic-miniprogram",
   "version": "0.2.0",
   "private": true,
-  "description": "邪修交通微信小程序脚手架（Vant Weapp）",
+  "description": "懂行微信小程序脚手架（Vant Weapp）",
   "dependencies": {
     "@vant/weapp": "^1.11.7"
   }

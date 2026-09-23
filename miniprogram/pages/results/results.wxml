@@ -3,7 +3,7 @@
   <view class="od-line" wx:if="{{ odLine }}">{{ odLine }}</view>
 
   <view class="state-wrap" wx:if="{{ status === 'loading' }}">
-    <van-loading type="spinner" size="24px" vertical>正在邪修组合…</van-loading>
+    <van-loading type="spinner" size="24px" vertical>正在组合方案…</van-loading>
   </view>
 
   <view class="state-wrap" wx:elif="{{ status === 'error' }}">

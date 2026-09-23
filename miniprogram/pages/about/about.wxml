@@ -1,6 +1,6 @@
 <view class="page about-page">
   <van-cell-group inset>
-    <van-cell title="邪修交通是什么？" />
+    <van-cell title="懂行是什么？" />
     <view class="about-pad">
       <view class="p">填出发地和目的地（日期、途经城市可选），帮你拼比直达更划算或更好受的走法：高铁 / 动车 / 飞机怎么搭。说清楚怎么去、为什么这样推；换乘空得够长，再告诉你怎么玩。</view>
       <view class="p"><text class="strong">只推荐路线，不卖票。</text>分段「去购票」跳去 12306 / 航司 / OTA；票价、时刻、有没有票，都以那边为准。</view>
