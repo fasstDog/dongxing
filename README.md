@@ -4,7 +4,7 @@
 
 **只推荐路线，不卖票。** 出计划由程序算（规则引擎），模型不编车次/票价。  
 **语言：全栈 TypeScript only**（禁止新增 Python；`engine/*.py` 冻结待迁）。  
-**正式客户端：微信小程序（Vant Weapp）+ 手机 App**（不止小程序；共享同一 API/契约）。
+**正式客户端：微信小程序（Vant Weapp，独立运行时）+ React Native（仅 iOS / Android）**。共享 TS 契约与引擎 API；Win / macOS / Web / tvOS / Linux / Alita **不进产品范围**。
 
 ## 系统架构（当前优先）
 
@@ -13,11 +13,12 @@
 | 文档 | 内容 |
 |------|------|
 | [`docs/邪修交通-系统架构设计_v1.0.md`](docs/邪修交通-系统架构设计_v1.0.md) | **总架构 v1.0**（懂行；原则/红线、核心链路、分阶段） |
-| [`docs/ADR-技术栈-TS与多端.md`](docs/ADR-技术栈-TS与多端.md) | **锁定**：TS only + 小程序/App 多端 |
+| [`docs/ADR-技术栈-TS与多端.md`](docs/ADR-技术栈-TS与多端.md) | **锁定**：TS only + 小程序 / RN 多端 |
+| [`docs/ADR-客户端-ReactNative.md`](docs/ADR-客户端-ReactNative.md) | **锁定**：RN 仅 iOS+Android；小程序独立 |
 | [`docs/架构-产品与体验.md`](docs/架构-产品与体验.md) | 产品边界、信息架构、三态 |
-| [`docs/架构-规则引擎.md`](docs/架构-规则引擎.md) | 取腿→定链→MCT→打分、API（TS 方向） |
+| [`docs/架构-规则引擎.md`](docs/架构-规则引擎.md) | 取腿→定链→MCT→打分、API（TS） |
 | [`docs/架构-数据与内容.md`](docs/架构-数据与内容.md) | 适配器、资产、mock→真源 |
-| [`docs/架构-小程序前端.md`](docs/架构-小程序前端.md) | **客户端**：小程序 + App、共享 plans API |
+| [`docs/架构-小程序前端.md`](docs/架构-小程序前端.md) | **客户端**：小程序 + RN，共享 plans API |
 
 下一刀方向（见总架构第 8 章）：**API 契约稳定 → 引擎服务化（TS）→ 客户端接真 API**；目标 **TS monorepo**。  
 `POST /v1/plans/search` 约定见 [`docs/api-plans-contract.md`](docs/api-plans-contract.md)。
@@ -27,7 +28,7 @@
 | 路径 | 角色 |
 |------|------|
 | `miniprogram/` | **正式客户端之一**：微信小程序脚手架（Vant Weapp）。打开说明：[`miniprogram/README.md`](miniprogram/README.md) |
-| `packages/shared` | **`@dongxing/shared`**：Leg / TransferPlay / PlansSearch*，小程序与 App 共用 |
+| `packages/shared` | **`@dongxing/shared`**：Leg / TransferPlay / PlansSearch*，小程序与 RN 共用 |
 | `engine/` | 规则引擎（TS：`src/` + `npm run server`；`*.py` / 旧 CJS **冻结**） |
 | `data/` | mock 腿与 plans、枢纽 POI |
 | `index.html` + `css/` + `js/` | **静态 Web 示意原型 — 已冻结，禁止再加功能/改交互** |
@@ -47,7 +48,7 @@
 
 ## 引擎演示（mock，开发用）
 
-M1 本地服务壳（**TypeScript**；小程序/App 共用 `POST /v1/plans/search`，失败可回落本地 JSON）：
+M1 本地服务壳（**TypeScript**；小程序 / RN 共用 `POST /v1/plans/search`，失败可回落本地 JSON）：
 
 ```bash
 cd engine && npm install && PORT=8787 npm run server
