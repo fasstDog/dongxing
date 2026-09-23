@@ -1,0 +1,21 @@
+{
+  "name": "@dongxing/engine",
+  "private": true,
+  "version": "0.1.0",
+  "description": "懂行规则引擎（TypeScript）",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "server": "tsx src/server.ts",
+    "server:prod": "npm run build && node dist/server.js",
+    "demo": "tsx src/search-pipeline-demo.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
