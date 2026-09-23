@@ -13,8 +13,7 @@
 | 文档 | 内容 |
 |------|------|
 | [`docs/邪修交通-系统架构设计_v1.0.md`](docs/邪修交通-系统架构设计_v1.0.md) | **总架构 v1.0**（懂行；原则/红线、核心链路、分阶段） |
-| [`docs/ADR-技术栈-TS与多端.md`](docs/ADR-技术栈-TS与多端.md) | **锁定**：TS only + 小程序 / RN 多端 |
-| [`docs/ADR-客户端-ReactNative.md`](docs/ADR-客户端-ReactNative.md) | **锁定**：RN 仅 iOS+Android；小程序独立 |
+| [`docs/ADR-技术栈-TS与多端.md`](docs/ADR-技术栈-TS与多端.md) | **锁定**：TS only；正式端=小程序 + RN（仅 iOS/Android） |
 | [`docs/架构-产品与体验.md`](docs/架构-产品与体验.md) | 产品边界、信息架构、三态 |
 | [`docs/架构-规则引擎.md`](docs/架构-规则引擎.md) | 取腿→定链→MCT→打分、API（TS） |
 | [`docs/架构-数据与内容.md`](docs/架构-数据与内容.md) | 适配器、资产、mock→真源 |
