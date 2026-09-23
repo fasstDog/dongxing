@@ -23,7 +23,7 @@
 
 3. **仓库目标形态**  
    - 收敛为 **TS monorepo**（示意：`packages/contracts`、`packages/engine`、`packages/mini`、`packages/app`）。  
-   - 分阶段：P0 锁定方向 → P1 契约包 + 引擎迁 TS → P2 App 正式与 monorepo 稳定。
+   - 工程落地顺序（同一最终设计）：P0 锁定方向 → P1 契约包 + 引擎迁 TS → P2 App 正式与 monorepo 稳定。
 
 ## 理由
 
