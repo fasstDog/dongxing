@@ -2,7 +2,7 @@
 
 > 状态：**已定稿**（与「邪修·规则引擎」2026-09-22 对齐）  
 > 分工：数据内容提供 `Leg` / `TransferPlay` + `source`/`as_of`；引擎负责枢纽候选、MCT、枚举、打分、三主卡与「为什么」模板。  
-> 原则：程序出计划；价格/时刻标「参考」；**模型不生成车次与票价**。产品优先级：**火车优先**，航班第二。文件名含 mock：本约定同时约束真源适配器输出。  
+> 原则：程序出计划；价格/时刻标「参考」；**模型不生成车次与票价**。**火车优先**，航班第二。  
 > 密钥不进仓；无真源时 `source: "mock"` + 写入时的 `as_of`。  
 > Schema：`docs/schemas/leg.schema.json`、`docs/schemas/transfer-play.schema.json`  
 > 数据：`data/mock/legs-xuzhou-lhasa.json`、`data/hub-pois.json`（独立表）
@@ -15,7 +15,7 @@
 |------|------|------|
 | `mode` | `"train"` \| `"flight"` | |
 | `from_city` / `to_city` | string | 城市名（枢纽匹配、途经链） |
-| `from_station` / `to_station` | string | 站/机场**中文显示名**（站码为选填扩展，见下） |
+| `from_station` / `to_station` | string | 站/机场**中文显示名**（站码可选，落地可后置） |
 | `dep_at` / `arr_at` | string | ISO 8601 **带时区偏移** |
 | `duration_min` | int | 分钟 |
 | `price_ref_cny` | int | **元整数**代表价，打分只用此字段 |
@@ -30,7 +30,7 @@
 |------|------|------|
 | `price_min_cny` / `price_max_cny` | int | 仅展示区间（元整数） |
 | `comfort` | enum | `hardseat` \| `hard_sleeper` \| `soft_sleeper` \| `second_class` \| `first_class` \| `economy` \| `unknown` |
-| `from_station_code` / `to_station_code` | string | 可选；真源有站码时填写 |
+| `from_station_code` / `to_station_code` | string | 可选；落地可后置 |
 | `id` | string | mock / 缓存键方便 |
 
 废弃：`train_or_flight_ref`、仅 HH:mm 的 `dep_time`、嵌在腿里的玩法对象、`price_range` 对象（改用 min/max 两字段）。
@@ -44,7 +44,7 @@
 | `hub_city` | string | |
 | `anchor_station` | string | 锚点站/机场 |
 | `name` | string | |
-| `dist_text` | string | 必填（展示用距站文案） |
+| `dist_text` | string | 必填 |
 | `dist_km` | number \| null | 可选 |
 | `suggest_hours` | number | 建议游玩小时 |
 | `suggest_text` | string | 展示补充 |
