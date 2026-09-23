@@ -27,13 +27,13 @@
 | 路径 | 角色 |
 |------|------|
 | `miniprogram/` | **正式客户端之一**：微信小程序脚手架（Vant Weapp）。打开说明：[`miniprogram/README.md`](miniprogram/README.md) |
-| `engine/` | 规则引擎 mock / 流水线（将服务化并迁 **TypeScript**；`*.py` 冻结） |
+| `packages/shared` | **`@dongxing/shared`**：Leg / TransferPlay / PlansSearch*，小程序与 App 共用 |
+| `engine/` | 规则引擎（TS：`src/` + `npm run server`；`*.py` / 旧 CJS **冻结**） |
 | `data/` | mock 腿与 plans、枢纽 POI |
 | `index.html` + `css/` + `js/` | **静态 Web 示意原型 — 已冻结，禁止再加功能/改交互** |
 
-交互对照（小程序）：[`docs/小程序-查询与三主卡交互要点.md`](docs/小程序-查询与三主卡交互要点.md)。  
-空态文案：[`docs/空态与文案规范.md`](docs/空态与文案规范.md)。  
-产品/技术拍板：[`docs/技术与设计拍板.md`](docs/技术与设计拍板.md)。
+文档口径：**只写最终交付设计**；工程分步另述，不用「MVP 不做××」当产品范围。  
+枢纽：[`docs/hubs.md`](docs/hubs.md)。交互对照：[`docs/小程序-查询与三主卡交互要点.md`](docs/小程序-查询与三主卡交互要点.md)。空态：[`docs/空态与文案规范.md`](docs/空态与文案规范.md)。
 
 ## 版本
 
