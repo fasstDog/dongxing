@@ -1,6 +1,6 @@
 # 方案生成 API 约定（mock / v1）
 
-> 状态：**定稿草案（规则引擎，2026-09-22）**  
+> 状态：**契约稳定 + M1 服务壳已通（规则引擎，2026-09-23）**  
 > 消费：`docs/data-contract-mock.md` 的 `Leg` / `TransferPlay`（数据文件：`data/mock/legs-*.json`、`data/hub-pois.json`）  
 > 产出：前端三主卡 + 详情（怎么去 · 为什么 · 怎么玩 · 购票段）  
 > 原则：**程序算计划**；价格/时刻为参考；**模型禁止生成车次与票价**。
@@ -29,7 +29,21 @@
 | Path | `/v1/plans/search` |
 | Content-Type | `application/json` |
 
-本地 mock 也可：`node engine/cli.js search --json <request.json>`（实现后另见 README）。
+本地服务壳（mock adapters，零依赖）：
+
+```bash
+PORT=8787 node engine/server.js
+curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
+  -H 'content-type: application/json' \
+  -d '{"from_city":"徐州","to_city":"拉萨","date":"2026-10-01"}'
+```
+
+| 文件 | 说明 |
+|------|------|
+| `engine/server.js` | `GET /health`、`POST /v1/plans/search` |
+| `engine/to-api-response.js` | pipeline → PlansSearchResponse（cheap/fast/balanced） |
+
+仍可用预导出 JSON 离线演示；小程序 M1 改打本服务即可。
 
 ---
 
