@@ -133,7 +133,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
   if (req.method === 'GET' && url.pathname === '/health') {
-    send(res, 200, { ok: true, service: 'xiexiu-plans', version: 'v1' });
+    send(res, 200, { ok: true, service: 'dongxing-plans', version: 'v1' });
     return;
   }
   if (req.method === 'POST' && url.pathname === '/v1/plans/search') {
