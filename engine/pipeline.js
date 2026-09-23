@@ -15,7 +15,7 @@ const { pickMainCards } = require('./score');
 const ROOT = path.resolve(__dirname, '..');
 const HUB_POIS_PATH = path.join(ROOT, 'data', 'hub-pois.json');
 
-/** MVP hubs from docs/hubs-mvp.md (12 cities, 西宁 required). */
+/** Hub list from docs/hubs.md (12 cities, 西宁 required). */
 const HUBS_MVP = Object.freeze([
   '北京',
   '上海',

@@ -3,7 +3,7 @@
     "note": "TransferPlay 独立表；按 hub_city 查询。西宁为样板；12 城均已覆盖，薄弱档已补齐。",
     "source": "mock",
     "as_of": "2026-09-22T19:30:00+08:00",
-    "hubs_ref": "docs/hubs-mvp.md"
+    "hubs_ref": "docs/hubs.md"
   },
   "pois": [
     {
