@@ -42,7 +42,7 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 | 文件 | 说明 |
 |------|------|
 | `backend/engine/src/server.ts`（`npm run server`） | `GET /health`、`POST /v1/plans/search` |
-| `backend/engine/to-api-response.js` | pipeline → PlansSearchResponse（cheap/fast/balanced） |
+| `backend/engine/src/to-api-response.js` | pipeline → PlansSearchResponse（cheap/fast/balanced） |
 
 仍可用预导出 JSON 离线演示；小程序 M1 改打本服务即可。
 
@@ -287,9 +287,9 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 
 ---
 
-## 10. Node pipeline（`backend/engine/pipeline.js`）→ 本 API / 前端
+## 10. Node pipeline（`backend/engine/src/pipeline.js`）→ 本 API / 前端
 
-`searchPlans` 冒烟：`node backend/engine/search-pipeline-demo.js`。返回形与 §3 略有不同；前端 `js/app.js` 的 `normalizePipelineResponse` 做薄映射后仍走 Vant 适配（`adaptPlan`）。
+`searchPlans` 冒烟：`cd backend/engine && npm run demo`。返回形与 §3 略有不同；小程序适配层（`adapt-plans`）做薄映射后仍走 Vant 展示。
 
 | pipeline 字段 | API / 前端 |
 |---------------|------------|
@@ -305,4 +305,4 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 
 Mock 文件 `backend/data/mock/plans-*.json` 已是 §3 数组形 `main`，映射为 no-op。裸 pipeline JSON（无 `scenarios` 包装）也可被 `ensurePlansLoaded` 读成 `auto` 场景。
 
-样例 OD：`plans-xuzhou-lhasa.json`、`plans-shanghai-chengdu.json`（及对应 `legs-*.json`）。上海→成都可用 `node backend/engine/export-shanghai-chengdu.js` 重导。
+样例 OD：`plans-xuzhou-lhasa.json`、`plans-shanghai-chengdu.json`（及对应 `legs-*.json`）。预导出 JSON 位于 `backend/data/`；重导脚本已移除，以 `src/` pipeline + mock adapters 为准。
