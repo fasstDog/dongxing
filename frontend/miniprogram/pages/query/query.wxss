@@ -1,5 +1,19 @@
-.top-actions { display: flex; align-items: center; justify-content: space-between; gap: 16rpx; margin: 16rpx 8rpx 8rpx; }
-.hero { flex: 1; font-size: 26rpx; color: #646566; line-height: 1.4; }
+
+.query-page .hero-card {
+  margin: 16rpx 0 8rpx;
+  padding: 24rpx;
+  background: linear-gradient(135deg, #ecf5ff 0%, #ffffff 55%);
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(25, 137, 250, 0.08);
+}
+.hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16rpx; }
+.hero-title { font-size: 32rpx; font-weight: 700; color: #323233; line-height: 1.35; }
+.hero-sub { margin-top: 8rpx; font-size: 22rpx; color: #969799; line-height: 1.4; }
+.hero-pills { display: flex; gap: 12rpx; margin-top: 20rpx; flex-wrap: wrap; }
+.pill { font-size: 22rpx; color: #fff; padding: 6rpx 18rpx; border-radius: 999rpx; font-weight: 600; }
+.pill.cheap { background: #07c160; }
+.pill.fast { background: #ee0a24; }
+.pill.balanced { background: #1989fa; }
 .search-wrap { margin: 40rpx 8rpx 24rpx; }
 .samples { display: flex; align-items: center; gap: 16rpx; padding: 0 8rpx; flex-wrap: wrap; }
 .samples-label { font-size: 24rpx; color: #969799; }

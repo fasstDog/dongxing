@@ -1,4 +1,4 @@
-<view class="page">
+<view class="page query-page">
   <van-notice-bar
     left-icon="info-o"
     text="只推荐路线，不卖票。价格、时刻都是参考，不保证有票。"
@@ -6,9 +6,19 @@
     background="#ecf5ff"
   />
 
-  <view class="top-actions">
-    <text class="hero">帮你找到直达之外那条更聪明的路</text>
-    <van-button size="small" plain hairline type="primary" bind:click="goAbout">关于</van-button>
+  <view class="hero-card">
+    <view class="hero-top">
+      <view class="hero-text">
+        <view class="hero-title">帮你找到直达之外那条更聪明的路</view>
+        <view class="hero-sub">三主卡：最省钱 · 最快 · 最综合 · 计划来自引擎</view>
+      </view>
+      <van-button size="small" plain hairline type="primary" bind:click="goAbout">关于</van-button>
+    </view>
+    <view class="hero-pills">
+      <text class="pill cheap">最省钱</text>
+      <text class="pill fast">最快</text>
+      <text class="pill balanced">最综合</text>
+    </view>
   </view>
 
   <view class="section-title">去哪儿</view>
@@ -43,7 +53,7 @@
     </block>
     <view class="via-actions">
       <van-button block plain hairline type="primary" icon="plus" disabled="{{ vias.length >= 3 }}" bind:click="onAddVia">添加途经城市</van-button>
-      <view class="tiny-hint">不填则系统自动选枢纽；最多 3 个。</view>
+      <view class="tiny-hint">不填则系统自动选枢纽；最多 3 个。途经会显示在结果页。</view>
     </view>
   </van-cell-group>
 

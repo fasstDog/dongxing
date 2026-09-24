@@ -3,7 +3,7 @@
 | 项 | 内容 |
 |----|------|
 | 状态 | Accepted |
-| 日期 | 2026-09-24 |
+| 日期 | 2026-09-24（同日修订：加入 taro-app） |
 | 决策 | 仓根按 **docs / frontend / backend / prototype** 四层组织；共享契约保留 **`packages/shared`（根级）** |
 
 ## 背景
@@ -16,8 +16,9 @@
 dongxing/
 ├── docs/                 # 架构、ADR、契约、走查（含 DEMO.md）
 ├── frontend/
-│   ├── miniprogram/      # 微信小程序（正式客户端之一）
-│   └── app/              # 官方 RN 占位（仅 iOS + Android）
+│   ├── taro-app/         # 生产 UI 源：Taro → weapp + RN(iOS/Android)
+│   ├── miniprogram/      # 过渡：原生微信壳（Taro weapp 就绪前可演示）
+│   └── app/              # RN 发布/壳占位（业务 UI 不双开）
 ├── backend/
 │   ├── engine/           # 规则引擎（唯一实现：src/）
 │   └── data/             # mock 腿 / plans、枢纽 POI
@@ -37,7 +38,7 @@ dongxing/
 ### 约束（不变）
 
 - TypeScript only；禁止新增 Python。
-- 正式客户端 = 微信小程序 + 官方 RN（**仅 iOS + Android**）；RN 不是小程序交付路径。
+- 正式客户端 = 微信小程序 + RN（**仅 iOS + Android**）；生产 UI 源 = Taro（`frontend/taro-app/`）；禁止 Alita。
 - **只荐不卖**；`prototype/` **冻结**（禁加功能/改交互）。
 - 文档只写最终交付设计。
 
@@ -46,8 +47,9 @@ dongxing/
 | 原路径 | 新路径 |
 |--------|--------|
 | `DEMO.md` | `docs/DEMO.md` |
-| `miniprogram/` | `frontend/miniprogram/` |
-| （无） | `frontend/app/`（RN 占位新增） |
+| `miniprogram/` | `frontend/miniprogram/`（过渡） |
+| （无） | `frontend/taro-app/`（Taro 生产 UI 源） |
+| （无） | `frontend/app/`（RN 发布占位） |
 | `engine/` | `backend/engine/` |
 | `data/` | `backend/data/` |
 | `index.html`、`css/`、`js/` | `prototype/` |

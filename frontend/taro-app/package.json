@@ -1,0 +1,51 @@
+{
+  "name": "@dongxing/taro-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "懂行生产 UI 源：Taro + React + TS → 微信小程序 + React Native（仅 iOS/Android）。只荐不卖。",
+  "templateInfo": {
+    "name": "default",
+    "typescript": true,
+    "css": "sass"
+  },
+  "scripts": {
+    "build:weapp": "taro build --type weapp",
+    "build:rn": "taro build --type rn",
+    "dev:weapp": "npm run build:weapp -- --watch",
+    "dev:rn": "npm run build:rn -- --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "browserslist": [
+    "last 3 versions",
+    "Android >= 4.1",
+    "ios >= 8"
+  ],
+  "dependencies": {
+    "@dongxing/shared": "file:../../packages/shared",
+    "@babel/runtime": "^7.24.0",
+    "@tarojs/components": "3.6.32",
+    "@tarojs/helper": "3.6.32",
+    "@tarojs/plugin-framework-react": "3.6.32",
+    "@tarojs/plugin-platform-weapp": "3.6.32",
+    "@tarojs/react": "3.6.32",
+    "@tarojs/runtime": "3.6.32",
+    "@tarojs/shared": "3.6.32",
+    "@tarojs/taro": "3.6.32",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
+    "@tarojs/cli": "3.6.32",
+    "@tarojs/webpack5-runner": "3.6.32",
+    "@types/react": "^18.2.0",
+    "babel-preset-taro": "3.6.32",
+    "sass": "^1.77.0",
+    "typescript": "^5.7.2",
+    "webpack": "5.91.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

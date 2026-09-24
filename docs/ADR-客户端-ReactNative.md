@@ -1,65 +1,69 @@
-# ADR · 客户端：React Native App（iOS / Android）
+# ADR · 客户端：React Native 目标（iOS / Android）
 
 | 项 | 值 |
 |----|-----|
-| **状态** | Accepted |
-| **日期** | 2026-09-23（Asia/Shanghai） |
+| **状态** | Accepted（2026-09-24 修订：UI 源收敛到 Taro） |
+| **日期** | 2026-09-23；修订 2026-09-24（Asia/Shanghai） |
 | **产品** | 懂行（`fasstDog/dongxing`） |
-| **关联** | [`ADR-技术栈-TS与多端.md`](./ADR-技术栈-TS与多端.md)；[`架构-小程序前端.md`](./架构-小程序前端.md)；[`架构-产品与体验.md`](./架构-产品与体验.md) |
+| **关联** | [`ADR-客户端-Taro一码多端.md`](./ADR-客户端-Taro一码多端.md)（**生产 UI 源**）；[`ADR-技术栈-TS与多端.md`](./ADR-技术栈-TS与多端.md)；[`架构-小程序前端.md`](./架构-小程序前端.md) |
 
 ## 决策
 
-1. **手机 App = 官方 React Native（仅 iOS + Android）**  
-   - 正式交付面之一：一套 **官方 React Native** + TypeScript 工程覆盖 **iOS + Android**。  
-   - UI 选用成熟开源组件库，**禁止自研设计系统**。
+1. **手机 App 交付面 = React Native → 仅 iOS + Android**  
+   - 正式交付面之一；不进 Win / macOS / Web / tvOS / Linux / Proton Native。
 
-2. **微信小程序是独立运行时（非 RN 交付路径）**  
-   - 小程序：微信原生运行时 + Vant Weapp（`@vant/weapp`）。  
-   - **不得**将 React Native、Alita 或其它「RN → 小程序」方案宣称为懂行小程序交付路径。  
-   - 两端工程与发布通道分离；共享契约 / API / 可抽出逻辑，而非同一 UI 运行时。
+2. **生产 UI 源 = Taro（React + TypeScript）一码多端**  
+   - App 与微信小程序共用 **`frontend/taro-app/`** 源码，由 Taro 分别编译到 weapp 与 RN。  
+   - 详见 [`ADR-客户端-Taro一码多端.md`](./ADR-客户端-Taro一码多端.md)。  
+   - `frontend/app/` 仅作 RN 发布/壳占位说明，**不另起一套业务 UI**。
 
-3. **共享边界（窄腰）**  
-   - **共享**：TypeScript 契约（`PlansSearch*` / Schema）、引擎 `POST /v1/plans/search`、可抽出的业务逻辑与文案口径。  
-   - **不共享**：UI 组件、导航栈、各端打包产物。  
+3. **微信小程序不是「RN 旁路」产物**  
+   - 小程序由 **同一 Taro 工程** 的 weapp 目标产出；**禁止** Alita 或其它「RN → 小程序」方案。  
+   - 过渡期：`frontend/miniprogram/` 原生微信壳可演示，标注 transitional，直至 Taro weapp 可运行。
+
+4. **共享边界（窄腰）**  
+   - **共享**：TypeScript 契约（`PlansSearch*`）、引擎 `POST /v1/plans/search`、可抽出逻辑、**Taro UI 源**。  
+   - **分端**：打包产物、商店/微信发布、平台 API。  
    - 禁止各端私造班次、票价或互斥 API。
 
-4. **红线**  
-   - 只荐不卖；程序算计划；禁止 LLM 编班次票价；根目录 HTML/Vue 原型冻结。
+5. **红线**  
+   - 只荐不卖；程序算计划；禁止 LLM 编班次票价；`prototype/` 冻结。
 
 ## 产品交付平台（仅此）
 
-| 平台 | 技术 | 说明 |
-|------|------|------|
-| **手机 App** | 官方 React Native → **iOS + Android** | 正式交付 |
-| **微信小程序** | 微信原生运行时 + Vant Weapp | 正式交付；与 RN **分运行时** |
+| 平台 | 技术 | UI 源 |
+|------|------|--------|
+| **手机 App** | Taro → React Native → **iOS + Android** | `frontend/taro-app/` |
+| **微信小程序** | Taro → weapp | `frontend/taro-app/`（同仓） |
 
 ### 非交付范围
 
-Windows / macOS / Web / tvOS / Linux、Proton Native、Alita 等社区扩展或旁路运行时**不是**懂行产品承诺。根目录 Web 原型仅冻结示意，不算正式客户端。
+Windows / macOS / Web / tvOS / Linux、Proton Native、Alita 等**不是**懂行产品承诺。根目录 Web 原型仅冻结示意。
 
 ## 理由
 
-- 产品触达不限微信内；需要独立 App 商店分发（iOS/Android），与小程序并存。  
-- 官方 RN 一码双端降低双维护成本，且与 TS monorepo 目标一致。  
-- 小程序与 RN 运行时不可互通；用 RN/Alita「出」小程序会混淆合规与交付边界，故明确否决。
+- 产品触达不限微信内；需要独立 App 商店分发（iOS/Android），与小程序并存且口径一致。  
+- 一码多端降低双维护；与 TS monorepo / `@dongxing/shared` 一致。  
+- 明确否决 Alita，避免把社区旁路误当成交付面。
 
 ## 后果
 
 | 做 | 不做（本 ADR 范围） |
 |----|---------------------|
-| 文档与评审按「小程序 + 官方 RN App（iOS/Android）」验收 | 承诺桌面 / Web / tvOS / Proton Native / Alita 等为产品交付 |
-| monorepo 预留 `packages/app`（RN） | 用 RN / Alita / Taro 等一码出小程序 |
-| App 与小程序同契约升级 | 为 App 另起一套 plans 字段或打分 |
+| 按「Taro → 小程序 + RN(iOS/Android)」验收 | 承诺桌面 / Web / tvOS / Alita 为交付 |
+| RN 目标消费同一 plans 契约 | 为 App 另起一套 plans 字段或打分 |
+| 保留 `frontend/app/` 作发布占位说明 | 用 Alita / 独立第二套业务 UI |
 
 ## 否决方案
 
 | 方案 | 否决原因 |
 |------|----------|
 | 仅微信小程序、不做 App | 产品要求正式 App |
-| 原生双端（Swift + Kotlin）为主线 | 双栈成本高；与 TS 共享逻辑目标不符 |
-| Flutter / 其它跨端为主线 | 与已拍板 RN + TS monorepo 不一致 |
-| RN/Alita 作为小程序交付 | 运行时不同；非产品路径 |
+| 原生双端（Swift + Kotlin）为主线 | 双栈成本高；与 TS 共享不符 |
+| Flutter / 其它跨端为主线 | 与已拍板 Taro + TS 不符 |
+| Alita 作为小程序交付 | 非产品路径 |
+| 永久双套 UI（原生 weapp + 独立 RN 业务） | 已由 Taro ADR 取代 |
 
 ---
 
-*修订时同步 README 一句话摘要与客户端分册 §0。*
+*修订时同步 README 与 [`ADR-客户端-Taro一码多端.md`](./ADR-客户端-Taro一码多端.md)。*

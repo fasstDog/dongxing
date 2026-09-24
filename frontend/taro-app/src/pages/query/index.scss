@@ -1,0 +1,130 @@
+.query-page {
+  .notice {
+    background: #ecf5ff;
+    color: #1989fa;
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 24px;
+    line-height: 1.45;
+  }
+
+  .hero-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 24px 0 8px;
+  }
+
+  .hero-title {
+    display: block;
+    font-size: 34px;
+    font-weight: 700;
+    color: #323233;
+    line-height: 1.35;
+  }
+
+  .hero-sub {
+    display: block;
+    margin-top: 8px;
+    font-size: 22px;
+    color: #969799;
+  }
+
+  .about-link {
+    flex-shrink: 0;
+    color: #1989fa;
+    border: 1px solid #1989fa;
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 24px;
+  }
+
+  .panel {
+    background: #fff;
+    border-radius: 16px;
+    padding: 8px 20px 20px;
+    box-shadow: 0 2px 12px rgba(100, 101, 102, 0.06);
+  }
+
+  .field-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 0;
+    border-bottom: 1px solid #f2f3f5;
+
+    &.between {
+      justify-content: space-between;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .label {
+    width: 100px;
+    flex-shrink: 0;
+    color: #646566;
+    font-size: 28px;
+  }
+
+  .input {
+    flex: 1;
+    font-size: 28px;
+  }
+
+  .field-hint {
+    padding: 8px 0 12px;
+    color: #969799;
+    font-size: 24px;
+  }
+
+  .via-row .remove {
+    color: #ee0a24;
+    font-size: 24px;
+    padding: 8px;
+  }
+
+  .search-wrap {
+    margin: 40px 0 24px;
+  }
+
+  .samples {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .samples-label {
+    font-size: 24px;
+    color: #969799;
+  }
+
+  .sample-chip {
+    font-size: 22px;
+    color: #1989fa;
+    border: 1px solid #1989fa;
+    border-radius: 999px;
+    padding: 8px 16px;
+  }
+
+  .demo-switches {
+    margin-top: 40px;
+    color: #c8c9cc;
+    font-size: 22px;
+  }
+
+  .demo-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .disabled {
+    opacity: 0.4;
+  }
+}

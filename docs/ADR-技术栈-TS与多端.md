@@ -3,9 +3,9 @@
 | 项 | 值 |
 |----|-----|
 | **状态** | Accepted |
-| **日期** | 2026-09-23（Asia/Shanghai） |
+| **日期** | 2026-09-23；修订 2026-09-24（Asia/Shanghai） |
 | **产品** | 懂行（`fasstDog/dongxing`） |
-| **关联** | 总架构 §2 / §8 / §9（ADR-01、05、25–28）；[`架构-规则引擎.md`](./架构-规则引擎.md)；[`架构-小程序前端.md`](./架构-小程序前端.md)；[`ADR-客户端-ReactNative.md`](./ADR-客户端-ReactNative.md) |
+| **关联** | 总架构 §2 / §8 / §9；[`架构-规则引擎.md`](./架构-规则引擎.md)；[`架构-小程序前端.md`](./架构-小程序前端.md)；[`ADR-客户端-Taro一码多端.md`](./ADR-客户端-Taro一码多端.md)；[`ADR-客户端-ReactNative.md`](./ADR-客户端-ReactNative.md) |
 
 ## 决策
 
@@ -14,11 +14,12 @@
    - **禁止新增 Python** 模块或脚本作为产品路径。  
    - 历史根级 Python / 重复 CJS 已删除；引擎唯一实现目录为 `backend/engine/src/`（`npm run server` / `npm run demo`）。
 
-2. **正式客户端 = 两端（仅此）**  
-   - **微信小程序**：微信原生运行时 + Vant Weapp（`@vant/weapp`）。  
-   - **手机 App**：**官方 React Native** → **iOS + Android**（详见 [`ADR-客户端-ReactNative.md`](./ADR-客户端-ReactNative.md)）。  
-   - 两端**共享** TypeScript 契约、`POST /v1/plans/search`、可抽出的业务逻辑；**UI / 运行时分端**。  
-   - **RN 不是小程序交付路径**（含 Alita 等「RN→小程序」方案）；禁止各端私造班次、票价或互斥 API。  
+2. **正式客户端 = 两端（仅此）；生产 UI 源 = Taro 一码**  
+   - **微信小程序** + **手机 App（React Native → 仅 iOS + Android）**。  
+   - **生产 UI 源**：一套 **Taro + React + TypeScript**（`frontend/taro-app/`）分别编译到 weapp 与 RN。详见 [`ADR-客户端-Taro一码多端.md`](./ADR-客户端-Taro一码多端.md)、[`ADR-客户端-ReactNative.md`](./ADR-客户端-ReactNative.md)。  
+   - 两端**共享** TypeScript 契约、`POST /v1/plans/search`、可抽出逻辑与 **同一 UI 源**；打包/发布分端。  
+   - **禁止 Alita** 及「RN→小程序」旁路；禁止各端私造班次、票价或互斥 API。  
+   - 过渡：`frontend/miniprogram/` 原生微信壳可演示（transitional），Taro weapp 就绪前不删除。  
    - 根目录 Web 原型继续**冻结**（非正式客户端）。
 
 3. **非交付范围（一笔）**  
@@ -42,7 +43,7 @@
 | 文档与评审按 TS + 小程序 + 官方 RN(iOS/Android) 验收 | 在 `src/` 外再加一套引擎入口 |
 | 新适配器/服务用 TS | 新增 Python 导出/打分入口 |
 | 小程序与 RN App 同契约升级 | 为 App 另起一套 plans 字段；承诺桌面/Web/tvOS/Alita 为产品端 |
-| 分端 UI 工程 | 用 RN/Alita 一码出小程序 |
+| Taro 一码出 weapp + RN(iOS/Android) | 用 Alita / 永久双套业务 UI |
 
 ## 否决方案
 
@@ -51,7 +52,8 @@
 | Python 继续作为引擎主链 | 与 Node/小程序生态割裂；拍板不符 |
 | 仅微信小程序、不做 App | 产品要求正式 RN App（iOS/Android） |
 | 各端各自 API | 双维护、易违反「程序算计划」 |
-| RN/Alita 作为小程序交付 | 运行时不同；非产品路径 |
+| Alita 作为小程序交付 | 非产品路径；UI 源已锁定 Taro |
+| 永久双套原生 weapp + 独立 RN UI | 由 Taro ADR 取代 |
 | 桌面 / Web / tvOS 等当正式端 | 超出产品交付平台 |
 
 ---
