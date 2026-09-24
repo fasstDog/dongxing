@@ -221,7 +221,7 @@ function toPlansSearchResponse(pipelineResult, request) {
       as_of: cheapP && cheapP.legs && cheapP.legs[0] ? cheapP.legs[0].as_of : null,
       disclaimer: '价格、时刻均为参考，以购票平台为准',
       no_realtime_inventory: true,
-      generated_by: 'engine/server.js → pipeline.searchPlans',
+      generated_by: 'engine/src/server.ts → pipeline.searchPlans',
     },
     direct_baseline: direct
       ? {

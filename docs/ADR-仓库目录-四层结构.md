@@ -19,7 +19,7 @@ dongxing/
 │   ├── miniprogram/      # 微信小程序（正式客户端之一）
 │   └── app/              # 官方 RN 占位（仅 iOS + Android）
 ├── backend/
-│   ├── engine/           # 规则引擎（TS 主线；*.py / 旧 CJS 冻结）
+│   ├── engine/           # 规则引擎（唯一实现：src/）
 │   └── data/             # mock 腿 / plans、枢纽 POI
 ├── prototype/            # 静态 Web 示意（FROZEN）
 ├── packages/

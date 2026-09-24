@@ -1,13 +1,40 @@
-#!/usr/bin/env node
 /**
  * Demo: programmatic pipeline 徐州→拉萨 (auto hubs) and via 西宁.
  * Prints main card labels + prices; exits 0.
+ *
+ *   cd backend/engine && npm run demo
  */
-'use strict';
+type PlanLike = {
+  id?: string;
+  label?: string;
+  price_ref_cny?: number;
+  play_hint?: string;
+  summary?: { price_ref_cny?: number; route_text?: string };
+};
 
-const { searchPlans } = require('./pipeline');
+type SearchResult = {
+  ok: boolean;
+  reason?: string;
+  main?: {
+    cheapest?: PlanLike;
+    fastest?: PlanLike;
+    balanced?: PlanLike;
+  };
+  more?: unknown[];
+};
 
-function cardLine(slot, plan) {
+// allowJs CJS modules
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { searchPlans } = require('./pipeline.js') as {
+  searchPlans: (q: {
+    from: string;
+    to: string;
+    date?: string;
+    vias?: string[];
+  }) => Promise<SearchResult>;
+};
+
+function cardLine(slot: string, plan?: PlanLike): string {
   if (!plan) return `  ${slot}: (none)`;
   const price =
     plan.price_ref_cny != null
@@ -17,7 +44,7 @@ function cardLine(slot, plan) {
   return `  ${slot}: ${label} · ¥${price}`;
 }
 
-function printResult(title, result) {
+function printResult(title: string, result: SearchResult): void {
   console.log('=== ' + title + ' ===');
   console.log('ok:', result.ok, result.reason ? '(' + result.reason + ')' : '');
   console.log('plans:', (result.more || []).length);
@@ -34,7 +61,7 @@ function printResult(title, result) {
   console.log('');
 }
 
-async function main() {
+async function main(): Promise<void> {
   const date = '2026-10-01';
 
   const auto = await searchPlans({
@@ -56,7 +83,8 @@ async function main() {
   process.exit(0);
 }
 
-main().catch((err) => {
-  console.error(err && err.stack ? err.stack : err);
+main().catch((err: unknown) => {
+  const e = err as { stack?: string };
+  console.error(e && e.stack ? e.stack : err);
   process.exit(1);
 });

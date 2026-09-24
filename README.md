@@ -3,7 +3,7 @@
 > 产品曾用名「邪修交通」；仓库原名 `xiexiu-traffic-prototype`，现为 `fasstDog/dongxing`。
 
 **只推荐路线，不卖票。** 出计划由程序算（规则引擎），模型不编车次/票价。  
-**语言：全栈 TypeScript only**（禁止新增 Python；`backend/engine/*.py` 冻结待迁）。  
+**语言：全栈 TypeScript only**（禁止新增 Python）。  
 **正式客户端仅两端：微信小程序（Vant Weapp，独立运行时）+ 官方 React Native App（iOS + Android）**；共享 TS 契约 / 引擎 API / 可抽出逻辑；**RN 不是小程序交付路径**。Win / macOS / Web / tvOS / Linux / Proton Native / Alita **不进产品范围**。
 
 ## 系统架构（当前优先）
@@ -31,7 +31,7 @@
 | `docs/` | 架构、ADR、契约、走查（含 [`docs/DEMO.md`](docs/DEMO.md)） |
 | `frontend/miniprogram/` | **正式客户端之一**：微信小程序（Vant Weapp）。说明：[`frontend/miniprogram/README.md`](frontend/miniprogram/README.md) |
 | `frontend/app/` | **官方 React Native** App 占位（**仅 iOS + Android**） |
-| `backend/engine/` | 规则引擎（TS：`src/` + `npm run server`；`*.py` / 旧 CJS **冻结**） |
+| `backend/engine/` | 规则引擎（唯一实现：`src/` + `npm run server` / `npm run demo`） |
 | `backend/data/` | mock 腿与 plans、枢纽 POI |
 | `packages/shared` | **`@dongxing/shared`**：Leg / TransferPlay / PlansSearch*（小程序 + RN + 引擎共用）。**留在仓库根**（npm workspace / `file:` 依赖清晰；不挪到 `frontend/shared`） |
 | `prototype/` | **静态 Web 示意原型 — 已冻结**（`index.html` + `css/` + `js/`） |
@@ -58,14 +58,11 @@ cd backend/engine && npm install && PORT=8787 npm run server
 # 入口：src/server.ts · POST /v1/plans/search · GET /health（dongxing-plans）
 ```
 
-微信开发者工具需勾选「不校验合法域名」。`backend/engine/*.py` 与旧 CJS **冻结**，新功能只进 `backend/engine/src/`（TS）。
+微信开发者工具需勾选「不校验合法域名」。引擎实现只在 `backend/engine/src/`。
 
-导出 / 冒烟（过渡期仍可用）：
+冒烟：
 
 ```bash
-node backend/engine/export-plans-with-flight.js          # 重导样例 plans
-node backend/engine/export-plans-with-flight.js bj-wh    # 京广
-node backend/engine/export-plans-with-flight.js cd-cq    # 成渝
 cd backend/engine && npm run demo
 ```
 

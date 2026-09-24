@@ -7,8 +7,8 @@
  * - 不臆造车次/票价；禁止爬取
  *
  *   search({ from_city, to_city, date?, after_at? })
- *   node backend/engine/adapters/train.mock.js 徐州 西宁
- *   node backend/engine/adapters/train.mock.js 西宁 拉萨 --after 2026-10-02T14:40:00+08:00
+ *   node backend/engine/src/adapters/train.mock.js 徐州 西宁
+ *   node backend/engine/src/adapters/train.mock.js 西宁 拉萨 --after 2026-10-02T14:40:00+08:00
  */
 
 'use strict';
@@ -218,7 +218,7 @@ function mainCli() {
         ok: false,
         error: 'USAGE',
         hint:
-          'node backend/engine/adapters/train.mock.js <from_city> <to_city> [YYYY-MM-DD] [--after ISO]',
+          'node backend/engine/src/adapters/train.mock.js <from_city> <to_city> [YYYY-MM-DD] [--after ISO]',
       })
     );
     process.exit(1);
