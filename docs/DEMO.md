@@ -6,16 +6,16 @@
 
 | OD | 数据文件（web / FE） | 小程序 | 说明 |
 |----|----------------------|--------|------|
-| **徐州 → 拉萨** | `data/mock/plans-xuzhou-lhasa.json` | `miniprogram/data/plans-xuzhou-lhasa.json` | 默认预填；长途邪修（直达硬座 / 空铁 / 西宁进藏） |
-| **上海 → 成都** | `data/mock/plans-shanghai-chengdu.json` | `miniprogram/data/plans-shanghai-chengdu.json` | 较短国内；经武汉最省钱 / **飞机直飞最快** / 经武汉可玩综合；可途经武汉 |
-| **北京 → 武汉** | `data/mock/plans-beijing-wuhan.json` | `miniprogram/data/plans-beijing-wuhan.json` | 京广对照；过夜火车最省 / **飞机直飞最快** / 高铁直达综合；可途经郑州 |
-| **成都 → 重庆** | `data/mock/plans-chengdu-chongqing.json` | `miniprogram/data/plans-chengdu-chongqing.json` | **成渝**短途；慢车最省 / **飞机直飞最快** / 高铁直达综合；可途经遂宁（mock 亦含内江） |
+| **徐州 → 拉萨** | `backend/data/mock/plans-xuzhou-lhasa.json` | `frontend/miniprogram/data/plans-xuzhou-lhasa.json` | 默认预填；长途邪修（直达硬座 / 空铁 / 西宁进藏） |
+| **上海 → 成都** | `backend/data/mock/plans-shanghai-chengdu.json` | `frontend/miniprogram/data/plans-shanghai-chengdu.json` | 较短国内；经武汉最省钱 / **飞机直飞最快** / 经武汉可玩综合；可途经武汉 |
+| **北京 → 武汉** | `backend/data/mock/plans-beijing-wuhan.json` | `frontend/miniprogram/data/plans-beijing-wuhan.json` | 京广对照；过夜火车最省 / **飞机直飞最快** / 高铁直达综合；可途经郑州 |
+| **成都 → 重庆** | `backend/data/mock/plans-chengdu-chongqing.json` | `frontend/miniprogram/data/plans-chengdu-chongqing.json` | **成渝**短途；慢车最省 / **飞机直飞最快** / 高铁直达综合；可途经遂宁（mock 亦含内江） |
 
 查询页「样例」按钮可一键切换（含成渝）。
 
 ## 路径 A：默认自动邪修（徐州 → 拉萨）
 
-1. 打开 `index.html` → **查询页**（已预填 徐州 → 拉萨，「日期灵活」已开）。
+1. 打开 `prototype/index.html` → **查询页**（已预填 徐州 → 拉萨，「日期灵活」已开）。
 2. 点 **「开始邪修」** → 约 0.7 秒 **「正在邪修组合…」** → **结果页**。
 3. 浏览三主卡：**最省钱** → **最快** → **最综合**。
 4. 点开 **「最综合」** → **方案详情**：怎么去 / 为什么 / 怎么玩。
@@ -62,7 +62,7 @@
 
 ## 小程序：详情路径（三线）
 
-打开 [`miniprogram/`](miniprogram/)（见 [`miniprogram/README.md`](miniprogram/README.md)）：`npm install` → 构建 npm → 开发者工具导入该目录。
+打开 [`frontend/miniprogram/`](../frontend/miniprogram/)（见 [`frontend/miniprogram/README.md`](../frontend/miniprogram/README.md)）：`npm install` → 构建 npm → 开发者工具导入该目录。
 
 1. **查询** `pages/query`：样例切 **徐州→拉萨 / 上海→成都 / 北京→武汉 / 成都→重庆（成渝）** →「开始邪修」；可进 **关于** 看只推荐不卖票。
 2. **结果** `pages/results`：约 0.7s loading → 三主卡；点任一主卡。

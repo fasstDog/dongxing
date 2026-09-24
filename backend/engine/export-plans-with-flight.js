@@ -1,7 +1,7 @@
 'use strict';
 /**
  * Re-export mock plans for frontend OD switch, with flight in 「最快」.
- * Usage: node engine/export-plans-with-flight.js
+ * Usage: node backend/engine/export-plans-with-flight.js
  */
 const fs = require('fs');
 const path = require('path');

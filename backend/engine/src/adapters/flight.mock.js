@@ -1,14 +1,13 @@
 /**
- * TrainLegProvider · mock 适配器（MVP）
+ * FlightLegProvider · mock 适配器（MVP）
  *
- * - 读 data/mock/legs-*.json，只返回 mode === "train" 的 Leg
- * - 单机内存缓存 + TTL（拍板：MVP 不上 Redis）
- * - 可选 after_at：锚定上一腿到达后再查下一腿（避免多段同日 applyDate 把 overnight 拽乱）
- * - 不臆造车次/票价；禁止爬取
+ * 与 train.mock 同契约：search({ from_city, to_city, date?, after_at? }) → Leg[]
+ * 仅返回 mode === "flight"；单机内存 TTL；不臆造航班号/票价。
  *
- *   search({ from_city, to_city, date?, after_at? })
- *   node engine/adapters/train.mock.js 徐州 西宁
- *   node engine/adapters/train.mock.js 西宁 拉萨 --after 2026-10-02T14:40:00+08:00
+ * 默认合并读取 data/mock/legs-*.json（含徐拉 / 沪蓉 / 京汉 等）
+ *
+ *   node backend/engine/adapters/flight.mock.js 西安 拉萨
+ *   node backend/engine/adapters/flight.mock.js 上海 成都 2026-10-08
  */
 
 'use strict';
@@ -18,7 +17,6 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '../../..');
 const DEFAULT_LEGS_DIR = path.join(ROOT, 'data', 'mock');
-const DEFAULT_LEGS_PATH = path.join(DEFAULT_LEGS_DIR, 'legs-xuzhou-lhasa.json');
 const DEFAULT_TTL_MS = 15 * 60 * 1000;
 
 /** @type {Map<string, { expires: number, legs: object[] }>} */
@@ -31,9 +29,26 @@ let ttlMs = DEFAULT_TTL_MS;
 
 function configure(opts) {
   if (!opts || typeof opts !== 'object') return;
-  if (opts.legsPath) legsPath = path.resolve(opts.legsPath);
+  if (opts.legsPath) {
+    legsPath = path.resolve(opts.legsPath);
+  }
+  if (Array.isArray(opts.legsPaths) && opts.legsPaths.length) {
+    legsPath = null;
+    legsDir = path.dirname(path.resolve(opts.legsPaths[0]));
+    // keep explicit list via temporary marker files — prefer legsDir scan
+  }
   if (opts.legsDir) legsDir = path.resolve(opts.legsDir);
   if (typeof opts.ttlMs === 'number' && opts.ttlMs >= 0) ttlMs = opts.ttlMs;
+}
+
+function resolveLegsFiles() {
+  if (legsPath) return [legsPath];
+  if (!fs.existsSync(legsDir)) return [];
+  return fs
+    .readdirSync(legsDir)
+    .filter((n) => /^legs-.*\.json$/.test(n))
+    .map((n) => path.join(legsDir, n))
+    .sort();
 }
 
 function clearCache() {
@@ -41,49 +56,24 @@ function clearCache() {
 }
 
 function cacheKey(fromCity, toCity, date, afterAt) {
-  return [fromCity, toCity, date || '*', afterAt || '*'].join('|');
+  return ['flight', fromCity, toCity, date || '*', afterAt || '*'].join('|');
 }
 
-function readLegsFile(filePath) {
-  const raw = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  const list = Array.isArray(raw.legs) ? raw.legs : Array.isArray(raw) ? raw : [];
-  return list.filter((l) => l && l.mode === 'train');
-}
-
-/** Load train legs from one file or all data/mock/legs-*.json. */
 function loadAllLegs() {
-  if (legsPath) {
-    if (!fs.existsSync(legsPath)) {
-      const err = new Error('LEGS_NOT_FOUND: ' + legsPath);
-      err.code = 'LEGS_NOT_FOUND';
-      throw err;
-    }
-    return readLegsFile(legsPath);
-  }
-  if (!fs.existsSync(legsDir)) {
-    const err = new Error('LEGS_DIR_NOT_FOUND: ' + legsDir);
-    err.code = 'LEGS_NOT_FOUND';
-    throw err;
-  }
-  const files = fs
-    .readdirSync(legsDir)
-    .filter((f) => /^legs-.*\.json$/.test(f))
-    .sort();
-  if (!files.length) {
-    if (fs.existsSync(DEFAULT_LEGS_PATH)) return readLegsFile(DEFAULT_LEGS_PATH);
-    const err = new Error('LEGS_NOT_FOUND: no legs-*.json in ' + legsDir);
-    err.code = 'LEGS_NOT_FOUND';
-    throw err;
-  }
+  const files = resolveLegsFiles();
   const out = [];
-  const seen = new Set();
-  for (const f of files) {
-    for (const leg of readLegsFile(path.join(legsDir, f))) {
-      const key = leg.id || [leg.from_city, leg.to_city, leg.dep_at, leg.service_ref].join('|');
-      if (seen.has(key)) continue;
-      seen.add(key);
-      out.push(leg);
+  for (const p of files) {
+    if (!fs.existsSync(p)) continue;
+    const raw = JSON.parse(fs.readFileSync(p, 'utf8'));
+    const list = Array.isArray(raw.legs) ? raw.legs : Array.isArray(raw) ? raw : [];
+    for (const l of list) {
+      if (l && l.mode === 'flight') out.push(l);
     }
+  }
+  if (!files.length) {
+    const err = new Error('LEGS_NOT_FOUND: ' + legsDir);
+    err.code = 'LEGS_NOT_FOUND';
+    throw err;
   }
   return out;
 }
@@ -121,9 +111,6 @@ function applyDate(leg, dateStr) {
   return out;
 }
 
-/**
- * Place leg so dep_at >= afterAt, preserving clock and overnight span from mock template.
- */
 function applyAfter(leg, afterAt) {
   const afterMs = Date.parse(afterAt);
   if (Number.isNaN(afterMs)) return Object.assign({}, leg, { source: leg.source || 'mock' });
@@ -134,7 +121,6 @@ function applyAfter(leg, afterAt) {
   const timeSuffix = String(leg.dep_at).slice(10);
   const arrSuffix = String(leg.arr_at).slice(10);
 
-  // Start from afterAt's calendar day in +08
   const afterShifted = new Date(afterMs + 8 * 3600 * 1000);
   let ymd =
     afterShifted.getUTCFullYear() +
@@ -218,7 +204,7 @@ function mainCli() {
         ok: false,
         error: 'USAGE',
         hint:
-          'node engine/adapters/train.mock.js <from_city> <to_city> [YYYY-MM-DD] [--after ISO]',
+          'node backend/engine/adapters/flight.mock.js <from_city> <to_city> [YYYY-MM-DD] [--after ISO]',
       })
     );
     process.exit(1);
@@ -234,7 +220,7 @@ function mainCli() {
       JSON.stringify(
         {
           ok: true,
-          provider: 'train.mock',
+          provider: 'flight.mock',
           query: {
             from_city: fromCity,
             to_city: toCity,
@@ -254,11 +240,10 @@ function mainCli() {
   }
 }
 
-
 /**
- * Adapter-facing async contract for engine consumers.
+ * Adapter-facing async contract (same as train.mock).
  * @param {{ from: string, to: string, date?: string|null, after_at?: string|null }} query
- * @returns {Promise<object[]>} Leg[]
+ * @returns {Promise<object[]>}
  */
 async function searchLegs({ from, to, date, after_at } = {}) {
   return search({
@@ -274,7 +259,7 @@ module.exports = {
   search,
   clearCache,
   configure,
-  DEFAULT_LEGS_PATH,
+  DEFAULT_LEGS_DIR,
   DEFAULT_TTL_MS,
 };
 

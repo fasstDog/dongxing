@@ -1,19 +1,19 @@
 /**
  * 邪修交通 · 交互原型（Vue 3 + Vant 4 CDN）
  * 静态 mock，无后端 / 无真实购票
- * 方案数据：data/mock/plans-*.json（API 形或 pipeline main/more 形 → UI camelCase）
- * 字段映射见 docs/api-plans-contract.md §8 / §10
+ * 方案数据：../backend/data/mock/plans-*.json（API 形或 pipeline main/more 形 → UI camelCase）
+ * 字段映射见 ../../docs/api-plans-contract.md §8 / §10
  */
 (function () {
   "use strict";
 
   const PLANS_MOCK_BY_OD = {
-    "徐州|拉萨": "data/mock/plans-xuzhou-lhasa.json",
-    "上海|成都": "data/mock/plans-shanghai-chengdu.json",
-    "北京|武汉": "data/mock/plans-beijing-wuhan.json",
-    "成都|重庆": "data/mock/plans-chengdu-chongqing.json",
+    "徐州|拉萨": "../backend/data/mock/plans-xuzhou-lhasa.json",
+    "上海|成都": "../backend/data/mock/plans-shanghai-chengdu.json",
+    "北京|武汉": "../backend/data/mock/plans-beijing-wuhan.json",
+    "成都|重庆": "../backend/data/mock/plans-chengdu-chongqing.json",
   };
-  const PLANS_MOCK_DEFAULT = "data/mock/plans-xuzhou-lhasa.json";
+  const PLANS_MOCK_DEFAULT = "../backend/data/mock/plans-xuzhou-lhasa.json";
 
   function plansUrlForOd(fromCity, toCity) {
     const key = String(fromCity || "").trim() + "|" + String(toCity || "").trim();

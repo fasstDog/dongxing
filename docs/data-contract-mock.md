@@ -5,7 +5,7 @@
 > 原则：程序出计划；价格/时刻标「参考」；**模型不生成车次与票价**。**火车优先**，航班第二。  
 > 密钥不进仓；无真源时 `source: "mock"` + 写入时的 `as_of`。  
 > Schema：`docs/schemas/leg.schema.json`、`docs/schemas/transfer-play.schema.json`  
-> 数据：`data/mock/legs-xuzhou-lhasa.json`、`data/hub-pois.json`（独立表）
+> 数据：`data/mock/legs-xuzhou-lhasa.json`、`backend/data/hub-pois.json`（独立表）
 
 ---
 

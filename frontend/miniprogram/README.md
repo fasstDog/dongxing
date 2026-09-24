@@ -4,14 +4,14 @@
 
 > **只推荐路线，不卖票。** 「去购票」仅 Toast：`将跳转12306/OTA，不卖票`。
 
-> 正式客户端另有 **官方 React Native** App（iOS+Android），与本小程序共享 TS 契约/引擎 API；RN **不是**小程序交付路径。详见 [`docs/ADR-客户端-ReactNative.md`](../docs/ADR-客户端-ReactNative.md)。
+> 正式客户端另有 **官方 React Native** App（iOS+Android），与本小程序共享 TS 契约/引擎 API；RN **不是**小程序交付路径。详见 [`docs/ADR-客户端-ReactNative.md`](../../docs/ADR-客户端-ReactNative.md)。
 
 ## 打开方式
 
-`project.config.json` 在 **`miniprogram/`** 内。用微信开发者工具 **打开本目录**（不要打开仓库根）。
+`project.config.json` 在 **`frontend/miniprogram/`** 内。用微信开发者工具 **打开本目录**（不要打开仓库根）。
 
 ```bash
-cd miniprogram
+cd frontend/miniprogram
 npm install
 # 开发者工具：工具 → 构建 npm
 ```
@@ -19,10 +19,10 @@ npm install
 ## 目录
 
 ```
-miniprogram/
+frontend/miniprogram/
   app.js / app.json / app.wxss
   project.config.json
-  package.json                 # @vant/weapp
+  package.json                 # @vant/weapp + @dongxing/shared
   utils/adapt-plans.js         # snake_case → UI（含详情字段）
   data/plans-xuzhou-lhasa.json
   data/plans-shanghai-chengdu.json
@@ -35,7 +35,7 @@ miniprogram/
 
 ## Mock 与 OD
 
-- 精简/拷贝自仓库 `data/mock/plans-*.json`，含 `timeline` / `why_detail` / `play` / `buy_legs`。
+- 精简/拷贝自仓库 `backend/data/mock/plans-*.json`，含 `timeline` / `why_detail` / `play` / `buy_legs`。
 - 查询页样例：**徐州→拉萨** / **上海→成都** / **北京→武汉**。
 - 结果页按 OD `require` 对应 JSON；详情按 `plan id` 查找（可走 `globalData.lastPlans` 缓存）。
 
@@ -56,19 +56,18 @@ miniprogram/
 
 ## 接引擎 API（M1）
 
-1. 本机启动：`PORT=8787 node engine/server.js`
+1. 本机启动：`cd backend/engine && PORT=8787 npm run server`
 2. 小程序 `utils/config.js`：`useRemoteApi: true`，`apiBase: 'http://127.0.0.1:8787'`
 3. 微信开发者工具勾选「不校验合法域名、web-view…」
 4. 查询后结果页优先 `POST /v1/plans/search`；网络失败回落 `data/plans-*.json`
 
 关闭远程：设 `useRemoteApi: false`。
 
-
 ## 共享契约包
 
 ```bash
-cd miniprogram && npm install
+cd frontend/miniprogram && npm install
 # 微信开发者工具：工具 → 构建 npm
 ```
 
-依赖 `@dongxing/shared`（`packages/shared`）提供 `PLAN_TYPE_LABELS` / `DISCLAIMER` 与 TS 类型；改字段先改 `docs/api-plans-contract.md`。
+依赖 `@dongxing/shared`（根级 `packages/shared`）提供 `PLAN_TYPE_LABELS` / `DISCLAIMER` 与 TS 类型；改字段先改 `docs/api-plans-contract.md`。

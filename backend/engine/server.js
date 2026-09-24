@@ -1,47 +1,29 @@
+/** FROZEN CJS — 新改动请进 engine/src/*.ts；运行: cd engine && npm run server */
+#!/usr/bin/env node
 /**
- * 懂行 · M1 服务壳（TypeScript）
- * POST /v1/plans/search → pipeline.searchPlans（仍 mock）
+ * M1 服务壳：POST /v1/plans/search → pipeline.searchPlans（仍 mock）
+ * 零依赖：Node http
  *
- *   cd engine && npm run server
+ *   PORT=8787 node backend/engine/server.js
+ *   curl -s localhost:8787/health
+ *   curl -s -X POST localhost:8787/v1/plans/search -H 'content-type: application/json' \
+ *     -d '{"from_city":"徐州","to_city":"拉萨","date":"2026-10-01"}'
  */
-import http from 'http';
-import { URL } from 'url';
-import type { PlansSearchRequest, PlansSearchResponse } from '@dongxing/shared';
-// allowJs CJS modules
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { searchPlans } = require('./pipeline.js') as {
-  searchPlans: (q: {
-    from: string;
-    to: string;
-    date?: string;
-    vias?: string[];
-    extraHubs?: string[];
-  }) => Promise<{
-    ok: boolean;
-    reason?: string;
-    main: Record<string, unknown>;
-    more: unknown[];
-  }>;
-};
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { toPlansSearchResponse } = require('./to-api-response.js') as {
-  toPlansSearchResponse: (result: unknown, request: Record<string, unknown>) => Record<string, unknown>;
-};
+'use strict';
+
+const http = require('http');
+const { URL } = require('url');
+const { searchPlans } = require('./pipeline');
+const { toPlansSearchResponse } = require('./to-api-response');
 
 const PORT = Number(process.env.PORT || 8787);
 const HOST = process.env.HOST || '127.0.0.1';
 
-/** @deprecated use PlansSearchRequest; kept for body parse flexibility */
-type SearchBody = PlansSearchRequest & {
-  from?: string;
-  to?: string;
-};
-
-function readJson(req: http.IncomingMessage): Promise<SearchBody> {
+function readJson(req) {
   return new Promise((resolve, reject) => {
-    const chunks: Buffer[] = [];
+    const chunks = [];
     let size = 0;
-    req.on('data', (c: Buffer) => {
+    req.on('data', (c) => {
       size += c.length;
       if (size > 1e6) {
         reject(Object.assign(new Error('BODY_TOO_LARGE'), { code: 'BODY_TOO_LARGE' }));
@@ -52,10 +34,10 @@ function readJson(req: http.IncomingMessage): Promise<SearchBody> {
     });
     req.on('end', () => {
       const raw = Buffer.concat(chunks).toString('utf8');
-      if (!raw) return resolve({} as SearchBody);
+      if (!raw) return resolve({});
       try {
-        resolve(JSON.parse(raw) as SearchBody);
-      } catch {
+        resolve(JSON.parse(raw));
+      } catch (e) {
         reject(Object.assign(new Error('INVALID_JSON'), { code: 'INVALID_JSON' }));
       }
     });
@@ -63,7 +45,7 @@ function readJson(req: http.IncomingMessage): Promise<SearchBody> {
   });
 }
 
-function send(res: http.ServerResponse, status: number, body: unknown): void {
+function send(res, status, body) {
   const json = JSON.stringify(body);
   res.writeHead(status, {
     'content-type': 'application/json; charset=utf-8',
@@ -75,30 +57,31 @@ function send(res: http.ServerResponse, status: number, body: unknown): void {
   res.end(json);
 }
 
-function normalizeRequest(body: SearchBody) {
-  const from_city = String(body?.from_city || body?.from || '').trim();
-  const to_city = String(body?.to_city || body?.to || '').trim();
+function normalizeRequest(body) {
+  const from_city = String((body && (body.from_city || body.from)) || '').trim();
+  const to_city = String((body && (body.to_city || body.to)) || '').trim();
   const date =
-    body?.date_flexible === true
+    body && body.date_flexible === true
       ? body.date || null
-      : body?.date
+      : body && body.date
         ? String(body.date).trim()
         : null;
-  const vias = Array.isArray(body?.vias)
+  const vias = Array.isArray(body && body.vias)
     ? body.vias.map((v) => String(v).trim()).filter(Boolean)
     : [];
-  const path_mode = body?.path_mode
-    ? String(body.path_mode)
-    : vias.length
-      ? 'user'
-      : 'auto';
-  const extra_hubs = Array.isArray(body?.extra_hubs)
+  const path_mode =
+    body && body.path_mode
+      ? String(body.path_mode)
+      : vias.length
+        ? 'user'
+        : 'auto';
+  const extra_hubs = Array.isArray(body && body.extra_hubs)
     ? body.extra_hubs.map((v) => String(v).trim()).filter(Boolean)
     : [];
   return {
     from_city,
     to_city,
-    date_flexible: body?.date_flexible !== false,
+    date_flexible: body && body.date_flexible !== false,
     date,
     vias,
     path_mode,
@@ -106,7 +89,7 @@ function normalizeRequest(body: SearchBody) {
   };
 }
 
-async function handleSearch(body: SearchBody) {
+async function handleSearch(body) {
   const req = normalizeRequest(body || {});
   if (!req.from_city || !req.to_city) {
     return {
@@ -136,22 +119,22 @@ async function handleSearch(body: SearchBody) {
     from: req.from_city,
     to: req.to_city,
     date: req.date || undefined,
-    vias,
+    vias: vias,
     extraHubs: req.extra_hubs,
   });
 
   const response = toPlansSearchResponse(result, req);
-  return { status: 200, body: response };
+  return { status: response.ok ? 200 : 200, body: response };
 }
 
 const server = http.createServer(async (req, res) => {
-  const url = new URL(req.url || '/', `http://${HOST}:${PORT}`);
+  const url = new URL(req.url || '/', 'http://' + HOST + ':' + PORT);
   if (req.method === 'OPTIONS') {
     send(res, 204, {});
     return;
   }
   if (req.method === 'GET' && url.pathname === '/health') {
-    send(res, 200, { ok: true, service: 'dongxing-plans', version: 'v1', runtime: 'typescript' });
+    send(res, 200, { ok: true, service: 'dongxing-plans', version: 'v1' });
     return;
   }
   if (req.method === 'POST' && url.pathname === '/v1/plans/search') {
@@ -159,8 +142,8 @@ const server = http.createServer(async (req, res) => {
       const body = await readJson(req);
       const out = await handleSearch(body);
       send(res, out.status, out.body);
-    } catch (e: unknown) {
-      const code = e && typeof e === 'object' && 'code' in e ? (e as { code?: string }).code : undefined;
+    } catch (e) {
+      const code = e && e.code;
       if (code === 'INVALID_JSON') {
         send(res, 400, {
           ok: false,
@@ -187,10 +170,9 @@ server.listen(PORT, HOST, () => {
   console.log(
     JSON.stringify({
       ok: true,
-      listen: `http://${HOST}:${PORT}`,
+      listen: 'http://' + HOST + ':' + PORT,
       routes: ['GET /health', 'POST /v1/plans/search'],
-      runtime: 'typescript',
-      note: 'mock adapters; no realtime inventory; python frozen',
+      note: 'mock adapters; no realtime inventory',
     })
   );
 });

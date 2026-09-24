@@ -1,7 +1,7 @@
 # 方案生成 API 约定（mock / v1）
 
 > 状态：**契约稳定 + M1 服务壳已通（规则引擎，2026-09-23）**  
-> 消费：`docs/data-contract-mock.md` 的 `Leg` / `TransferPlay`（数据文件：`data/mock/legs-*.json`、`data/hub-pois.json`）  
+> 消费：`docs/data-contract-mock.md` 的 `Leg` / `TransferPlay`（数据文件：`backend/data/mock/legs-*.json`、`backend/data/hub-pois.json`）  
 > 产出：前端三主卡 + 详情（怎么去 · 为什么 · 怎么玩 · 购票段）  
 > 原则：**程序算计划**；价格/时刻为参考；**模型禁止生成车次与票价**。  
 > **文档口径：** 只写最终交付契约；工程分步不改变字段语义。
@@ -12,8 +12,8 @@
 
 | 文件 | 内容 |
 |------|------|
-| `data/mock/legs-xuzhou-lhasa.json` | `{ meta, legs: Leg[] }`，冒烟 OD |
-| `data/hub-pois.json` | `{ meta, pois: TransferPlay[] }`，按 `hub_city` 查 |
+| `backend/data/mock/legs-xuzhou-lhasa.json` | `{ meta, legs: Leg[] }`，冒烟 OD |
+| `backend/data/hub-pois.json` | `{ meta, pois: TransferPlay[] }`，按 `hub_city` 查 |
 | `docs/schemas/leg.schema.json` | Leg |
 | `docs/schemas/transfer-play.schema.json` | TransferPlay |
 
@@ -41,8 +41,8 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 
 | 文件 | 说明 |
 |------|------|
-| `engine/src/server.ts`（`npm run server`） | `GET /health`、`POST /v1/plans/search` |
-| `engine/to-api-response.js` | pipeline → PlansSearchResponse（cheap/fast/balanced） |
+| `backend/engine/src/server.ts`（`npm run server`） | `GET /health`、`POST /v1/plans/search` |
+| `backend/engine/to-api-response.js` | pipeline → PlansSearchResponse（cheap/fast/balanced） |
 
 仍可用预导出 JSON 离线演示；小程序 M1 改打本服务即可。
 
@@ -279,7 +279,7 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 - `fast`：徐州→西安（G）+ 西安飞拉萨  
 - `balanced`：徐州→西宁 + 西宁→拉萨，且西宁缓冲够时可挂塔尔寺等 POI  
 
-具体数值以 `data/mock/legs-xuzhou-lhasa.json` + `data/hub-pois.json` 枚举结果为准，**不以本文写死票价**。
+具体数值以 `backend/data/mock/legs-xuzhou-lhasa.json` + `backend/data/hub-pois.json` 枚举结果为准，**不以本文写死票价**。
 
 ---
 
@@ -287,9 +287,9 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 
 ---
 
-## 10. Node pipeline（`engine/pipeline.js`）→ 本 API / 前端
+## 10. Node pipeline（`backend/engine/pipeline.js`）→ 本 API / 前端
 
-`searchPlans` 冒烟：`node engine/search-pipeline-demo.js`。返回形与 §3 略有不同；前端 `js/app.js` 的 `normalizePipelineResponse` 做薄映射后仍走 Vant 适配（`adaptPlan`）。
+`searchPlans` 冒烟：`node backend/engine/search-pipeline-demo.js`。返回形与 §3 略有不同；前端 `js/app.js` 的 `normalizePipelineResponse` 做薄映射后仍走 Vant 适配（`adaptPlan`）。
 
 | pipeline 字段 | API / 前端 |
 |---------------|------------|
@@ -303,6 +303,6 @@ curl -s -X POST http://127.0.0.1:8787/v1/plans/search \
 | `play[]`（含 `back_ok_note`） | `play[]`（`ok` ← `back_ok_note`） |
 | `play_hint` | `play_hint` |
 
-Mock 文件 `data/mock/plans-*.json` 已是 §3 数组形 `main`，映射为 no-op。裸 pipeline JSON（无 `scenarios` 包装）也可被 `ensurePlansLoaded` 读成 `auto` 场景。
+Mock 文件 `backend/data/mock/plans-*.json` 已是 §3 数组形 `main`，映射为 no-op。裸 pipeline JSON（无 `scenarios` 包装）也可被 `ensurePlansLoaded` 读成 `auto` 场景。
 
-样例 OD：`plans-xuzhou-lhasa.json`、`plans-shanghai-chengdu.json`（及对应 `legs-*.json`）。上海→成都可用 `node engine/export-shanghai-chengdu.js` 重导。
+样例 OD：`plans-xuzhou-lhasa.json`、`plans-shanghai-chengdu.json`（及对应 `legs-*.json`）。上海→成都可用 `node backend/engine/export-shanghai-chengdu.js` 重导。
