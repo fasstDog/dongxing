@@ -35,3 +35,20 @@
 .tl-desc { margin-top: 6rpx; font-size: 22rpx; color: #969799; line-height: 1.4; }
 .muted { color: #969799; font-size: 24rpx; }
 .pad { padding: 16rpx; }
+
+
+.header {
+  box-shadow: 0 6rpx 20rpx rgba(50, 50, 51, 0.06);
+  border-left-width: 12rpx;
+  border-left-style: solid;
+}
+.card-cheap { border-left-color: #07c160; }
+.card-fast { border-left-color: #ee0a24; }
+.card-balanced { border-left-color: #1989fa; }
+.price { font-size: 40rpx; font-weight: 700; }
+.buy-cta-note {
+  margin: 8rpx 24rpx 0;
+  font-size: 22rpx;
+  color: #969799;
+  line-height: 1.4;
+}

@@ -1,0 +1,112 @@
+.plan-card {
+  background: #fff;
+  border-radius: 16px;
+  margin: 16px 0;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(50, 50, 51, 0.06);
+}
+
+.plan-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.type-pill {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 999px;
+}
+
+.type-cheap {
+  background: #07c160;
+}
+
+.type-fast {
+  background: #ee0a24;
+}
+
+.type-balanced {
+  background: #1989fa;
+}
+
+.chip {
+  font-size: 20px;
+  color: #1989fa;
+  border: 1px solid #1989fa;
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+.chip-warn {
+  color: #ed6a0c;
+  border-color: #ed6a0c;
+}
+
+.price-wrap {
+  text-align: right;
+}
+
+.price {
+  font-size: 36px;
+  font-weight: 700;
+  color: #323233;
+}
+
+.price-note {
+  display: block;
+  font-size: 20px;
+  color: #969799;
+}
+
+.route {
+  margin-top: 16px;
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.meta {
+  margin-top: 8px;
+  font-size: 24px;
+  color: #646566;
+}
+
+.dot {
+  margin: 0 8px;
+  color: #c8c9cc;
+}
+
+.vs {
+  margin-top: 12px;
+  font-size: 24px;
+  color: #ed6a0c;
+}
+
+.why {
+  margin-top: 12px;
+  font-size: 24px;
+  color: #646566;
+  line-height: 1.5;
+}
+
+.hint {
+  margin-top: 8px;
+  font-size: 24px;
+  color: #07c160;
+}
+
+.card-foot {
+  margin-top: 14px;
+  font-size: 22px;
+  color: #969799;
+}

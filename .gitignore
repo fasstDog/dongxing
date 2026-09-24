@@ -7,3 +7,7 @@ packages/shared/node_modules/
 packages/shared/dist/
 .DS_Store
 *.log
+frontend/taro-app/node_modules/
+frontend/taro-app/dist/
+frontend/taro-app/.temp/
+frontend/taro-app/.rn_temp/

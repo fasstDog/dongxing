@@ -1,0 +1,296 @@
+{
+  "meta": {
+    "od": {
+      "from_city": "北京",
+      "to_city": "武汉"
+    },
+    "note": "mock · 只推荐不卖票 · 同步人话 why",
+    "source": "data/mock/plans-beijing-wuhan.json"
+  },
+  "scenarios": {
+    "auto": {
+      "response": {
+        "ok": true,
+        "error": null,
+        "main": [
+          {
+            "id": "bj-wh-cheap",
+            "type": "cheap",
+            "type_label": "最省钱",
+            "price_ref_cny": 268,
+            "price_display": "¥230–420",
+            "price_note": "参考价",
+            "duration_min": 650,
+            "duration_display": "约 11 小时",
+            "transfers": 0,
+            "route_one_line": "北京 → 武汉",
+            "vs_direct": "参考价大概省 252 块，多花大约 7 小时",
+            "why": "北京过夜火车直达武汉，参考价最便宜，但要坐一整晚。当「最省钱」对照看就行。",
+            "why_detail": "北京过夜火车直达武汉，参考价最便宜，但要坐一整晚。当「最省钱」对照看就行。 参考价大概省 252 块，多花大约 7 小时。价格、时刻都是参考，以购票平台为准。",
+            "play_hint": null,
+            "path_note": "直达",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "火车",
+                "from_station": "北京西站",
+                "to_station": "汉口站",
+                "dep_at": "2026-10-01T19:50:00+08:00",
+                "arr_at": "2026-10-02T06:40:00+08:00",
+                "duration_min": 650,
+                "duration_display": "约 11 小时",
+                "seat_hint": "硬座 / 硬卧",
+                "price_ref_cny": 268,
+                "price_display": "约 ¥268",
+                "service_ref": "过夜普速/动车类（参考）",
+                "leg_id": "leg-bj-wh-d-cheap",
+                "comfort": "hardseat"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "北京 → 武汉",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥268",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "bj-wh-fast",
+            "type": "fast",
+            "type_label": "最快",
+            "price_ref_cny": 680,
+            "price_display": "¥450–1100",
+            "price_note": "参考价",
+            "duration_min": 130,
+            "duration_display": "约 2 小时",
+            "transfers": 0,
+            "route_one_line": "北京 → 武汉",
+            "vs_direct": "参考价大概贵 160 块，能少耗大约 2 小时",
+            "why": "北京直飞武汉，一趟飞机到，少折腾。比高铁贵一截，但能少耗大约 2 小时。",
+            "why_detail": "北京直飞武汉，一趟飞机到，少折腾。比高铁贵一截，但能少耗大约 2 小时。 参考价大概贵 160 块，能少耗大约 2 小时。价格、时刻都是参考，以购票平台为准。",
+            "play_hint": null,
+            "path_note": "直达",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "flight",
+                "mode_label": "飞机",
+                "from_station": "北京大兴国际机场",
+                "to_station": "武汉天河国际机场",
+                "dep_at": "2026-10-01T09:10:00+08:00",
+                "arr_at": "2026-10-01T11:20:00+08:00",
+                "duration_min": 130,
+                "duration_display": "约 2 小时",
+                "seat_hint": "经济舱",
+                "price_ref_cny": 680,
+                "price_display": "约 ¥680",
+                "service_ref": "航司直飞（参考）",
+                "leg_id": "leg-bj-wh-flight",
+                "comfort": "economy"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "北京 → 武汉",
+                "sub": "跳转 航司 / OTA · 约 ¥680",
+                "mode": "flight",
+                "deep_link_hint": null
+              }
+            ]
+          },
+          {
+            "id": "bj-wh-balanced",
+            "type": "balanced",
+            "type_label": "最综合",
+            "price_ref_cny": 520,
+            "price_display": "¥480–575",
+            "price_note": "参考价",
+            "duration_min": 260,
+            "duration_display": "约 4 小时",
+            "transfers": 0,
+            "route_one_line": "北京 → 武汉",
+            "vs_direct": "参考价差不多，时长差不多",
+            "why": "北京直达武汉的高铁，少换乘。当「直达对照」看就行。",
+            "why_detail": "北京直达武汉的高铁，少换乘。当「直达对照」看就行。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。",
+            "play_hint": null,
+            "path_note": "直达对照",
+            "timeline": [
+              {
+                "kind": "leg",
+                "mode": "train",
+                "mode_label": "高铁",
+                "from_station": "北京西站",
+                "to_station": "武汉站",
+                "dep_at": "2026-10-01T08:00:00+08:00",
+                "arr_at": "2026-10-01T12:20:00+08:00",
+                "duration_min": 260,
+                "duration_display": "约 4 小时",
+                "seat_hint": "二等座",
+                "price_ref_cny": 520,
+                "price_display": "约 ¥520",
+                "service_ref": "G 字头京广直达（参考）",
+                "leg_id": "leg-bj-wh-g-direct",
+                "comfort": "second_class"
+              }
+            ],
+            "play": null,
+            "buy_legs": [
+              {
+                "name": "北京 → 武汉",
+                "sub": "跳转 12306 / 铁路 OTA · 约 ¥520",
+                "mode": "train",
+                "deep_link_hint": null
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "response": {
+    "ok": true,
+    "error": null,
+    "main": [
+      {
+        "id": "bj-wh-cheap",
+        "type": "cheap",
+        "type_label": "最省钱",
+        "price_ref_cny": 268,
+        "price_display": "¥230–420",
+        "price_note": "参考价",
+        "duration_min": 650,
+        "duration_display": "约 11 小时",
+        "transfers": 0,
+        "route_one_line": "北京 → 武汉",
+        "vs_direct": "参考价大概省 252 块，多花大约 7 小时",
+        "why": "直达硬座最便宜，但要坐四十来个小时。当「最省钱」对照看就行。",
+        "why_detail": "直达硬座最便宜，但要坐四十来个小时。当「最省钱」对照看就行。 参考价大概省 252 块，多花大约 7 小时。价格、时刻都是参考，以购票平台为准。",
+        "play_hint": null,
+        "path_note": "直达",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "火车",
+            "from_station": "北京西站",
+            "to_station": "汉口站",
+            "dep_at": "2026-10-01T19:50:00+08:00",
+            "arr_at": "2026-10-02T06:40:00+08:00",
+            "duration_min": 650,
+            "duration_display": "约 11 小时",
+            "seat_hint": "硬座 / 硬卧",
+            "price_ref_cny": 268,
+            "price_display": "约 ¥268",
+            "service_ref": "过夜普速/动车类（参考）",
+            "leg_id": "leg-bj-wh-d-cheap",
+            "comfort": "hardseat"
+          }
+        ],
+        "play": null,
+        "buy_legs": [
+          {
+            "name": "北京 → 武汉",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥268",
+            "mode": "train",
+            "deep_link_hint": null
+          }
+        ]
+      },
+      {
+        "id": "bj-wh-fast",
+        "type": "fast",
+        "type_label": "最快",
+        "price_ref_cny": 680,
+        "price_display": "¥450–1100",
+        "price_note": "参考价",
+        "duration_min": 130,
+        "duration_display": "约 2 小时",
+        "transfers": 0,
+        "route_one_line": "北京 → 武汉",
+        "vs_direct": "参考价大概贵 160 块，能少耗大约 2 小时",
+        "why": "北京直飞武汉，一趟飞机到，少折腾。参考价以航司/OTA为准。",
+        "why_detail": "北京直飞武汉，一趟飞机到，少折腾。参考价以航司/OTA为准。 参考价大概贵 160 块，能少耗大约 2 小时。",
+        "play_hint": null,
+        "path_note": "直达",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "flight",
+            "mode_label": "飞机",
+            "from_station": "北京大兴国际机场",
+            "to_station": "武汉天河国际机场",
+            "dep_at": "2026-10-01T09:10:00+08:00",
+            "arr_at": "2026-10-01T11:20:00+08:00",
+            "duration_min": 130,
+            "duration_display": "约 2 小时",
+            "seat_hint": "经济舱",
+            "price_ref_cny": 680,
+            "price_display": "约 ¥680",
+            "service_ref": "航司直飞（参考）",
+            "leg_id": "leg-bj-wh-flight",
+            "comfort": "economy"
+          }
+        ],
+        "play": null,
+        "buy_legs": [
+          {
+            "name": "北京 → 武汉",
+            "sub": "跳转 航司 / OTA · 约 ¥680",
+            "mode": "flight",
+            "deep_link_hint": null
+          }
+        ]
+      },
+      {
+        "id": "bj-wh-balanced",
+        "type": "balanced",
+        "type_label": "最综合",
+        "price_ref_cny": 520,
+        "price_display": "¥480–575",
+        "price_note": "参考价",
+        "duration_min": 260,
+        "duration_display": "约 4 小时",
+        "transfers": 0,
+        "route_one_line": "北京 → 武汉",
+        "vs_direct": "参考价差不多，时长差不多",
+        "why": "直达走法，少换乘。当「对照」看就行。",
+        "why_detail": "直达走法，少换乘。当「对照」看就行。 参考价差不多，时长差不多。价格、时刻都是参考，以购票平台为准。",
+        "play_hint": null,
+        "path_note": "直达",
+        "timeline": [
+          {
+            "kind": "leg",
+            "mode": "train",
+            "mode_label": "高铁",
+            "from_station": "北京西站",
+            "to_station": "武汉站",
+            "dep_at": "2026-10-01T08:00:00+08:00",
+            "arr_at": "2026-10-01T12:20:00+08:00",
+            "duration_min": 260,
+            "duration_display": "约 4 小时",
+            "seat_hint": "二等座",
+            "price_ref_cny": 520,
+            "price_display": "约 ¥520",
+            "service_ref": "G 字头京广直达（参考）",
+            "leg_id": "leg-bj-wh-g-direct",
+            "comfort": "second_class"
+          }
+        ],
+        "play": null,
+        "buy_legs": [
+          {
+            "name": "北京 → 武汉",
+            "sub": "跳转 12306 / 铁路 OTA · 约 ¥520",
+            "mode": "train",
+            "deep_link_hint": null
+          }
+        ]
+      }
+    ]
+  }
+}
