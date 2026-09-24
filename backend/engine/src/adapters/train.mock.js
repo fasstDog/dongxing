@@ -7,8 +7,8 @@
  * - 不臆造车次/票价；禁止爬取
  *
  *   search({ from_city, to_city, date?, after_at? })
- *   node engine/adapters/train.mock.js 徐州 西宁
- *   node engine/adapters/train.mock.js 西宁 拉萨 --after 2026-10-02T14:40:00+08:00
+ *   node backend/engine/adapters/train.mock.js 徐州 西宁
+ *   node backend/engine/adapters/train.mock.js 西宁 拉萨 --after 2026-10-02T14:40:00+08:00
  */
 
 'use strict';
@@ -16,7 +16,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '../..');
+const ROOT = path.resolve(__dirname, '../../..');
 const DEFAULT_LEGS_DIR = path.join(ROOT, 'data', 'mock');
 const DEFAULT_LEGS_PATH = path.join(DEFAULT_LEGS_DIR, 'legs-xuzhou-lhasa.json');
 const DEFAULT_TTL_MS = 15 * 60 * 1000;
@@ -218,7 +218,7 @@ function mainCli() {
         ok: false,
         error: 'USAGE',
         hint:
-          'node engine/adapters/train.mock.js <from_city> <to_city> [YYYY-MM-DD] [--after ISO]',
+          'node backend/engine/adapters/train.mock.js <from_city> <to_city> [YYYY-MM-DD] [--after ISO]',
       })
     );
     process.exit(1);

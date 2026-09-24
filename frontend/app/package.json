@@ -1,0 +1,12 @@
+{
+  "name": "@dongxing/app",
+  "version": "0.0.0",
+  "private": true,
+  "description": "懂行官方 React Native App（仅 iOS + Android）。占位包；实现另开。非小程序交付路径。",
+  "scripts": {
+    "placeholder": "echo 'RN App scaffold not yet initialized; iOS+Android only'"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

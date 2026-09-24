@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Load mock plans JSON, run scoring, print a JSON summary to stdout.
- * Usage: node engine/run-mock.js [path-to-plans.json]
+ * Usage: node backend/engine/run-mock.js [path-to-plans.json]
  */
 
 'use strict';

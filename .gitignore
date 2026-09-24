@@ -1,5 +1,9 @@
 node_modules/
-miniprogram/node_modules/
-miniprogram/miniprogram_npm/
+frontend/miniprogram/node_modules/
+frontend/miniprogram/miniprogram_npm/
+backend/engine/node_modules/
+backend/engine/dist/
+packages/shared/node_modules/
+packages/shared/dist/
 .DS_Store
 *.log

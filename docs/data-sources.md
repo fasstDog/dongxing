@@ -1,6 +1,6 @@
 # 合规数据源选型与缓存降级（草稿）
 
-> 状态：§8 已拍板；适配器骨架见 `engine/adapters/train.mock.js`  
+> 状态：§8 已拍板；适配器骨架见 `backend/engine/adapters/train.mock.js`  
 > 约束（拍板）：合规数据源；**密钥不进仓**；**禁止违规爬取**。  
 > **火车优先**，航班第二（空铁混搭）。引擎只消费 `Leg` / `TransferPlay`，不臆造车次票价。
 
@@ -26,7 +26,7 @@
 
 1. **已签约的数据服务商 / 开放平台**（合同允许火车时刻 + 参考价，有 SLA 与用途条款）  
 2. **铁路或地方政府公开、允许商用的开放数据**（若有；需核对许可证）  
-3. **过渡期继续 `source: "mock"`**（`data/mock/legs-*.json`），产品与引擎并行，不挡演示  
+3. **过渡期继续 `source: "mock"`**（`backend/data/mock/legs-*.json`），产品与引擎并行，不挡演示  
 
 明确不做：模拟登录、绕过验证码、批量抓取购票页 HTML/私有接口。
 
@@ -84,7 +84,7 @@
 
 ## 5. 「怎么玩」内容源
 
-- 当前：人工维护 `data/hub-pois.json`（`TransferPlay`）  
+- 当前：人工维护 `backend/data/hub-pois.json`（`TransferPlay`）  
 - 后续若接地图 / POI API：仅用**官方或合规 SDK**，距站与建议时长仍需人工或规则审校  
 - 密钥同样不进仓
 
@@ -102,7 +102,7 @@
 
 1. ~~字段定稿 + mock 腿 / TransferPlay~~（已完成）  
 2. ~~§8 拍板：纯 mock 可演示；短名单私有；单机内存缓存~~（已完成）  
-3. ~~`train.mock` 适配器骨架~~（`engine/adapters/train.mock.js`）  
+3. ~~`train.mock` 适配器骨架~~（`backend/engine/adapters/train.mock.js`）  
 4. 引擎枚举改为优先 `require('../adapters/train.mock').search`（规则引擎）  
 5. 后续：`train.<vendor>.js` 合规源；再启 `flight.*`
 
@@ -114,4 +114,4 @@
 - [x] **意向合规火车数据源**：短名单由数据侧私有维护（商务细节不进公开仓库）；公开文档只写「合规 API / 官方或授权渠道」，禁止违规爬取。飞机源第二优先。  
 - [x] **缓存**：落地先 **单机内存** + 过期降级；QPS/多实例需要时再上 Redis，不提前上重。  
 
-适配器目录约定（无密钥）：`engine/adapters/` 后续按 `train.mock.js` / `train.<vendor>.js` 命名；密钥只走环境变量或密钥管理，禁止进仓。
+适配器目录约定（无密钥）：`backend/engine/adapters/` 后续按 `train.mock.js` / `train.<vendor>.js` 命名；密钥只走环境变量或密钥管理，禁止进仓。

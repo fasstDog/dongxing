@@ -12,8 +12,8 @@
 1. **全栈 TypeScript only**  
    - 新代码（引擎、契约、客户端、工具）一律 TypeScript。  
    - **禁止新增 Python** 模块或脚本作为产品路径。  
-   - 现有 `engine/search.py`、`score.py`、`export_fe.py`：**冻结**（可对照，不扩展）；择期迁移到 TS 后归档/删除。  
-   - 现仓 `engine/*.js` 为过渡实现；主链服务化时迁 TS（**本次仅文档锁定，不改写引擎**）。
+   - 现有 `backend/engine/search.py`、`score.py`、`export_fe.py`：**冻结**（可对照，不扩展）；择期迁移到 TS 后归档/删除。  
+   - 现仓 `backend/engine/*.js` 为过渡实现；主链服务化时迁 TS（**本次仅文档锁定，不改写引擎**）。
 
 2. **正式客户端 = 两端（仅此）**  
    - **微信小程序**：微信原生运行时 + Vant Weapp（`@vant/weapp`）。  
@@ -40,7 +40,7 @@
 
 | 做 | 不做（本 ADR 范围） |
 |----|---------------------|
-| 文档与评审按 TS + 小程序 + 官方 RN(iOS/Android) 验收 | 立即把 `engine/*.py` / `*.js` 改写成 TS |
+| 文档与评审按 TS + 小程序 + 官方 RN(iOS/Android) 验收 | 立即把 `backend/engine/*.py` / `*.js` 改写成 TS |
 | 新适配器/服务用 TS | 新增 Python 导出/打分入口 |
 | 小程序与 RN App 同契约升级 | 为 App 另起一套 plans 字段；承诺桌面/Web/tvOS/Alita 为产品端 |
 | 分端 UI 工程 | 用 RN/Alita 一码出小程序 |

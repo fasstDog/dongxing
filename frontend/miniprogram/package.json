@@ -5,6 +5,6 @@
   "description": "懂行微信小程序脚手架（Vant Weapp）",
   "dependencies": {
     "@vant/weapp": "^1.11.7",
-    "@dongxing/shared": "file:../packages/shared"
+    "@dongxing/shared": "file:../../packages/shared"
   }
 }

@@ -6,8 +6,8 @@
  *
  * 默认合并读取 data/mock/legs-*.json（含徐拉 / 沪蓉 / 京汉 等）
  *
- *   node engine/adapters/flight.mock.js 西安 拉萨
- *   node engine/adapters/flight.mock.js 上海 成都 2026-10-08
+ *   node backend/engine/adapters/flight.mock.js 西安 拉萨
+ *   node backend/engine/adapters/flight.mock.js 上海 成都 2026-10-08
  */
 
 'use strict';
@@ -15,7 +15,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '../../..');
+const ROOT = path.resolve(__dirname, '../..');
 const DEFAULT_LEGS_DIR = path.join(ROOT, 'data', 'mock');
 const DEFAULT_TTL_MS = 15 * 60 * 1000;
 
@@ -204,7 +204,7 @@ function mainCli() {
         ok: false,
         error: 'USAGE',
         hint:
-          'node engine/adapters/flight.mock.js <from_city> <to_city> [YYYY-MM-DD] [--after ISO]',
+          'node backend/engine/adapters/flight.mock.js <from_city> <to_city> [YYYY-MM-DD] [--after ISO]',
       })
     );
     process.exit(1);

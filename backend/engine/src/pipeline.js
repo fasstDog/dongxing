@@ -12,7 +12,7 @@ const { searchLegs } = require('./adapters');
 const { checkConnection, bufferMinutes } = require('./mct');
 const { pickMainCards } = require('./score');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '../..'); // backend/ (engine + data siblings)
 const HUB_POIS_PATH = path.join(ROOT, 'data', 'hub-pois.json');
 
 /** Hub list from docs/hubs.md (12 cities, 西宁 required). */
