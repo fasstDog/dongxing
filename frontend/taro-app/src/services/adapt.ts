@@ -200,16 +200,34 @@ export function adaptResponse(raw: any, scenarioKey?: string) {
   } else if (raw.response) {
     response = raw.response;
   }
-  const main = sortMain(
-    (Array.isArray(response.main) ? response.main : [])
-      .map(adaptPlan)
-      .filter(Boolean) as UiPlan[]
-  );
+  const adaptList = (list: any) =>
+    (Array.isArray(list) ? list : []).map(adaptPlan).filter(Boolean) as UiPlan[];
+  const main = sortMain(adaptList(response.main));
+  const more = adaptList(response.more);
   return {
     ok: response.ok !== false,
     main,
+    more,
     error: response.error || null
   };
+}
+
+/** 有途经时用对应 mock 场景；没有匹配场景则回 auto。不跟途经时一律 auto。 */
+const VIA_SCENARIO: Record<string, string> = {
+  西宁: 'user_via_xining',
+  遂宁: 'user_via_suining'
+};
+
+export function scenarioKeyForVias(vias: string[] | undefined, followPath: boolean): string {
+  if (!followPath || !vias || !vias.length) return 'auto';
+  for (let i = 0; i < vias.length; i++) {
+    const name = String(vias[i] || '');
+    const cities = Object.keys(VIA_SCENARIO);
+    for (let j = 0; j < cities.length; j++) {
+      if (name.indexOf(cities[j]) >= 0) return VIA_SCENARIO[cities[j]];
+    }
+  }
+  return 'auto';
 }
 
 function loadLocalAdaptedPlans(fromCity: string, toCity: string, scenarioKey?: string) {
@@ -262,10 +280,16 @@ export function loadAdaptedPlans(
 }
 
 export function findPlan(fromCity: string, toCity: string, planId: string) {
-  const raw = getRawForOd(fromCity, toCity);
-  if (!raw) return null;
-  const adapted = adaptResponse(raw);
-  return (adapted.main || []).find((p) => p.id === planId) || null;
+  const raw = getRawForOd(fromCity, toCity) as any;
+  if (!raw || !planId) return null;
+  const keys: (string | undefined)[] = raw.scenarios ? Object.keys(raw.scenarios) : [undefined];
+  for (let i = 0; i < keys.length; i++) {
+    const adapted = adaptResponse(raw, keys[i]);
+    const all = (adapted.main || []).concat(adapted.more || []);
+    const hit = all.find((p) => p.id === planId);
+    if (hit) return hit;
+  }
+  return null;
 }
 
 export { DISCLAIMER, PLAN_TYPE_LABELS };

@@ -52,7 +52,10 @@ export default function LoadingPage() {
     const resultUrl = [
       `/pages/results/index?from=${encodeURIComponent(fromCity)}`,
       `to=${encodeURIComponent(toCity)}`,
-      viaCities.length ? `vias=${encodeURIComponent(viaCities.join(','))}` : ''
+      `fromName=${encodeURIComponent(fromName)}`,
+      `toName=${encodeURIComponent(toName)}`,
+      viaCities.length ? `vias=${encodeURIComponent(viaCities.join(','))}` : '',
+      stops.length ? `viaNames=${encodeURIComponent(stops.join(','))}` : ''
     ]
       .filter(Boolean)
       .join('&');

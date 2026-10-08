@@ -3,7 +3,7 @@ import { View, Text } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import Disclaimer from '../../components/Disclaimer';
 import { findPlan, type UiPlan } from '../../services/adapt';
-import { getDongxingGlobal } from '../../app';
+import { getDongxingGlobal } from '../../services/store';
 import './index.scss';
 
 export default function DetailPage() {

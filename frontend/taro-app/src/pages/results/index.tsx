@@ -1,174 +1,215 @@
 import { useCallback, useEffect, useState } from 'react';
 import { View, Text } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
-import PlanCard from '../../components/PlanCard';
 import Disclaimer from '../../components/Disclaimer';
-import { loadAdaptedPlans, type UiPlan } from '../../services/adapt';
-import { getDongxingGlobal } from '../../app';
+import { loadAdaptedPlans, scenarioKeyForVias, type UiPlan } from '../../services/adapt';
+import { getDongxingGlobal } from '../../services/store';
 import './index.scss';
 
-const LOADING_MS = 700;
-const SAMPLE_OD: Record<string, { fromCity: string; toCity: string }> = {
-  xz: { fromCity: '徐州', toCity: '拉萨' },
-  sh: { fromCity: '上海', toCity: '成都' },
-  bj: { fromCity: '北京', toCity: '武汉' },
-  cd: { fromCity: '成都', toCity: '重庆' }
+const PRESS = { hoverStartTime: 0, hoverStayTime: 80 } as const;
+
+const dec = (s?: string) => {
+  try {
+    return decodeURIComponent(s || '');
+  } catch (e) {
+    return s || '';
+  }
 };
+
+type Mode = 'path' | 'recommend';
 
 export default function ResultsPage() {
   const router = useRouter();
   const [status, setStatus] = useState<'loading' | 'ok' | 'empty' | 'error'>('loading');
-  const [plans, setPlans] = useState<UiPlan[]>([]);
+  const [main, setMain] = useState<UiPlan[]>([]);
+  const [more, setMore] = useState<UiPlan[]>([]);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [mode, setMode] = useState<Mode>('path');
   const [fromCity, setFromCity] = useState('徐州');
   const [toCity, setToCity] = useState('拉萨');
   const [vias, setVias] = useState<string[]>([]);
-  const [demoEmpty, setDemoEmpty] = useState(false);
-  const [demoError, setDemoError] = useState(false);
-  const [odLine, setOdLine] = useState('');
-  const [notice, setNotice] = useState('');
+  const [names, setNames] = useState<string[]>(['徐州', '拉萨']);
 
-  const applyOd = (from: string, to: string, viaList: string[], empty: boolean, error: boolean) => {
-    setFromCity(from);
-    setToCity(to);
-    setVias(viaList);
-    setDemoEmpty(empty);
-    setDemoError(error);
-    setOdLine(`${from} → ${to}${viaList.length ? `（途经 ${viaList.join('、')}）` : ''}`);
-    setNotice(
-      viaList.length
-        ? `已记录途经：${viaList.join('、')}（样例仍按出发/到达出方案）`
-        : '只推荐路线，不卖票。价格、时刻都是参考。'
-    );
-  };
-
-  const runLoad = useCallback(
-    (from: string, to: string, viaList: string[], empty: boolean, error: boolean) => {
-      setStatus('loading');
-      setPlans([]);
-      setTimeout(() => {
-        if (error) {
-          setStatus('error');
+  const runLoad = useCallback((from: string, to: string, viaList: string[], followPath: boolean) => {
+    setStatus('loading');
+    setMain([]);
+    setMore([]);
+    setMoreOpen(false);
+    loadAdaptedPlans(from, to, {
+      vias: viaList,
+      scenarioKey: scenarioKeyForVias(viaList, followPath)
+    })
+      .then((adapted: any) => {
+        const list: UiPlan[] = (adapted && adapted.main) || [];
+        const extra: UiPlan[] = (adapted && adapted.more) || [];
+        const code = adapted && adapted.error && (adapted.error.code || adapted.error);
+        if (adapted && adapted.ok === false && list.length === 0) {
+          setStatus(!code || code === 'NO_FEASIBLE' || code === 'NO_LEGS' || code === 'empty' ? 'empty' : 'error');
           return;
         }
-        if (empty) {
+        if (!list.length) {
           setStatus('empty');
           return;
         }
-        loadAdaptedPlans(from, to, { vias: viaList })
-          .then((adapted: any) => {
-            const main: UiPlan[] = (adapted && adapted.main) || [];
-            const code = adapted && adapted.error && (adapted.error.code || adapted.error);
-            if (adapted && adapted.ok === false && main.length === 0) {
-              if (code === 'NO_FEASIBLE' || code === 'NO_LEGS' || !code) {
-                setStatus('empty');
-                return;
-              }
-              setStatus('error');
-              return;
-            }
-            if (!main.length) {
-              setStatus('empty');
-              return;
-            }
-            getDongxingGlobal().lastPlans = main;
-            setPlans(main);
-            setStatus('ok');
-          })
-          .catch(() => setStatus('error'));
-      }, LOADING_MS);
-    },
-    []
-  );
+        getDongxingGlobal().lastPlans = list.concat(extra);
+        setMain(list);
+        setMore(extra);
+        setStatus('ok');
+      })
+      .catch(() => setStatus('error'));
+  }, []);
 
   useEffect(() => {
-    const from = decodeURIComponent(router.params.from || '徐州');
-    const to = decodeURIComponent(router.params.to || '拉萨');
-    const viasRaw = router.params.vias ? decodeURIComponent(router.params.vias) : '';
-    const viaList = viasRaw ? viasRaw.split(',').filter(Boolean) : [];
-    const empty = router.params.demoEmpty === '1';
-    const error = router.params.demoError === '1';
-    applyOd(from, to, viaList, empty, error);
-    runLoad(from, to, viaList, empty, error);
+    const from = dec(router.params.from) || '徐州';
+    const to = dec(router.params.to) || '拉萨';
+    const viaList = dec(router.params.vias).split(',').filter(Boolean);
+    const fromName = dec(router.params.fromName) || from;
+    const toName = dec(router.params.toName) || to;
+    const viaNames = dec(router.params.viaNames).split(',').filter(Boolean);
+    const shownVias = viaList.map((city, i) => viaNames[i] || city);
+    setFromCity(from);
+    setToCity(to);
+    setVias(viaList);
+    setNames([fromName, ...shownVias, toName]);
+    setMode('path');
+    runLoad(from, to, viaList, viaList.length > 0);
   }, [router.params, runLoad]);
 
-  const onBackQuery = () => {
-    Taro.navigateBack({ fail: () => Taro.redirectTo({ url: '/pages/query/index' }) });
+  const onMode = (next: Mode) => {
+    if (next === mode) return;
+    setMode(next);
+    runLoad(fromCity, toCity, vias, next === 'path');
   };
 
-  const onEmptySample = (key: string) => {
-    const s = SAMPLE_OD[key] || SAMPLE_OD.xz;
-    applyOd(s.fromCity, s.toCity, [], false, false);
-    runLoad(s.fromCity, s.toCity, [], false, false);
-  };
-
-  const onOpenDetail = (id: string) => {
-    const q = [
-      `id=${encodeURIComponent(id)}`,
-      `from=${encodeURIComponent(fromCity)}`,
-      `to=${encodeURIComponent(toCity)}`
-    ].join('&');
+  const onOpen = (id: string) => {
+    const q = [`id=${encodeURIComponent(id)}`, `from=${encodeURIComponent(fromCity)}`, `to=${encodeURIComponent(toCity)}`].join('&');
     Taro.navigateTo({ url: `/pages/detail/index?${q}` });
   };
 
-  return (
-    <View className='page results-page'>
-      {notice ? <View className='notice'>{notice}</View> : null}
-      {odLine ? <View className='od-line'>{odLine}</View> : null}
+  const onBack = () => {
+    Taro.navigateBack({ fail: () => Taro.redirectTo({ url: '/pages/query/index' }) });
+  };
 
-      {status === 'loading' ? (
-        <View className='state-wrap'>
-          <Text className='loading-text'>正在组合方案…</Text>
-          <Text className='state-sub'>最省钱 / 最快 / 最综合 · 只荐不卖</Text>
+  return (
+    <View className='r-page'>
+      <View className='r-sky'>
+        <View className='r-route'>
+          {names.map((n, i) => (
+            <View key={`${n}-${i}`} className='r-route-item'>
+              {i > 0 ? <Text className='r-arrow'>→</Text> : null}
+              <Text className={i > 0 && i < names.length - 1 ? 'r-place r-place-via' : 'r-place'}>{n}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      {vias.length ? (
+        <View className='r-seg'>
+          <View
+            className={mode === 'path' ? 'r-seg-btn r-seg-on' : 'r-seg-btn'}
+            hoverClass='r-press'
+            {...PRESS}
+            onClick={() => onMode('path')}
+          >
+            <Text className={mode === 'path' ? 'r-seg-text r-seg-text-on' : 'r-seg-text'}>按你的路径</Text>
+          </View>
+          <View
+            className={mode === 'recommend' ? 'r-seg-btn r-seg-on' : 'r-seg-btn'}
+            hoverClass='r-press'
+            {...PRESS}
+            onClick={() => onMode('recommend')}
+          >
+            <Text className={mode === 'recommend' ? 'r-seg-text r-seg-text-on' : 'r-seg-text'}>系统推荐</Text>
+          </View>
         </View>
       ) : null}
 
-      {status === 'error' ? (
-        <View className='state-wrap'>
-          <Text className='state-title'>这趟没查到，多半是数据暂不可用</Text>
-          <Text className='state-sub'>价格、时刻都是参考，不保证有票。也可以改条件再查。</Text>
-          <View
-            className='btn-primary btn-block'
-            onClick={() => runLoad(fromCity, toCity, vias, demoEmpty, demoError)}
-          >
-            再试一次
-          </View>
-          <View className='btn-ghost btn-block' onClick={onBackQuery}>
-            改条件
-          </View>
+      {status === 'loading' ? (
+        <View className='r-list'>
+          <View className='r-bone' />
+          <View className='r-bone' />
+          <View className='r-bone r-bone-short' />
         </View>
       ) : null}
 
       {status === 'empty' ? (
-        <View className='state-wrap'>
-          <Text className='state-title'>这趟暂时拼不出方案</Text>
-          <Text className='state-sub'>
-            可能是城市名不好认、日期太偏，或这条线我们还没覆盖好。价格时刻都是参考，不保证有票。
-          </Text>
-          <View className='btn-ghost btn-block' onClick={onBackQuery}>
-            改查询条件
+        <View className='r-state'>
+          <Text className='r-state-title'>这趟暂时没有合适的走法</Text>
+          <Text className='r-state-sub'>换个城市，或去掉途经再试试</Text>
+          <View className='r-state-btn' hoverClass='r-press' {...PRESS} onClick={onBack}>
+            <Text className='r-state-btn-text'>改条件</Text>
           </View>
-          {Object.entries(SAMPLE_OD).map(([k, s]) => (
-            <View key={k} className='btn-ghost btn-block sample-btn' onClick={() => onEmptySample(k)}>
-              看看示例：{s.fromCity}→{s.toCity}
-            </View>
-          ))}
+        </View>
+      ) : null}
+
+      {status === 'error' ? (
+        <View className='r-state'>
+          <Text className='r-state-title'>这趟没查到</Text>
+          <Text className='r-state-sub'>过一会儿再试，或改个条件</Text>
+          <View className='r-state-btn' hoverClass='r-press' {...PRESS} onClick={() => runLoad(fromCity, toCity, vias, mode === 'path')}>
+            <Text className='r-state-btn-text'>再试一次</Text>
+          </View>
+          <View className='r-state-btn r-state-btn-ghost' hoverClass='r-press' {...PRESS} onClick={onBack}>
+            <Text className='r-state-btn-text r-state-btn-text-ghost'>改条件</Text>
+          </View>
         </View>
       ) : null}
 
       {status === 'ok' ? (
-        <View>
-          <View className='legend'>
-            <Text className='lg cheap'>最省钱</Text>
-            <Text className='lg fast'>最快</Text>
-            <Text className='lg balanced'>最综合</Text>
-          </View>
-          {plans.map((p) => (
-            <PlanCard key={p.id} plan={p} onOpen={onOpenDetail} />
+        <View className='r-list'>
+          {main.map((p) => (
+            <View key={p.id} className={`r-card r-card-${p.type}`} hoverClass='r-press' {...PRESS} onClick={() => onOpen(p.id)}>
+              <View className='r-card-top'>
+                <Text className={`r-tag r-tag-${p.type}`}>{p.typeLabel || '方案'}</Text>
+                <Text className='r-xfer'>{p.transfers ? `${p.transfers} 次换乘` : '不用换乘'}</Text>
+              </View>
+              {p.type === 'fast' ? (
+                <View className='r-metric'>
+                  <Text className={`r-hero r-hero-${p.type}`}>{p.duration}</Text>
+                  <Text className='r-sub'>{p.price} · 参考价</Text>
+                </View>
+              ) : p.type === 'balanced' ? (
+                <View className='r-metric r-metric-pair'>
+                  <Text className={`r-hero r-hero-pair r-hero-${p.type}`}>{p.price}</Text>
+                  <Text className='r-pair-gap'>·</Text>
+                  <Text className={`r-hero r-hero-pair r-hero-${p.type}`}>{p.duration}</Text>
+                </View>
+              ) : (
+                <View className='r-metric'>
+                  <Text className={`r-hero r-hero-${p.type}`}>{p.price}</Text>
+                  <Text className='r-sub'>{p.duration} · 参考价</Text>
+                </View>
+              )}
+              {p.routeOneLine ? <Text className='r-line'>{p.routeOneLine}</Text> : null}
+              {p.why ? <Text className='r-why'>{p.why}</Text> : null}
+            </View>
           ))}
+
+          {more.length ? (
+            <View className='r-more'>
+              <View className='r-more-head' hoverClass='r-press' {...PRESS} onClick={() => setMoreOpen((v) => !v)}>
+                <Text className='r-more-title'>{moreOpen ? '收起' : '更多方案'}</Text>
+                <Text className='r-more-count'>{more.length}</Text>
+              </View>
+              {moreOpen
+                ? more.map((p) => (
+                    <View key={p.id} className='r-more-row' hoverClass='r-press' {...PRESS} onClick={() => onOpen(p.id)}>
+                      <Text className={`r-tag r-tag-sm r-tag-${p.type}`}>{p.typeLabel || '方案'}</Text>
+                      <View className='r-more-main'>
+                        <Text className='r-more-line'>{p.routeOneLine || p.duration}</Text>
+                        <Text className='r-more-meta'>
+                          {p.duration} · {p.price}
+                        </Text>
+                      </View>
+                    </View>
+                  ))
+                : null}
+            </View>
+          ) : null}
+
+          <Disclaimer />
         </View>
       ) : null}
-
-      <Disclaimer />
     </View>
   );
 }
