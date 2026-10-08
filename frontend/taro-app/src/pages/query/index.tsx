@@ -167,8 +167,11 @@ export default function QueryPage() {
       `to=${encodeURIComponent(to.city)}`,
       `fromName=${encodeURIComponent(from.name)}`,
       `toName=${encodeURIComponent(to.name)}`,
+      `fromType=${encodeURIComponent(from.type)}`,
+      `toType=${encodeURIComponent(to.type)}`,
       viaList.length ? `vias=${encodeURIComponent(viaList.map((v) => v.city).join(','))}` : '',
-      viaList.length ? `viaNames=${encodeURIComponent(viaList.map((v) => v.name).join(','))}` : ''
+      viaList.length ? `viaNames=${encodeURIComponent(viaList.map((v) => v.name).join(','))}` : '',
+      viaList.length ? `viaTypes=${encodeURIComponent(viaList.map((v) => v.type).join(','))}` : ''
     ]
       .filter(Boolean)
       .join('&');

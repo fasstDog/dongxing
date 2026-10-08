@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, Text } from '@tarojs/components';
+import { View, Text, Image } from '@tarojs/components';
+import { PLACE_ICON } from '../../assets/place';
 import Taro, { useRouter } from '@tarojs/taro';
 import { loadAdaptedPlans } from '../../services/adapt';
 import './index.scss';
@@ -33,7 +34,13 @@ export default function LoadingPage() {
   const toName = dec(router.params.toName) || toCity;
   const viaCities = dec(router.params.vias).split(',').filter(Boolean);
   const viaNames = dec(router.params.viaNames).split(',').filter(Boolean);
+  const viaTypes = dec(router.params.viaTypes).split(',').filter(Boolean);
+  const toType = dec(router.params.toType) || 'city';
   const stops = viaCities.map((city, i) => viaNames[i] || city);
+  // 每一段的载具看「下一点」的类型：机场=飞机，码头=轮船，火车站/城市=火车
+  const legDest = stops.map((_, i) => viaTypes[i] || 'city').concat(toType).slice(0, 4);
+  const crafts = legDest.map((t) => (t === 'airport' || t === 'port' ? t : 'station'));
+  const legs = Math.max(1, Math.min(4, crafts.length));
 
   const [nonce, setNonce] = useState(0);
   const [failed, setFailed] = useState(false);
@@ -88,11 +95,14 @@ export default function LoadingPage() {
       <View className='ld-card'>
         <View className='ld-route'>
           <View className='ld-rail' />
-          <View className={`ld-ticket ld-go-${Math.min(stops.length, 3)}`}>
-            <View className='ld-ticket-bar' />
-            <View className='ld-ticket-line' />
-            <View className='ld-ticket-line ld-ticket-line-short' />
-          </View>
+          {crafts.map((kind, i) => (
+            <Image
+              key={`craft-${i}`}
+              className={`ld-craft ${i > 0 ? 'ld-craft-wait' : ''} ld-k-${legs}-${i}`}
+              src={PLACE_ICON[kind]}
+              mode='aspectFit'
+            />
+          ))}
 
           <View className='ld-stop'>
             <View className='ld-dot ld-dot-from' />

@@ -176,84 +176,140 @@
   font-weight: 600;
 }
 
-// 小车票沿轨道从出发滑到到达。距离 = 途经数对应的站间距（每站 120px）
-.ld-ticket {
+// 载具沿轨道分段滑行：每段看下一点的类型。无动画时只留第一段的图标停在出发端。
+.ld-craft {
   position: absolute;
   z-index: 3;
-  left: 8px;
-  top: 32px;
-  width: 52px;
-  height: 56px;
-  border-radius: 10px;
-  background: $color-surface;
-  border: 2px solid $color-line-warm;
-  box-shadow: 0 6px 14px rgba(28, 43, 51, 0.12);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: hidden;
+  left: 2px;
+  top: 30px;
+  width: 64px;
+  height: 64px;
 }
 
-.ld-ticket-bar {
-  width: 100%;
-  height: 10px;
-  background: $color-coral;
+.ld-craft-wait {
+  opacity: 0;
 }
 
-.ld-ticket-line {
-  width: 28px;
-  height: 4px;
-  margin-top: 10px;
-  border-radius: 2px;
-  background: $color-line-warm;
+.ld-k-1-0 {
+  animation: ld-k-1-0 1.5s linear infinite;
 }
 
-.ld-ticket-line-short {
-  width: 18px;
+@keyframes ld-k-1-0 {
+  0% { opacity: 1; transform: translateY(0); }
+  92.00% { opacity: 1; transform: translateY(120px); }
+  100.00% { opacity: 0; transform: translateY(120px); }
+  100% { opacity: 0; transform: translateY(0); }
 }
 
-.ld-go-0 {
-  animation: ld-slide-0 2.8s linear infinite;
+.ld-k-2-0 {
+  animation: ld-k-2-0 3.0s linear infinite;
 }
 
-.ld-go-1 {
-  animation: ld-slide-1 2.8s linear infinite;
+@keyframes ld-k-2-0 {
+  0% { opacity: 1; transform: translateY(0); }
+  46.00% { opacity: 1; transform: translateY(120px); }
+  50.00% { opacity: 0; transform: translateY(120px); }
+  100% { opacity: 0; transform: translateY(0); }
 }
 
-.ld-go-2 {
-  animation: ld-slide-2 2.8s linear infinite;
+.ld-k-2-1 {
+  animation: ld-k-2-1 3.0s linear infinite;
 }
 
-.ld-go-3 {
-  animation: ld-slide-3 2.8s linear infinite;
+@keyframes ld-k-2-1 {
+  0% { opacity: 0; transform: translateY(120px); }
+  50.00% { opacity: 0; transform: translateY(120px); }
+  54.00% { opacity: 1; transform: translateY(120px); }
+  96.00% { opacity: 1; transform: translateY(240px); }
+  100.00% { opacity: 0; transform: translateY(240px); }
+  100% { opacity: 0; transform: translateY(0); }
 }
 
-@keyframes ld-slide-0 {
-  0% { transform: translateY(0); }
-  72% { transform: translateY(120px); }
-  86% { transform: translateY(120px); }
-  100% { transform: translateY(0); }
+.ld-k-3-0 {
+  animation: ld-k-3-0 4.5s linear infinite;
 }
 
-@keyframes ld-slide-1 {
-  0% { transform: translateY(0); }
-  72% { transform: translateY(240px); }
-  86% { transform: translateY(240px); }
-  100% { transform: translateY(0); }
+@keyframes ld-k-3-0 {
+  0% { opacity: 1; transform: translateY(0); }
+  30.67% { opacity: 1; transform: translateY(120px); }
+  33.33% { opacity: 0; transform: translateY(120px); }
+  100% { opacity: 0; transform: translateY(0); }
 }
 
-@keyframes ld-slide-2 {
-  0% { transform: translateY(0); }
-  72% { transform: translateY(360px); }
-  86% { transform: translateY(360px); }
-  100% { transform: translateY(0); }
+.ld-k-3-1 {
+  animation: ld-k-3-1 4.5s linear infinite;
 }
 
-@keyframes ld-slide-3 {
-  0% { transform: translateY(0); }
-  72% { transform: translateY(480px); }
-  86% { transform: translateY(480px); }
-  100% { transform: translateY(0); }
+@keyframes ld-k-3-1 {
+  0% { opacity: 0; transform: translateY(120px); }
+  33.33% { opacity: 0; transform: translateY(120px); }
+  36.00% { opacity: 1; transform: translateY(120px); }
+  64.00% { opacity: 1; transform: translateY(240px); }
+  66.67% { opacity: 0; transform: translateY(240px); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+.ld-k-3-2 {
+  animation: ld-k-3-2 4.5s linear infinite;
+}
+
+@keyframes ld-k-3-2 {
+  0% { opacity: 0; transform: translateY(240px); }
+  66.67% { opacity: 0; transform: translateY(240px); }
+  69.33% { opacity: 1; transform: translateY(240px); }
+  97.33% { opacity: 1; transform: translateY(360px); }
+  100.00% { opacity: 0; transform: translateY(360px); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+.ld-k-4-0 {
+  animation: ld-k-4-0 6.0s linear infinite;
+}
+
+@keyframes ld-k-4-0 {
+  0% { opacity: 1; transform: translateY(0); }
+  23.00% { opacity: 1; transform: translateY(120px); }
+  25.00% { opacity: 0; transform: translateY(120px); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+.ld-k-4-1 {
+  animation: ld-k-4-1 6.0s linear infinite;
+}
+
+@keyframes ld-k-4-1 {
+  0% { opacity: 0; transform: translateY(120px); }
+  25.00% { opacity: 0; transform: translateY(120px); }
+  27.00% { opacity: 1; transform: translateY(120px); }
+  48.00% { opacity: 1; transform: translateY(240px); }
+  50.00% { opacity: 0; transform: translateY(240px); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+.ld-k-4-2 {
+  animation: ld-k-4-2 6.0s linear infinite;
+}
+
+@keyframes ld-k-4-2 {
+  0% { opacity: 0; transform: translateY(240px); }
+  50.00% { opacity: 0; transform: translateY(240px); }
+  52.00% { opacity: 1; transform: translateY(240px); }
+  73.00% { opacity: 1; transform: translateY(360px); }
+  75.00% { opacity: 0; transform: translateY(360px); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+.ld-k-4-3 {
+  animation: ld-k-4-3 6.0s linear infinite;
+}
+
+@keyframes ld-k-4-3 {
+  0% { opacity: 0; transform: translateY(360px); }
+  75.00% { opacity: 0; transform: translateY(360px); }
+  77.00% { opacity: 1; transform: translateY(360px); }
+  98.00% { opacity: 1; transform: translateY(480px); }
+  100.00% { opacity: 0; transform: translateY(480px); }
+  100% { opacity: 0; transform: translateY(0); }
 }
 
 .ld-caption {
