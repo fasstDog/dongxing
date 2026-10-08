@@ -11,7 +11,7 @@
 // ---- 顶部 ----
 .q-hero {
   background: $color-brand;
-  padding: $space-3 $space-4 104px;
+  padding: $space-3 $space-4 112px;
 }
 
 .q-hero-top {
@@ -51,12 +51,6 @@
   line-height: $line-tight;
 }
 
-.q-hero-sub {
-  margin-top: $space-1;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: $font-sm;
-}
-
 // ---- 卡片 ----
 .q-card {
   margin: $space-4 $space-4 0;
@@ -69,13 +63,6 @@
 .q-card-od {
   margin-top: -72px;
   padding-top: $space-2;
-}
-
-.q-card-title {
-  font-size: $font-md;
-  font-weight: $weight-bold;
-  color: $color-text;
-  margin-bottom: $space-2;
 }
 
 // ---- 起终点轨道 ----
@@ -242,63 +229,6 @@
   font-size: $font-sm;
 }
 
-
-// ---- 日期分段 ----
-.q-seg {
-  display: flex;
-  flex-direction: row;
-  background: $color-bg;
-  border-radius: $radius-pill;
-  padding: 6px;
-}
-
-.q-seg-item {
-  flex: 1;
-  height: 64px;
-  border-radius: $radius-pill;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.q-seg-item-on {
-  background: $color-surface;
-  box-shadow: 0 2px 8px rgba(25, 137, 250, 0.15);
-}
-
-.q-seg-text {
-  color: $color-text-2;
-  font-size: $font-sm;
-}
-
-.q-seg-text-on {
-  color: $color-brand;
-  font-weight: $weight-bold;
-}
-
-.q-date-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: $space-3;
-  min-height: $touch-min;
-  padding: 0 $space-3;
-  border-radius: $radius-md;
-  background: $color-brand-soft;
-}
-
-.q-date-text {
-  color: $color-text;
-  font-size: $font-lg;
-  font-weight: $weight-medium;
-}
-
-.q-date-arrow {
-  color: $color-brand;
-  font-size: $font-sm;
-}
-
 // ---- 提示条 ----
 .q-banner {
   margin: $space-4 $space-4 0;
@@ -354,8 +284,6 @@
   font-weight: $weight-bold;
   letter-spacing: 2px;
 }
-
-
 
 // ---- 样例 ----
 .q-section-title {

@@ -4,11 +4,10 @@
  */
 import Taro from '@tarojs/taro';
 
+/** 查询页草稿。不指定日期，搜索按「日期灵活」处理。 */
 export type QueryDraft = {
   fromCity: string;
   toCity: string;
-  dateFlexible: boolean;
-  date: string;
   vias: string[];
 };
 
@@ -49,8 +48,6 @@ export function loadQueryDraft(): QueryDraft | null {
       return {
         fromCity: q.fromCity || '',
         toCity: q.toCity || '',
-        dateFlexible: q.dateFlexible !== false,
-        date: q.date || '',
         vias: Array.isArray(q.vias) ? q.vias.slice(0, 3) : []
       };
     }

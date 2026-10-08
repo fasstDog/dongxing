@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { View, Text, Input, Picker } from '@tarojs/components';
+import { View, Text, Input } from '@tarojs/components';
 import Taro, { useDidShow, useRouter } from '@tarojs/taro';
 import { loadQueryDraft, saveQueryDraft } from '../../services/store';
 import { QUERY_SAMPLES, MAX_VIAS, type QuerySample } from '../../data/samples';
@@ -9,46 +9,15 @@ import './index.scss';
 type FieldErrors = {
   from?: string;
   to?: string;
-  date?: string;
   vias: Record<number, string>;
 };
 
-const WEEK = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 const CITY_MAX_LEN = 12;
 const PLACEHOLDER_STYLE = `color:${color.text4}`;
 
-function pad(n: number) {
-  return n < 10 ? `0${n}` : String(n);
-}
-
-function toDateStr(d: Date) {
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-}
-
-function addDays(base: Date, days: number) {
-  const d = new Date(base.getTime());
-  d.setDate(d.getDate() + days);
-  return d;
-}
-
-function dateLabel(dateStr: string, todayStr: string, tomorrowStr: string) {
-  const m = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if (!m) return dateStr;
-  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
-  const rel = dateStr === todayStr ? ' · 今天' : dateStr === tomorrowStr ? ' · 明天' : '';
-  return `${Number(m[2])}月${Number(m[3])}日 ${WEEK[d.getDay()]}${rel}`;
-}
-
 const clean = (s: string) => String(s || '').trim();
 
-function validate(
-  from: string,
-  to: string,
-  vias: string[],
-  dateFlexible: boolean,
-  date: string,
-  todayStr: string
-): FieldErrors {
+function validate(from: string, to: string, vias: string[]): FieldErrors {
   const errs: FieldErrors = { vias: {} };
   const f = clean(from);
   const t = clean(to);
@@ -68,10 +37,6 @@ function validate(
     const dup = vias.findIndex((other, j) => j < i && clean(other) === v);
     if (dup >= 0) errs.vias[i] = `和途经 ${dup + 1} 重复了`;
   });
-  if (!dateFlexible) {
-    if (!date) errs.date = '选一下出发日期';
-    else if (date < todayStr) errs.date = '这天已经过了，换一天';
-  }
   return errs;
 }
 
@@ -84,21 +49,13 @@ function errorList(e: FieldErrors) {
     .sort((a, b) => a - b)
     .forEach((k) => list.push(e.vias[k]));
   if (e.to) list.push(e.to);
-  if (e.date) list.push(e.date);
   return list;
 }
 
 export default function QueryPage() {
   const router = useRouter();
-  const today = useMemo(() => new Date(), []);
-  const todayStr = toDateStr(today);
-  const tomorrowStr = toDateStr(addDays(today, 1));
-  const endStr = toDateStr(addDays(today, 60));
-
   const [fromCity, setFromCity] = useState('徐州');
   const [toCity, setToCity] = useState('拉萨');
-  const [dateFlexible, setDateFlexible] = useState(true);
-  const [date, setDate] = useState(tomorrowStr);
   const [vias, setVias] = useState<string[]>([]);
   const [attempted, setAttempted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -111,10 +68,6 @@ export default function QueryPage() {
       setToCity(decodeURIComponent(p.to || ''));
       const v = p.vias ? decodeURIComponent(p.vias).split(',') : [];
       setVias(v.slice(0, MAX_VIAS));
-      if (p.date) {
-        setDateFlexible(false);
-        setDate(decodeURIComponent(p.date));
-      }
       if (p.check === '1') setAttempted(true);
       return;
     }
@@ -123,18 +76,13 @@ export default function QueryPage() {
       setFromCity(draft.fromCity);
       setToCity(draft.toCity);
       setVias(draft.vias);
-      setDateFlexible(draft.dateFlexible);
-      if (draft.date && draft.date >= todayStr) setDate(draft.date);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useDidShow(() => setSubmitting(false));
 
-  const errors = useMemo(
-    () => validate(fromCity, toCity, vias, dateFlexible, date, todayStr),
-    [fromCity, toCity, vias, dateFlexible, date, todayStr]
-  );
+  const errors = useMemo(() => validate(fromCity, toCity, vias), [fromCity, toCity, vias]);
   const shown: FieldErrors = attempted ? errors : { vias: {} };
   const problems = errorList(errors);
   const isBlank = !clean(fromCity) && !clean(toCity) && vias.length === 0;
@@ -184,7 +132,6 @@ export default function QueryPage() {
     setFromCity('');
     setToCity('');
     setVias([]);
-    setDateFlexible(true);
     setAttempted(false);
   };
 
@@ -192,7 +139,6 @@ export default function QueryPage() {
     setFromCity(s.fromCity);
     setToCity(s.toCity);
     setVias(s.vias.slice());
-    setDateFlexible(true);
     setAttempted(false);
   };
 
@@ -203,18 +149,11 @@ export default function QueryPage() {
     const from = clean(fromCity);
     const to = clean(toCity);
     const viaList = vias.map(clean);
-    saveQueryDraft({
-      fromCity: from,
-      toCity: to,
-      dateFlexible,
-      date: dateFlexible ? '' : date,
-      vias: viaList
-    });
+    saveQueryDraft({ fromCity: from, toCity: to, vias: viaList });
     const q = [
       `from=${encodeURIComponent(from)}`,
       `to=${encodeURIComponent(to)}`,
-      viaList.length ? `vias=${encodeURIComponent(viaList.join(','))}` : '',
-      dateFlexible ? 'dateFlexible=1' : `date=${encodeURIComponent(date)}`
+      viaList.length ? `vias=${encodeURIComponent(viaList.join(','))}` : ''
     ]
       .filter(Boolean)
       .join('&');
@@ -240,7 +179,6 @@ export default function QueryPage() {
           </View>
         </View>
         <View className='q-hero-title'>直达之外，帮你找更聪明的走法</View>
-        <View className='q-hero-sub'>最省钱 · 最快 · 最综合</View>
       </View>
 
       {/* 起终点 + 有序途经 */}
@@ -324,34 +262,6 @@ export default function QueryPage() {
             </View>
           ) : null}
         </View>
-      </View>
-
-      {/* 日期 */}
-      <View className='q-card'>
-        <View className='q-card-title'>出发日期</View>
-        <View className='q-seg'>
-          <View
-            className={`q-seg-item ${dateFlexible ? 'q-seg-item-on' : ''}`}
-            onClick={() => setDateFlexible(true)}
-          >
-            <Text className={`q-seg-text ${dateFlexible ? 'q-seg-text-on' : ''}`}>日期灵活</Text>
-          </View>
-          <View
-            className={`q-seg-item ${!dateFlexible ? 'q-seg-item-on' : ''}`}
-            onClick={() => setDateFlexible(false)}
-          >
-            <Text className={`q-seg-text ${!dateFlexible ? 'q-seg-text-on' : ''}`}>指定日期</Text>
-          </View>
-        </View>
-        {dateFlexible ? null : (
-          <Picker mode='date' value={date} start={todayStr} end={endStr} onChange={(e) => setDate(String(e.detail.value))}>
-            <View className='q-date-row'>
-              <Text className='q-date-text'>{dateLabel(date, todayStr, tomorrowStr)}</Text>
-              <Text className='q-date-arrow'>更改 ›</Text>
-            </View>
-          </Picker>
-        )}
-        {renderError(shown.date)}
       </View>
 
       {/* 提交态 / 空态 / 错误态 */}
