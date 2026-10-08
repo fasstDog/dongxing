@@ -14,7 +14,7 @@
 
 | 页 | 路径 | 内容 |
 |----|------|------|
-| 查询 | `pages/query` | 出发/到达、日期灵活、途经≤3、样例 OD、三态演示开关 |
+| 查询 | `pages/query` | 出发/到达 + 交换、有序途经≤3（增删/上移）、日期灵活/指定、逐项校验与错误汇总、提交态、空态引导、本地样例（徐州→拉萨、成都→重庆，含/不含途经） |
 | 结果 | `pages/results` | 最省钱 / 最快 / 最综合 三主卡 + 加载/空/失败 |
 | 详情 | `pages/detail` | 怎么去 · 为什么 · 怎么玩 · 外链购票 CTA（无支付） |
 | 关于 | `pages/about` | 产品说明 / 免责 / 数据说明 |
@@ -60,6 +60,10 @@ npm run dev:rn
 
 完整 `@tarojs/*` 依赖体积较大。若当前 CI/沙箱 `npm i` 失败，以本骨架 + 过渡小程序为准继续演示；在开发者机器上按上文安装即可出 weapp 包。
 
+## 设计 token
+
+颜色、字号、间距、圆角、阴影统一在 `src/styles/tokens.scss`（TS 镜像 `src/styles/tokens.ts`，用于组件 props 颜色）。页面样式只用单层 class 选择器，不嵌套、不用 `gap`，保证 RN 端可编译。
+
 ## 目录
 
 ```
@@ -69,8 +73,9 @@ frontend/taro-app/
     app.ts / app.config.ts / app.scss
     pages/{query,results,detail,about}/
     components/{PlanCard,Disclaimer}/
-    services/{config,api,adapt}.ts
-    data/plans-*.json
+    styles/tokens.{scss,ts}
+    services/{config,api,adapt,store}.ts
+    data/plans-*.json · data/samples.ts
   package.json
   project.config.json
 ```

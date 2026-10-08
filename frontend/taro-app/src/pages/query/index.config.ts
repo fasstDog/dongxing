@@ -1,1 +1,1 @@
-export default { navigationBarTitleText: '懂行 · 查询' };
+export default { navigationBarTitleText: '懂行' };
