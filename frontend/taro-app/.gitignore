@@ -4,3 +4,4 @@ dist/
 .rn_temp/
 *.log
 .DS_Store
+.swc/
