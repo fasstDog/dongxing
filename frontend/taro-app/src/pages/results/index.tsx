@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { View, Text } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
-import Disclaimer from '../../components/Disclaimer';
 import { loadAdaptedPlans, scenarioKeyForVias, type UiPlan } from '../../services/adapt';
 import { getDongxingGlobal } from '../../services/store';
 import './index.scss';
@@ -158,30 +157,17 @@ export default function ResultsPage() {
       {status === 'ok' ? (
         <View className='r-list'>
           {main.map((p) => (
-            <View key={p.id} className={`r-card r-card-${p.type}`} hoverClass='r-press' {...PRESS} onClick={() => onOpen(p.id)}>
+            <View key={p.id} className='r-card' hoverClass='r-press' {...PRESS} onClick={() => onOpen(p.id)}>
               <View className='r-card-top'>
                 <Text className={`r-tag r-tag-${p.type}`}>{p.typeLabel || '方案'}</Text>
                 <Text className='r-xfer'>{p.transfers ? `${p.transfers} 次换乘` : '不用换乘'}</Text>
               </View>
-              {p.type === 'fast' ? (
-                <View className='r-metric'>
-                  <Text className={`r-hero r-hero-${p.type}`}>{p.duration}</Text>
-                  <Text className='r-sub'>{p.price} · 参考价</Text>
-                </View>
-              ) : p.type === 'balanced' ? (
-                <View className='r-metric r-metric-pair'>
-                  <Text className={`r-hero r-hero-pair r-hero-${p.type}`}>{p.price}</Text>
-                  <Text className='r-pair-gap'>·</Text>
-                  <Text className={`r-hero r-hero-pair r-hero-${p.type}`}>{p.duration}</Text>
-                </View>
-              ) : (
-                <View className='r-metric'>
-                  <Text className={`r-hero r-hero-${p.type}`}>{p.price}</Text>
-                  <Text className='r-sub'>{p.duration} · 参考价</Text>
-                </View>
-              )}
-              {p.routeOneLine ? <Text className='r-line'>{p.routeOneLine}</Text> : null}
-              {p.why ? <Text className='r-why'>{p.why}</Text> : null}
+              <View className='r-metrics'>
+                <Text className={`r-num ${p.type === 'cheap' || p.type === 'balanced' ? `r-num-on r-num-${p.type}` : ''}`}>{p.price}</Text>
+                <Text className={`r-num r-num-dur ${p.type === 'fast' || p.type === 'balanced' ? `r-num-on r-num-${p.type}` : ''}`}>{p.duration}</Text>
+              </View>
+              <Text className='r-line'>{p.routeOneLine}</Text>
+              <Text className='r-why'>{p.why}</Text>
             </View>
           ))}
 
@@ -207,7 +193,6 @@ export default function ResultsPage() {
             </View>
           ) : null}
 
-          <Disclaimer />
         </View>
       ) : null}
     </View>
