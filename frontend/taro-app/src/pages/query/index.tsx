@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { View, Text, Input, Switch, Picker } from '@tarojs/components';
+import { View, Text, Input, Picker } from '@tarojs/components';
 import Taro, { useDidShow, useRouter } from '@tarojs/taro';
-import Disclaimer from '../../components/Disclaimer';
 import { loadQueryDraft, saveQueryDraft } from '../../services/store';
 import { QUERY_SAMPLES, MAX_VIAS, type QuerySample } from '../../data/samples';
 import { color } from '../../styles/tokens';
@@ -103,9 +102,6 @@ export default function QueryPage() {
   const [vias, setVias] = useState<string[]>([]);
   const [attempted, setAttempted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [showDemo, setShowDemo] = useState(false);
-  const [demoEmpty, setDemoEmpty] = useState(false);
-  const [demoError, setDemoError] = useState(false);
 
   // 预填：链接参数 > 上次查询 > 默认样例
   useEffect(() => {
@@ -198,8 +194,6 @@ export default function QueryPage() {
     setVias(s.vias.slice());
     setDateFlexible(true);
     setAttempted(false);
-    setDemoEmpty(false);
-    setDemoError(false);
   };
 
   const onSearch = () => {
@@ -220,9 +214,7 @@ export default function QueryPage() {
       `from=${encodeURIComponent(from)}`,
       `to=${encodeURIComponent(to)}`,
       viaList.length ? `vias=${encodeURIComponent(viaList.join(','))}` : '',
-      dateFlexible ? 'dateFlexible=1' : `date=${encodeURIComponent(date)}`,
-      `demoEmpty=${demoEmpty ? '1' : '0'}`,
-      `demoError=${demoError ? '1' : '0'}`
+      dateFlexible ? 'dateFlexible=1' : `date=${encodeURIComponent(date)}`
     ]
       .filter(Boolean)
       .join('&');
@@ -388,7 +380,8 @@ export default function QueryPage() {
       >
         <Text className='q-submit-text'>{submitting ? '正在组合方案…' : '开始推荐'}</Text>
       </View>
-      <View className='q-submit-note'>只推荐路线，不卖票 · 购票跳转 12306 / 航司 / OTA</View>
+      <View className='q-submit-note'>只推荐路线，不卖票 · 价格时刻仅供参考</View>
+      <View className='q-submit-note q-submit-note-2'>购票跳转 12306 / 航司 / OTA</View>
 
       {/* 样例：仅列本地 mock 中存在的场景 */}
       <View className='q-section-title'>试试这些</View>
@@ -404,40 +397,6 @@ export default function QueryPage() {
         ))}
       </View>
 
-      {/* 原型演示开关（折叠） */}
-      <View className='q-demo-toggle' onClick={() => setShowDemo(!showDemo)}>
-        <Text className='q-demo-toggle-text'>原型演示开关 {showDemo ? '▾' : '▸'}</Text>
-      </View>
-      {showDemo ? (
-        <View className='q-demo'>
-          <View className='q-demo-row'>
-            <Text className='q-demo-text'>结果页演示：无方案</Text>
-            <Switch
-              checked={demoEmpty}
-              color={color.brand}
-              onChange={(e) => {
-                const on = !!e.detail.value;
-                setDemoEmpty(on);
-                if (on) setDemoError(false);
-              }}
-            />
-          </View>
-          <View className='q-demo-row'>
-            <Text className='q-demo-text'>结果页演示：加载失败</Text>
-            <Switch
-              checked={demoError}
-              color={color.brand}
-              onChange={(e) => {
-                const on = !!e.detail.value;
-                setDemoError(on);
-                if (on) setDemoEmpty(false);
-              }}
-            />
-          </View>
-        </View>
-      ) : null}
-
-      <Disclaimer />
     </View>
   );
 }
