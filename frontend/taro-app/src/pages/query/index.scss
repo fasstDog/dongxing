@@ -272,32 +272,29 @@
 .q-type {
   flex-shrink: 0;
   margin-left: $space-2;
-  height: 36px;
-  padding: 0 12px;
-  border-radius: $radius-pill;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .q-type-station {
-  background: $color-coral-soft;
+  background: $color-place-station-soft;
 }
 
 .q-type-airport {
-  background: #eceefc;
+  background: $color-place-airport-soft;
 }
 
-.q-type-text {
-  font-size: 20px;
-  font-weight: 700;
+.q-type-port {
+  background: $color-place-port-soft;
 }
 
-.q-type-text-station {
-  color: $color-coral;
-}
-
-.q-type-text-airport {
-  color: $color-route-indigo;
+.q-type-icon {
+  width: 30px;
+  height: 30px;
 }
 
 .q-err {

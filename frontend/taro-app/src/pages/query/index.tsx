@@ -5,6 +5,7 @@ import { loadQueryDraft, saveQueryDraft } from '../../services/store';
 import { placeFromName, takePendingPick, type PickField, type PlaceValue } from '../../services/places';
 import { QUERY_SAMPLES, MAX_VIAS, type QuerySample } from '../../data/samples';
 import { HERO_SCENE, ROUTE_THEMES } from '../../assets/decor';
+import { PLACE_ICON } from '../../assets/place';
 import './index.scss';
 
 type FieldErrors = {
@@ -17,7 +18,6 @@ type Slot = PlaceValue | null;
 
 /** 按压反馈：hover-class 在小程序 / H5 / RN 均可用 */
 const PRESS = { hoverStartTime: 0, hoverStayTime: 80 } as const;
-const TYPE_TAG: Record<string, string> = { station: '火车站', airport: '机场' };
 
 function validate(from: Slot, to: Slot, vias: Slot[]): FieldErrors {
   const errs: FieldErrors = { vias: {} };
@@ -179,7 +179,7 @@ export default function QueryPage() {
     });
   };
 
-  /** 字段显示：车站 / 机场显示站名 + 类型小标，城市显示城市名 */
+  /** 字段显示：车站 / 机场 / 码头显示站名 + 类型图标，城市显示城市名 */
   const renderValue = (v: Slot, placeholder: string, via = false) => (
     <View className={`q-field ${via ? 'q-field-via' : ''}`}>
       {v ? (
@@ -187,9 +187,9 @@ export default function QueryPage() {
       ) : (
         <Text className={`q-field-ph ${via ? 'q-field-ph-via' : ''}`}>{placeholder}</Text>
       )}
-      {v && TYPE_TAG[v.type] ? (
+      {v && v.type !== 'city' ? (
         <View className={`q-type q-type-${v.type}`}>
-          <Text className={`q-type-text q-type-text-${v.type}`}>{TYPE_TAG[v.type]}</Text>
+          <Image className='q-type-icon' src={PLACE_ICON[v.type]} mode='aspectFit' />
         </View>
       ) : null}
     </View>

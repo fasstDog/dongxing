@@ -47,3 +47,11 @@ export const travel = {
   routeCoral: '#ff6b4a',
   routeAmber: '#e99a2c'
 } as const;
+
+/** 地点类型色，与 tokens.scss `$color-place-*` 一致 */
+export const placeColor = {
+  city: '#0e5a6b',
+  station: '#ff6b4a',
+  airport: '#4c5fd5',
+  port: '#0a8fd8'
+} as const;

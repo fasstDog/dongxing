@@ -110,3 +110,13 @@ $ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
 $duration-press: 160ms;
 $duration-enter: 220ms;
 $press-scale: 0.97;
+
+// ---- 地点类型色（城市 / 火车站 / 机场 / 码头；图标 + 浅色底） ----
+$color-place-city: #0e5a6b;
+$color-place-city-soft: #e4f2f4;
+$color-place-station: #ff6b4a;
+$color-place-station-soft: #fff0ea;
+$color-place-airport: #4c5fd5;
+$color-place-airport-soft: #eceefc;
+$color-place-port: #0a8fd8;
+$color-place-port-soft: #e3f3fc;

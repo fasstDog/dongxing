@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { View, Text, Input } from '@tarojs/components';
+import { View, Text, Input, Image } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import {
   HOT_CITIES,
-  TYPE_BADGE,
+  TYPE_ORDER,
+  TYPE_TITLE,
   clearRecent,
   getCity,
   loadRecent,
@@ -18,6 +19,7 @@ import {
 } from '../../services/places';
 import { locateCity, openLocationSetting, type LocateError } from '../../services/location';
 import { travel } from '../../styles/tokens';
+import { PLACE_ICON } from '../../assets/place';
 import './index.scss';
 
 const PRESS = { hoverStartTime: 0, hoverStayTime: 80 } as const;
@@ -50,6 +52,10 @@ export default function PlacePickerPage() {
 
   const groups = useMemo(() => searchPlaces(keyword), [keyword]);
   const searching = keyword.trim().length > 0;
+  const recentGroups = useMemo(
+    () => TYPE_ORDER.map((type) => ({ type, items: recent.filter((v) => v.type === type) })).filter((g) => g.items.length > 0),
+    [recent]
+  );
 
   const pick = (v: PlaceValue) => {
     pushRecent(v);
@@ -83,12 +89,18 @@ export default function PlacePickerPage() {
     const p = h.place;
     const sub =
       p.type === 'city'
-        ? [p.stations ? `${p.stations} 个火车站` : '', p.airports ? `${p.airports} 个机场` : ''].filter(Boolean).join(' · ')
+        ? [
+            p.stations ? `${p.stations} 个火车站` : '',
+            p.airports ? `${p.airports} 个机场` : '',
+            p.ports ? `${p.ports} 个码头` : ''
+          ]
+            .filter(Boolean)
+            .join(' · ')
         : [p.city, p.code].filter(Boolean).join(' · ');
     return (
       <View key={p.id} className={`pp-item ${i === all.length - 1 ? 'pp-item-last' : ''}`} hoverClass='pp-item-press' {...PRESS} onClick={() => pick(toValue(p))}>
         <View className={`pp-badge pp-badge-${p.type}`}>
-          <Text className={`pp-badge-text pp-badge-text-${p.type}`}>{TYPE_BADGE[p.type]}</Text>
+          <Image className='pp-badge-icon' src={PLACE_ICON[p.type]} mode='aspectFit' />
         </View>
         <View className='pp-item-main'>
           <Text className='pp-item-name'>
@@ -120,7 +132,7 @@ export default function PlacePickerPage() {
             className='pp-input'
             focus
             value={keyword}
-            placeholder='搜索城市 / 火车站 / 机场'
+            placeholder='搜索城市 / 车站 / 机场 / 码头'
             placeholderClass='pp-placeholder'
             placeholderStyle={`color:${travel.ink4}`}
             onInput={(e) => setKeyword(e.detail.value)}
@@ -161,16 +173,19 @@ export default function PlacePickerPage() {
                   <Text className='pp-section-action-text'>清空</Text>
                 </View>
               </View>
-              <View className='pp-chips'>
-                {recent.map((v) => (
-                  <View key={v.id} className='pp-chip' hoverClass='pp-chip-press' {...PRESS} onClick={() => pick(v)}>
-                    {v.type !== 'city' ? (
-                      <Text className={`pp-chip-tag pp-badge-text-${v.type}`}>{TYPE_BADGE[v.type]}</Text>
-                    ) : null}
-                    <Text className='pp-chip-text'>{v.name}</Text>
+              {recentGroups.map((g) => (
+                <View key={g.type} className='pp-rgroup'>
+                  <Text className='pp-rgroup-title'>{TYPE_TITLE[g.type]}</Text>
+                  <View className='pp-chips'>
+                    {g.items.map((v) => (
+                      <View key={v.id} className='pp-chip' hoverClass='pp-chip-press' {...PRESS} onClick={() => pick(v)}>
+                        <Image className='pp-chip-icon' src={PLACE_ICON[v.type]} mode='aspectFit' />
+                        <Text className='pp-chip-text'>{v.name}</Text>
+                      </View>
+                    ))}
                   </View>
-                ))}
-              </View>
+                </View>
+              ))}
             </View>
           ) : null}
 
@@ -192,6 +207,7 @@ export default function PlacePickerPage() {
           {groups.map((g) => (
             <View key={g.type} className='pp-group'>
               <View className='pp-group-head'>
+                <Image className='pp-group-icon' src={PLACE_ICON[g.type]} mode='aspectFit' />
                 <Text className='pp-group-title'>{g.title}</Text>
                 <Text className='pp-group-count'>{g.items.length}</Text>
               </View>

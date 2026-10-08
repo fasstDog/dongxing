@@ -1,11 +1,11 @@
 /**
- * 地点（城市 / 火车站 / 机场）检索：本地静态数据 + 预生成拼音。
- * 支持中文、拼音全拼、拼音首字母；按城市 / 火车站 / 机场分组。
+ * 地点（城市 / 火车站 / 机场 / 码头）检索：本地静态数据 + 预生成拼音。
+ * 支持中文、拼音全拼、拼音首字母；按城市 / 火车站 / 机场 / 码头分组。
  */
 import Taro from '@tarojs/taro';
 import data from '../data/places.json';
 
-export type PlaceType = 'city' | 'station' | 'airport';
+export type PlaceType = 'city' | 'station' | 'airport' | 'port';
 
 export type Place = {
   id: string;
@@ -18,6 +18,7 @@ export type Place = {
   aliasPy?: string[];
   stations?: number;
   airports?: number;
+  ports?: number;
   lat?: number;
   lng?: number;
 };
@@ -35,8 +36,8 @@ const PLACES: Place[] = (data as { places: Place[] }).places;
 const CITIES: Place[] = PLACES.filter((p) => p.type === 'city');
 export const HOT_CITIES: string[] = (data as { hot: string[] }).hot;
 
-export const TYPE_TITLE: Record<PlaceType, string> = { city: '城市', station: '火车站', airport: '机场' };
-export const TYPE_BADGE: Record<PlaceType, string> = { city: '城', station: '站', airport: '机' };
+export const TYPE_ORDER: PlaceType[] = ['city', 'station', 'airport', 'port'];
+export const TYPE_TITLE: Record<PlaceType, string> = { city: '城市', station: '火车站', airport: '机场', port: '码头' };
 
 const BY_NAME: Record<string, Place> = {};
 PLACES.forEach((p) => {
@@ -107,6 +108,8 @@ function cityPinyinHit(cityName: string, q: string) {
   return !!r && r[0] === 0;
 }
 
+const PORT_WORDS = ['码头', '港口', '客运港', '邮轮'];
+
 function matchPlace(p: Place, q: string): SearchHit | null {
   const idx = p.name.indexOf(q);
   if (idx >= 0) return { place: p, segments: segmentsOf(p.name, [idx, idx + q.length]), score: idx === 0 ? 0 : 2 };
@@ -115,6 +118,8 @@ function matchPlace(p: Place, q: string): SearchHit | null {
     if (ai >= 0) return { place: p, segments: segmentsOf(p.name, aliasRangeInName(p, ai, ai + q.length)), score: 3 };
   }
   if (p.city.indexOf(q) === 0) return { place: p, segments: segmentsOf(p.name, null), score: 4 };
+  // 搜「码头 / 港口 / 邮轮」时列出全部码头（名称里不一定带「码头」，如 深圳蛇口邮轮中心）
+  if (p.type === 'port' && PORT_WORDS.some((w) => w.indexOf(q) === 0)) return { place: p, segments: segmentsOf(p.name, null), score: 4 };
   if (!isAscii(q)) return null;
 
   const starts = p.type !== 'city' && p.name.indexOf(p.city) === 0 ? [0, p.city.length] : [0];
@@ -135,8 +140,7 @@ export function searchPlaces(raw: string): SearchGroup[] {
   // 关键字已命中某城市（如 xz → 徐州）时，只保留该城市的站点/机场和开头命中的结果，压掉「北京西站」这类中段巧合
   const cities = hits.filter((h) => h.place.type === 'city' && h.score <= 1).map((h) => h.place.name);
   if (cities.length) hits = hits.filter((h) => h.score <= 1 || cities.indexOf(h.place.city) >= 0);
-  const order: PlaceType[] = ['city', 'station', 'airport'];
-  return order
+  return TYPE_ORDER
     .map((type) => ({
       type,
       title: TYPE_TITLE[type],

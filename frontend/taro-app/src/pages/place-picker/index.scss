@@ -221,6 +221,18 @@
   font-size: $font-sm;
 }
 
+.pp-rgroup {
+  margin-bottom: $space-2;
+}
+
+.pp-rgroup-title {
+  display: block;
+  margin: 0 0 $space-2 4px;
+  color: $color-ink-3;
+  font-size: $font-xs;
+  letter-spacing: 2px;
+}
+
 .pp-chips {
   display: flex;
   flex-direction: row;
@@ -244,10 +256,11 @@
   transform: scale(0.95);
 }
 
-.pp-chip-tag {
-  font-size: 20px;
-  font-weight: 800;
-  margin-right: 8px;
+.pp-chip-icon {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  flex-shrink: 0;
 }
 
 .pp-chip-text {
@@ -292,6 +305,12 @@
   flex-direction: row;
   align-items: center;
   margin: $space-2 0 $space-2 4px;
+}
+
+.pp-group-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
 }
 
 .pp-group-title {
@@ -351,32 +370,24 @@
 }
 
 .pp-badge-city {
-  background: $color-sky-soft;
+  background: $color-place-city-soft;
 }
 
 .pp-badge-station {
-  background: $color-coral-soft;
+  background: $color-place-station-soft;
 }
 
 .pp-badge-airport {
-  background: #eceefc;
+  background: $color-place-airport-soft;
 }
 
-.pp-badge-text {
-  font-size: 26px;
-  font-weight: 800;
+.pp-badge-port {
+  background: $color-place-port-soft;
 }
 
-.pp-badge-text-city {
-  color: $color-sky-700;
-}
-
-.pp-badge-text-station {
-  color: $color-coral;
-}
-
-.pp-badge-text-airport {
-  color: $color-route-indigo;
+.pp-badge-icon {
+  width: 34px;
+  height: 34px;
 }
 
 .pp-item-main {

@@ -1,5 +1,5 @@
 /**
- * 生成 src/data/places.json（地点搜索用）：城市 / 火车站 / 机场 + 逐字拼音。
+ * 生成 src/data/places.json（地点搜索用）：城市 / 火车站 / 机场 / 码头 + 逐字拼音。
  * 拼音由 pinyin-pro（devDependency）在本地预生成，运行时不依赖拼音库。
  *   npm run gen:places
  */
@@ -20,6 +20,7 @@ for (const c of src.cities) {
     py: py(c.city),
     stations: c.stations.length,
     airports: c.airports.length,
+    ports: (c.ports || []).length,
     lat: c.lat,
     lng: c.lng
   });
@@ -30,6 +31,13 @@ for (const c of src.cities) {
     // 简称：去掉城市前缀与「国际」，如 徐州观音国际机场 → 观音机场
     const alias = name.replace(c.city, '').replace('国际', '');
     places.push({ id: `airport:${code}`, type: 'airport', name, city: c.city, code, alias, aliasPy: py(alias), py: py(name) });
+  }
+  for (const name of c.ports || []) {
+    // 简称：去掉城市前缀，如 重庆朝天门码头 → 朝天门码头
+    const alias = name.indexOf(c.city) === 0 ? name.slice(c.city.length) : '';
+    const item = { id: `port:${name}`, type: 'port', name, city: c.city, py: py(name) };
+    if (alias) Object.assign(item, { alias, aliasPy: py(alias) });
+    places.push(item);
   }
 }
 
