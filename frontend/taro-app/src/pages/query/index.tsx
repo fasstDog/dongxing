@@ -165,13 +165,16 @@ export default function QueryPage() {
     const q = [
       `from=${encodeURIComponent(from.city)}`,
       `to=${encodeURIComponent(to.city)}`,
-      viaList.length ? `vias=${encodeURIComponent(viaList.map((v) => v.city).join(','))}` : ''
+      `fromName=${encodeURIComponent(from.name)}`,
+      `toName=${encodeURIComponent(to.name)}`,
+      viaList.length ? `vias=${encodeURIComponent(viaList.map((v) => v.city).join(','))}` : '',
+      viaList.length ? `viaNames=${encodeURIComponent(viaList.map((v) => v.name).join(','))}` : ''
     ]
       .filter(Boolean)
       .join('&');
     setSubmitting(true);
     Taro.navigateTo({
-      url: `/pages/results/index?${q}`,
+      url: `/pages/loading/index?${q}`,
       fail: () => {
         setSubmitting(false);
         toast('页面没打开，再点一次试试');

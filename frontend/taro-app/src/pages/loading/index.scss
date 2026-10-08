@@ -1,0 +1,299 @@
+@import '../../styles/tokens.scss';
+
+// 组合中过渡页。RN：动画降级为静止，车票停在出发端，布局不依赖动画。
+// 只用单层 class，不嵌套、不用后代/伪类、不用 gap。
+
+.ld-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: $color-paper;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding-bottom: 80px;
+}
+
+.ld-sky {
+  position: relative;
+  overflow: hidden;
+  background-color: $color-sky-700;
+  background-image: linear-gradient(160deg, $color-sky-900 0%, $color-sky-700 55%, $color-sky-500 100%);
+  padding: $space-4 $space-5 150px;
+}
+
+.ld-sun {
+  position: absolute;
+  right: 56px;
+  top: 28px;
+  width: 84px;
+  height: 84px;
+  border-radius: 42px;
+  background: $color-sand;
+  opacity: 0.85;
+}
+
+.ld-brand-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.ld-brand-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: $color-coral;
+  margin-right: $space-2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-8deg);
+}
+
+.ld-brand-mark-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  background: #fff;
+}
+
+.ld-brand {
+  color: #fff;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 6px;
+}
+
+.ld-card {
+  position: relative;
+  z-index: 2;
+  margin: -96px $space-5 0;
+  background: $color-surface;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-ticket;
+  padding: 8px $space-4 8px 12px;
+}
+
+.ld-route {
+  position: relative;
+}
+
+.ld-rail {
+  position: absolute;
+  z-index: 1;
+  left: 84px;
+  top: 60px;
+  bottom: 60px;
+  border-left-width: 4px;
+  border-left-style: dashed;
+  border-left-color: $color-sky-300;
+}
+
+.ld-stop {
+  position: relative;
+  z-index: 2;
+  height: 120px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.ld-dot {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin-left: 72px;
+  margin-right: 20px;
+  border-radius: 14px;
+  box-sizing: border-box;
+}
+
+.ld-dot-from {
+  background: $color-surface;
+  border: 6px solid $color-sky-500;
+}
+
+.ld-dot-to {
+  background: $color-coral;
+  border: 6px solid $color-coral-soft;
+}
+
+.ld-dot-via {
+  background: $color-line-warm;
+  border: 4px solid $color-surface;
+}
+
+.ld-via-d1 {
+  animation: ld-glow 2.8s linear infinite;
+  animation-delay: 0.15s;
+}
+
+.ld-via-d2 {
+  animation: ld-glow 2.8s linear infinite;
+  animation-delay: 0.45s;
+}
+
+.ld-via-d3 {
+  animation: ld-glow 2.8s linear infinite;
+  animation-delay: 0.75s;
+}
+
+@keyframes ld-glow {
+  0% {
+    background: $color-line-warm;
+    transform: scale(1);
+  }
+  22% {
+    background: $color-sky-500;
+    transform: scale(1.18);
+  }
+  62% {
+    background: $color-sky-500;
+    transform: scale(1.18);
+  }
+  82% {
+    background: $color-line-warm;
+    transform: scale(1);
+  }
+  100% {
+    background: $color-line-warm;
+    transform: scale(1);
+  }
+}
+
+.ld-name {
+  flex: 1;
+  color: $color-ink;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.ld-name-via {
+  color: $color-ink-2;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+// 小车票沿轨道从出发滑到到达。距离 = 途经数对应的站间距（每站 120px）
+.ld-ticket {
+  position: absolute;
+  z-index: 3;
+  left: 8px;
+  top: 32px;
+  width: 52px;
+  height: 56px;
+  border-radius: 10px;
+  background: $color-surface;
+  border: 2px solid $color-line-warm;
+  box-shadow: 0 6px 14px rgba(28, 43, 51, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ld-ticket-bar {
+  width: 100%;
+  height: 10px;
+  background: $color-coral;
+}
+
+.ld-ticket-line {
+  width: 28px;
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 2px;
+  background: $color-line-warm;
+}
+
+.ld-ticket-line-short {
+  width: 18px;
+}
+
+.ld-go-0 {
+  animation: ld-slide-0 2.8s linear infinite;
+}
+
+.ld-go-1 {
+  animation: ld-slide-1 2.8s linear infinite;
+}
+
+.ld-go-2 {
+  animation: ld-slide-2 2.8s linear infinite;
+}
+
+.ld-go-3 {
+  animation: ld-slide-3 2.8s linear infinite;
+}
+
+@keyframes ld-slide-0 {
+  0% { transform: translateY(0); }
+  72% { transform: translateY(120px); }
+  86% { transform: translateY(120px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes ld-slide-1 {
+  0% { transform: translateY(0); }
+  72% { transform: translateY(240px); }
+  86% { transform: translateY(240px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes ld-slide-2 {
+  0% { transform: translateY(0); }
+  72% { transform: translateY(360px); }
+  86% { transform: translateY(360px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes ld-slide-3 {
+  0% { transform: translateY(0); }
+  72% { transform: translateY(480px); }
+  86% { transform: translateY(480px); }
+  100% { transform: translateY(0); }
+}
+
+.ld-caption {
+  margin-top: 56px;
+  text-align: center;
+  color: $color-ink-2;
+  font-size: 28px;
+  letter-spacing: 1px;
+}
+
+
+.ld-fail {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ld-caption-still {
+  margin-top: 0;
+}
+
+.ld-retry {
+  margin-top: 28px;
+  height: 80px;
+  padding: 0 48px;
+  border-radius: 40px;
+  background: $color-coral;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.ld-retry-press {
+  transform: scale(0.97);
+}
+
+.ld-retry-text {
+  color: #fff;
+  font-size: 30px;
+  font-weight: 700;
+}

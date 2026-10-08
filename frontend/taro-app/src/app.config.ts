@@ -1,6 +1,7 @@
 export default {
   pages: [
     'pages/query/index',
+    'pages/loading/index',
     'pages/mine/index',
     'pages/results/index',
     'pages/detail/index',
