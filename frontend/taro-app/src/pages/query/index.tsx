@@ -240,7 +240,7 @@ export default function QueryPage() {
           </View>
         </View>
         <View className='q-hero-title'>直达之外，帮你找更聪明的走法</View>
-        <View className='q-hero-sub'>最省钱 · 最快 · 最综合，三张卡看懂怎么走</View>
+        <View className='q-hero-sub'>最省钱 · 最快 · 最综合</View>
       </View>
 
       {/* 起终点 + 有序途经 */}
@@ -315,7 +315,7 @@ export default function QueryPage() {
             onClick={onAddVia}
           >
             <Text className='q-add-text'>
-              {vias.length >= MAX_VIAS ? `途经已满 ${MAX_VIAS} 个` : `+ 添加途经（${vias.length}/${MAX_VIAS}）`}
+              {vias.length >= MAX_VIAS ? `最多 ${MAX_VIAS} 个途经城市` : '+ 添加途经城市'}
             </Text>
           </View>
           {!isBlank ? (
@@ -323,11 +323,6 @@ export default function QueryPage() {
               <Text className='q-link-text'>清空</Text>
             </View>
           ) : null}
-        </View>
-        <View className='q-hint'>
-          {vias.length
-            ? '按你的顺序经过这些城市；结果页也能切回「系统自动」对比。'
-            : '不填途经，系统自动挑换乘枢纽。'}
         </View>
       </View>
 
@@ -348,9 +343,7 @@ export default function QueryPage() {
             <Text className={`q-seg-text ${!dateFlexible ? 'q-seg-text-on' : ''}`}>指定日期</Text>
           </View>
         </View>
-        {dateFlexible ? (
-          <View className='q-hint'>不锁死某一天，前后几天一起比，更容易拼出划算走法。</View>
-        ) : (
+        {dateFlexible ? null : (
           <Picker mode='date' value={date} start={todayStr} end={endStr} onChange={(e) => setDate(String(e.detail.value))}>
             <View className='q-date-row'>
               <Text className='q-date-text'>{dateLabel(date, todayStr, tomorrowStr)}</Text>
@@ -370,7 +363,7 @@ export default function QueryPage() {
         </View>
       ) : isBlank ? (
         <View className='q-banner q-banner-info'>
-          <View className='q-banner-text-info'>填出发和到达就能出方案，或点下面的样例一键填入。</View>
+          <View className='q-banner-text-info'>填好出发和到达，或选一条下面的路线</View>
         </View>
       ) : null}
 
@@ -380,11 +373,9 @@ export default function QueryPage() {
       >
         <Text className='q-submit-text'>{submitting ? '正在组合方案…' : '开始推荐'}</Text>
       </View>
-      <View className='q-submit-note'>只推荐路线，不卖票 · 价格时刻仅供参考</View>
-      <View className='q-submit-note q-submit-note-2'>购票跳转 12306 / 航司 / OTA</View>
 
       {/* 样例：仅列本地 mock 中存在的场景 */}
-      <View className='q-section-title'>试试这些</View>
+      <View className='q-section-title'>常用路线</View>
       <View className='q-samples'>
         {QUERY_SAMPLES.map((s) => (
           <View key={s.key} className='q-sample' onClick={() => onSample(s)}>
@@ -392,7 +383,6 @@ export default function QueryPage() {
               {s.fromCity} → {s.vias.length ? `${s.vias.join(' → ')} → ` : ''}
               {s.toCity}
             </View>
-            <View className='q-sample-note'>{s.note}</View>
           </View>
         ))}
       </View>

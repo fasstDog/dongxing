@@ -8,14 +8,13 @@ export type QuerySample = {
   fromCity: string;
   toCity: string;
   vias: string[];
-  note: string;
 };
 
 export const QUERY_SAMPLES: QuerySample[] = [
-  { key: 'xz-lxa', fromCity: '徐州', toCity: '拉萨', vias: [], note: '长线 · 系统选枢纽' },
-  { key: 'xz-lxa-xn', fromCity: '徐州', toCity: '拉萨', vias: ['西宁'], note: '经西宁 · 长换乘可玩' },
-  { key: 'cd-cq', fromCity: '成都', toCity: '重庆', vias: [], note: '短途 · 直达对比' },
-  { key: 'cd-cq-sn', fromCity: '成都', toCity: '重庆', vias: ['遂宁'], note: '经遂宁 · 短换乘' }
+  { key: 'xz-lxa', fromCity: '徐州', toCity: '拉萨', vias: [] },
+  { key: 'xz-lxa-xn', fromCity: '徐州', toCity: '拉萨', vias: ['西宁'] },
+  { key: 'cd-cq', fromCity: '成都', toCity: '重庆', vias: [] },
+  { key: 'cd-cq-sn', fromCity: '成都', toCity: '重庆', vias: ['遂宁'] }
 ];
 
 export const MAX_VIAS = 3;
