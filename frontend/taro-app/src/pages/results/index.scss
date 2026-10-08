@@ -12,7 +12,24 @@
 .r-sky {
   background-color: $color-sky-700;
   background-image: linear-gradient(160deg, $color-sky-900 0%, $color-sky-700 70%, $color-sky-500 100%);
-  padding: $space-5 $space-5 36px;
+  padding: $space-4 $space-5 36px;
+}
+
+.r-back {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.r-back-arrow {
+  color: #fff;
+  font-size: 44px;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .r-route {

@@ -149,6 +149,9 @@ export default function ResultsPage() {
   return (
     <View className='r-page'>
       <View className='r-sky'>
+        <View className='r-back' hoverClass='r-press' {...PRESS} onClick={onBack}>
+          <Text className='r-back-arrow'>←</Text>
+        </View>
         <View className='r-route'>
           {names.map((n, i) => (
             <View key={`${n}-${i}`} className='r-route-item'>
