@@ -1,1 +1,5 @@
-export default { navigationBarTitleText: '方案详情' };
+export default {
+  navigationBarTitleText: '攻略',
+  navigationBarBackgroundColor: '#0e6e6a',
+  navigationBarTextStyle: 'white'
+};
