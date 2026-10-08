@@ -1,0 +1,841 @@
+@import '../../styles/tokens.scss';
+
+// 查询页 · 旅行主题
+// RN 兼容：只用单层 class 选择器，不嵌套、不用后代/伪类/伪元素、不用 gap；
+// 渐变、阴影、动画在 RN 端会自动降级为纯色 / 无动画，不影响布局。
+
+.q-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: $color-paper;
+  // 原生 tabBar 占位由系统处理；这里再留出底部呼吸距离 + 安全区
+  padding-bottom: 64px;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+}
+
+// ---------------- 头部 ----------------
+.q-hero {
+  position: relative;
+  overflow: hidden;
+  background-color: $color-sky-700;
+  background-image: linear-gradient(160deg, $color-sky-900 0%, $color-sky-700 45%, $color-sky-500 100%);
+  padding: $space-3 $space-5 210px;
+}
+
+.q-hero-scene {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 260px;
+}
+
+.q-hero-top {
+  position: relative;
+  height: 56px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.q-brand-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.q-brand-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: $color-coral;
+  margin-right: $space-2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-8deg);
+}
+
+.q-brand-mark-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  background: #fff;
+}
+
+.q-brand {
+  color: #fff;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 6px;
+}
+
+.q-hero-title-1 {
+  position: relative;
+  margin-top: 40px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 34px;
+  font-weight: $weight-medium;
+  letter-spacing: 2px;
+}
+
+.q-hero-title-2 {
+  position: relative;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.q-hero-title-2a {
+  color: #fff;
+  font-size: $font-title;
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.q-hero-title-2b {
+  color: $color-sand;
+  font-size: $font-display;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+// ---------------- 路线车票 ----------------
+.q-ticket {
+  position: relative;
+  z-index: 2;
+  margin: -96px $space-5 0;
+  background: $color-surface;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-ticket;
+}
+
+.q-ticket-main {
+  position: relative;
+  padding: $space-2 $space-5 0 $space-4;
+}
+
+.q-row {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.q-row-enter {
+  animation: q-row-in $duration-enter $ease-out-strong both;
+}
+
+@keyframes q-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.q-node-col {
+  width: 44px;
+  margin-right: $space-3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.q-track {
+  flex: 1;
+  width: 4px;
+  min-height: 16px;
+  border-radius: 2px;
+  background: $color-line-warm;
+}
+
+.q-track-hidden {
+  background: transparent;
+}
+
+.q-node {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.q-node-from {
+  border: 4px solid $color-sky-500;
+  background: $color-surface;
+}
+
+.q-node-to {
+  border: 4px solid $color-coral;
+  background: $color-surface;
+}
+
+.q-node-core {
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  background: $color-sky-500;
+}
+
+.q-node-core-to {
+  background: $color-coral;
+}
+
+.q-row-body {
+  flex: 1;
+  padding: 18px 0;
+  border-bottom: 2px dashed $color-line-warm;
+}
+
+.q-row-body-from {
+  padding-right: 104px;
+}
+
+.q-row-body-last {
+  border-bottom: 0;
+}
+
+.q-label {
+  color: $color-ink-3;
+  font-size: $font-xs;
+  letter-spacing: 4px;
+}
+
+.q-row-body-press {
+  opacity: 0.6;
+}
+
+.q-field {
+  margin-top: 8px;
+  min-height: 72px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.q-field-via {
+  min-height: 60px;
+}
+
+// 地点类型图标块：浅色底圆角方块，颜色与 place-picker 一致
+.q-ptile {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  margin-right: $space-3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.q-ptile-via {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+}
+
+.q-ptile-city {
+  background: $color-place-city-soft;
+}
+
+.q-ptile-station {
+  background: $color-place-station-soft;
+}
+
+.q-ptile-airport {
+  background: $color-place-airport-soft;
+}
+
+.q-ptile-port {
+  background: $color-place-port-soft;
+}
+
+.q-ptile-empty {
+  background: $color-paper;
+  border: 2px dashed $color-line-warm;
+}
+
+.q-ptile-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.q-ptile-icon-via {
+  width: 34px;
+  height: 34px;
+}
+
+.q-field-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.q-field-text {
+  color: $color-ink;
+  font-size: $font-title;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.q-field-text-via {
+  font-size: 36px;
+}
+
+.q-field-ph {
+  color: $color-ink-4;
+  font-size: $font-title;
+  font-weight: $weight-regular;
+  line-height: 1.2;
+}
+
+.q-field-ph-via {
+  font-size: 36px;
+}
+
+.q-field-sub {
+  margin-top: 4px;
+  font-size: $font-xs;
+  color: $color-ink-3;
+}
+
+.q-field-sub-city {
+  color: $color-place-city;
+}
+
+.q-field-sub-station {
+  color: $color-place-station;
+}
+
+.q-field-sub-airport {
+  color: $color-place-airport;
+}
+
+.q-field-sub-port {
+  color: $color-place-port;
+}
+
+.q-err {
+  margin-top: 6px;
+  color: $color-error;
+  font-size: $font-xs;
+  line-height: $line-normal;
+}
+
+.q-swap {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: -42px;
+  width: 84px;
+  height: 84px;
+  border-radius: 42px;
+  background: $color-surface;
+  border: 2px solid $color-sky-soft;
+  box-shadow: 0 6px 16px rgba(14, 90, 107, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.q-swap-press {
+  transform: scale(0.9) rotate(180deg);
+  background: $color-sky-soft;
+}
+
+.q-swap-icon {
+  color: $color-sky-700;
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.q-mini {
+  width: 52px;
+  height: 52px;
+  margin-left: $space-1;
+  border-radius: 26px;
+  background: $color-paper;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.q-mini-danger {
+  background: $color-error-soft;
+}
+
+.q-mini-press {
+  transform: scale(0.88);
+}
+
+.q-mini-text {
+  color: $color-ink-2;
+  font-size: $font-sm;
+  font-weight: 700;
+}
+
+.q-mini-text-danger {
+  color: $color-error;
+}
+
+// 撕口
+.q-perf {
+  position: relative;
+  height: 44px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.q-notch {
+  position: absolute;
+  top: 0;
+  width: 22px;
+  height: 44px;
+  background: $color-paper;
+}
+
+.q-notch-left {
+  left: 0;
+  border-top-right-radius: 22px;
+  border-bottom-right-radius: 22px;
+}
+
+.q-notch-right {
+  right: 0;
+  border-top-left-radius: 22px;
+  border-bottom-left-radius: 22px;
+}
+
+.q-perf-line {
+  flex: 1;
+  height: 0;
+  margin: 0 40px;
+  border-top: 3px dashed $color-line-warm;
+}
+
+// 票根：添加途经 / 清空
+.q-vias {
+  padding: $space-2 $space-5 0 $space-4;
+}
+
+.q-via {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 6px $space-2 6px 10px;
+  margin-bottom: $space-2;
+  background: $color-paper;
+  border-radius: 24px;
+}
+
+.q-via-num {
+  flex-shrink: 0;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.q-via-num-text {
+  width: 34px;
+  height: 34px;
+  line-height: 30px;
+  border-radius: 17px;
+  text-align: center;
+  box-sizing: border-box;
+  background: $color-surface;
+  border: 2px solid $color-sky-300;
+  color: $color-sky-700;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.q-mini-light {
+  background: $color-surface;
+}
+
+.q-via-body {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 0 10px $space-1;
+}
+
+.q-via-actions {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.q-ticket-stub {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px $space-5 $space-4 $space-4;
+}
+
+.q-add {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 68px;
+  padding: 0 $space-4 0 14px;
+  border-radius: $radius-pill;
+  background: $color-sky-soft;
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.q-add-press {
+  transform: scale($press-scale);
+}
+
+.q-add-disabled {
+  background: $color-paper-2;
+  padding-left: $space-4;
+}
+
+.q-add-plus {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: $color-sky-500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $space-2;
+}
+
+.q-add-plus-text {
+  color: #fff;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 40px;
+}
+
+.q-add-text {
+  color: $color-sky-700;
+  font-size: 26px;
+  font-weight: $weight-bold;
+}
+
+.q-clear {
+  height: 68px;
+  padding: 0 $space-2;
+  display: flex;
+  align-items: center;
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.q-clear-press {
+  transform: scale(0.94);
+  opacity: 0.6;
+}
+
+.q-clear-text {
+  color: $color-ink-3;
+  font-size: 26px;
+}
+
+// ---------------- 提示条 ----------------
+.q-banner {
+  margin: $space-4 $space-5 0;
+  border-radius: 20px;
+  padding: 18px $space-4;
+}
+
+.q-banner-error {
+  background: $color-error-soft;
+}
+
+.q-banner-info {
+  background: $color-sky-soft;
+}
+
+.q-banner-text-error {
+  color: $color-error;
+  font-size: $font-sm;
+  line-height: $line-normal;
+}
+
+.q-banner-text-info {
+  color: $color-sky-700;
+  font-size: $font-sm;
+  line-height: $line-normal;
+}
+
+// ---------------- 主按钮 ----------------
+.q-cta {
+  margin: $space-5 $space-5 0;
+  height: 108px;
+  border-radius: $radius-pill;
+  background-color: $color-coral;
+  background-image: linear-gradient(100deg, $color-coral 0%, $color-coral-2 100%);
+  box-shadow: $shadow-cta;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.q-cta-press {
+  transform: scale($press-scale);
+  box-shadow: 0 6px 14px rgba(255, 107, 74, 0.3);
+}
+
+.q-cta-busy {
+  opacity: 0.8;
+}
+
+.q-cta-blocked {
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+.q-cta-text {
+  color: #fff;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 6px;
+}
+
+.q-cta-arrow {
+  width: 52px;
+  height: 52px;
+  margin-left: $space-3;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.q-cta-arrow-text {
+  color: #fff;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+// ---------------- 常用路线 ----------------
+.q-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: $space-6 $space-5 20px;
+}
+
+.q-section-bar {
+  width: 8px;
+  height: 28px;
+  border-radius: 4px;
+  background: $color-coral;
+  margin-right: $space-2;
+}
+
+.q-section-title {
+  color: $color-ink;
+  font-size: $font-md;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.q-stubs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0 $space-5;
+}
+
+.q-stub {
+  position: relative;
+  width: 335px;
+  min-height: 124px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  background: $color-surface;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(28, 43, 51, 0.06);
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.q-stub-press {
+  transform: scale($press-scale);
+}
+
+.q-stub-side {
+  width: 76px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.q-stub-icon {
+  width: 44px;
+  height: 44px;
+}
+
+.q-stub-cut {
+  position: relative;
+  width: 0;
+  border-left: 2px dashed $color-line-warm;
+}
+
+.q-stub-hole {
+  position: absolute;
+  left: -12px;
+  width: 22px;
+  height: 11px;
+  background: $color-paper;
+}
+
+.q-stub-hole-top {
+  top: 0;
+  border-bottom-left-radius: 11px;
+  border-bottom-right-radius: 11px;
+}
+
+.q-stub-hole-bottom {
+  bottom: 0;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
+}
+
+.q-stub-body {
+  flex: 1;
+  padding: 18px 16px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.q-stub-od {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.q-stub-city {
+  color: $color-ink;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.q-stub-arrow {
+  margin: 0 8px;
+  color: $color-ink-3;
+  font-size: 24px;
+}
+
+.q-stub-vias {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.q-stub-via {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 36px;
+  padding: 0 14px 0 10px;
+  border-radius: $radius-pill;
+}
+
+.q-stub-via-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  margin-right: 8px;
+}
+
+.q-stub-via-text {
+  font-size: $font-xs;
+  font-weight: 700;
+}
+
+.q-stub-line {
+  margin-top: 18px;
+  height: 36px;
+}
+
+.q-stub-line-bar {
+  width: 56px;
+  height: 6px;
+  border-radius: 3px;
+  opacity: 0.85;
+}
+
+// 路线主题色
+.q-tone-indigo {
+  background: $color-route-indigo;
+}
+
+.q-tone-teal {
+  background: $color-route-teal;
+}
+
+.q-tone-coral {
+  background: $color-route-coral;
+}
+
+.q-tone-amber {
+  background: $color-route-amber;
+}
+
+.q-tone-soft-indigo {
+  background: #eceefc;
+}
+
+.q-tone-soft-teal {
+  background: #e2f3f1;
+}
+
+.q-tone-soft-coral {
+  background: #fff0ea;
+}
+
+.q-tone-soft-amber {
+  background: #fdf1df;
+}
+
+.q-tone-text-indigo {
+  color: $color-route-indigo;
+}
+
+.q-tone-text-teal {
+  color: $color-route-teal;
+}
+
+.q-tone-text-coral {
+  color: $color-route-coral;
+}
+
+.q-tone-text-amber {
+  color: $color-route-amber;
+}

@@ -1,0 +1,64 @@
+@import '../../styles/tokens.scss';
+
+// 我的 · 与首页同一旅行主题；RN 兼容：单层 class，无后代/伪类选择器
+
+.m-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: $color-paper;
+  padding-bottom: 64px;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+}
+
+.m-hero {
+  position: relative;
+  overflow: hidden;
+  background-color: $color-sky-700;
+  background-image: linear-gradient(160deg, $color-sky-900 0%, $color-sky-700 45%, $color-sky-500 100%);
+  padding: $space-6 $space-5 190px;
+}
+
+.m-hero-scene {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 260px;
+  opacity: 0.7;
+}
+
+.m-profile {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.m-avatar {
+  width: 104px;
+  height: 104px;
+  border-radius: 32px;
+  background: $color-coral;
+  border: 4px solid rgba(255, 255, 255, 0.85);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-6deg);
+}
+
+.m-avatar-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.m-name {
+  margin-left: $space-4;
+  color: #fff;
+  font-size: $font-title;
+  font-weight: 800;
+  letter-spacing: 6px;
+}

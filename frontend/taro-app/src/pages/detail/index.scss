@@ -1,0 +1,247 @@
+@import '../../styles/tokens.scss';
+
+.g-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: $color-paper;
+  padding-bottom: 220px;
+}
+
+.g-sky {
+  background-color: $color-sky-700;
+  background-image: linear-gradient(160deg, $color-sky-900 0%, $color-sky-700 72%, $color-sky-500 100%);
+  padding: $space-4 $space-5 $space-5;
+}
+
+.g-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.g-back {
+  width: 72px;
+  height: 72px;
+  border-radius: 36px;
+  background: rgba(255, 255, 255, 0.22);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.g-back-arrow {
+  color: #fff;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.g-title {
+  margin-left: 16px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.g-body {
+  padding: $space-5 $space-5 0;
+}
+
+.g-lead {
+  display: block;
+  color: $color-ink;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+.g-sec {
+  margin-top: 40px;
+}
+
+.g-h {
+  display: block;
+  color: $color-ink;
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.g-p {
+  display: block;
+  margin-top: 16px;
+  color: $color-ink-2;
+  font-size: 30px;
+  line-height: 1.8;
+}
+
+.g-photo {
+  margin-top: 20px;
+  height: 280px;
+  border-radius: 20px;
+  background-color: $color-paper-2;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.g-photo-train {
+  background-image: url('../../assets/ticket/mark-train.png');
+}
+
+.g-photo-plane {
+  background-image: url('../../assets/ticket/mark-plane.png');
+}
+
+.g-buy {
+  margin-top: 48px;
+  background: $color-coral;
+  border-radius: 999px;
+  padding: 22px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.g-buy-label {
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.g-empty {
+  padding: 80px $space-5;
+}
+
+.g-empty-text {
+  display: block;
+  color: $color-ink-2;
+  font-size: 28px;
+  margin-bottom: $space-4;
+}
+
+.g-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $color-paper;
+  border-top: 1px solid $color-line-warm;
+  padding: 16px 8px 28px;
+}
+
+.g-acts {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.g-act {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0 4px;
+}
+
+.g-act-icon {
+  color: $color-ink-2;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.g-act-icon-on {
+  color: $color-sky-700;
+}
+
+.g-heart-on {
+  color: $color-coral;
+}
+
+.g-act-label {
+  margin-top: 6px;
+  color: $color-ink-2;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.g-act-label-on {
+  color: $color-ink;
+}
+
+.g-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(28, 43, 51, 0.45);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.g-sheet {
+  background: $color-paper;
+  border-radius: 24px 24px 0 0;
+  padding: $space-5 $space-5 40px;
+}
+
+.g-sheet-title {
+  display: block;
+  color: $color-ink;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.g-input {
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  font-size: 28px;
+  color: $color-ink;
+}
+
+.g-sheet-row {
+  display: flex;
+  flex-direction: row;
+  margin-top: 24px;
+}
+
+.g-sheet-cancel {
+  flex: 1;
+  margin-right: 16px;
+  border-radius: 999px;
+  padding: 18px 0;
+  background: $color-paper-2;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.g-sheet-cancel-text {
+  color: $color-ink-2;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.g-sheet-ok {
+  flex: 1;
+  border-radius: 999px;
+  padding: 18px 0;
+  background: $color-sky-700;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.g-sheet-ok-text {
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
+}

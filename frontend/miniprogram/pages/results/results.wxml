@@ -1,9 +1,18 @@
-<view class="page">
+<view class="page results-page">
   <van-notice-bar wx:if="{{ notice }}" left-icon="volume-o" text="{{ notice }}" color="#ed6a0c" background="#fffbe8" />
-  <view class="od-line" wx:if="{{ odLine }}">{{ odLine }}</view>
+  <view class="od-block" wx:if="{{ odLine }}">
+    <view class="od-line">{{ odLine }}</view>
+    <view class="via-row" wx:if="{{ vias.length }}">
+      <text class="via-label">途经</text>
+      <block wx:for="{{ vias }}" wx:key="*this">
+        <text class="via-chip">{{ item }}</text>
+      </block>
+    </view>
+  </view>
 
   <view class="state-wrap" wx:if="{{ status === 'loading' }}">
     <van-loading type="spinner" size="24px" vertical>正在组合方案…</van-loading>
+    <view class="loading-hint">最省钱 / 最快 / 最综合 · 只荐不卖</view>
   </view>
 
   <view class="state-wrap" wx:elif="{{ status === 'error' }}">
@@ -30,34 +39,42 @@
   </view>
 
   <block wx:elif="{{ status === 'ok' }}">
+    <view class="legend">
+      <text class="lg cheap">最省钱</text>
+      <text class="lg fast">最快</text>
+      <text class="lg balanced">最综合</text>
+    </view>
     <view
       wx:for="{{ plans }}"
       wx:key="id"
-      class="plan-card card-{{ item.type }}"
+      class="plan-card"
       data-id="{{ item.id }}"
       bindtap="onOpenDetail"
     >
-      <view class="plan-head">
-        <view class="tags">
-          <van-tag type="{{ item.tagType }}" round>{{ item.typeLabel }}</van-tag>
-          <van-tag wx:if="{{ item.hasTransfer }}" plain type="primary" class="mini-tag">换乘</van-tag>
-          <van-tag wx:if="{{ item.hasFlight }}" plain type="warning" class="mini-tag">飞机</van-tag>
+      <view class="plan-accent accent-{{ item.type }}"></view>
+      <view class="plan-body">
+        <view class="plan-head">
+          <view class="tags">
+            <view class="type-pill type-{{ item.type }}">{{ item.typeLabel }}</view>
+            <van-tag wx:if="{{ item.hasTransfer }}" plain type="primary">换乘</van-tag>
+            <van-tag wx:if="{{ item.hasFlight }}" plain type="warning">飞机</van-tag>
+          </view>
+          <view class="price-wrap">
+            <text class="price">{{ item.price }}</text>
+            <text class="price-note">{{ item.priceNote || '参考价' }}</text>
+          </view>
         </view>
-        <view class="price-wrap">
-          <text class="price">{{ item.price }}</text>
-          <text class="price-note">{{ item.priceNote || '参考价' }}</text>
+        <view class="route">{{ item.routeOneLine }}</view>
+        <view class="meta">
+          <text>{{ item.duration }}</text>
+          <text class="dot">·</text>
+          <text>{{ item.transfers }} 次换乘</text>
         </view>
+        <view class="vs" wx:if="{{ item.vsDirect }}">vs直达：{{ item.vsDirect }}</view>
+        <view class="why" wx:if="{{ item.why }}">{{ item.why }}</view>
+        <view class="hint" wx:if="{{ item.playHint }}">怎么玩：{{ item.playHint }}</view>
+        <view class="card-foot muted">点按看详情 · 外链购票 · 我们不卖票</view>
       </view>
-      <view class="route">{{ item.routeOneLine }}</view>
-      <view class="meta">
-        <text>{{ item.duration }}</text>
-        <text class="dot">·</text>
-        <text>{{ item.transfers }} 次换乘</text>
-      </view>
-      <view class="vs" wx:if="{{ item.vsDirect }}">vs直达：{{ item.vsDirect }}</view>
-      <view class="why" wx:if="{{ item.why }}">{{ item.why }}</view>
-      <view class="hint" wx:if="{{ item.playHint }}">怎么玩：{{ item.playHint }}</view>
-      <view class="card-foot muted">点按看详情</view>
     </view>
   </block>
 

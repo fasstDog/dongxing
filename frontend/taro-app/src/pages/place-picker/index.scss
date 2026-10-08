@@ -1,0 +1,459 @@
+@import '../../styles/tokens.scss';
+
+// 地点搜索 · 旅行主题；RN 兼容：单层 class，无后代/伪类/伪元素选择器
+
+.pp-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: $color-paper;
+  padding-bottom: 64px;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+}
+
+// ---- 搜索条 ----
+.pp-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px $space-5 20px;
+  background: $color-paper;
+}
+
+.pp-search {
+  flex: 1;
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 $space-3 0 $space-4;
+  background: $color-surface;
+  border-radius: $radius-pill;
+  border: 2px solid $color-sky-soft;
+  box-shadow: 0 6px 18px rgba(14, 90, 107, 0.08);
+}
+
+.pp-glass {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  margin-right: $space-2;
+}
+
+.pp-glass-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  border: 4px solid $color-sky-500;
+  box-sizing: border-box;
+}
+
+.pp-glass-handle {
+  position: absolute;
+  left: 20px;
+  top: 22px;
+  width: 12px;
+  height: 4px;
+  border-radius: 2px;
+  background: $color-sky-500;
+  transform: rotate(45deg);
+}
+
+.pp-input {
+  flex: 1;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  color: $color-ink;
+  font-size: $font-md;
+}
+
+.pp-placeholder {
+  color: $color-ink-4;
+}
+
+.pp-clear {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background: $color-paper-2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pp-clear-text {
+  color: $color-ink-2;
+  font-size: 20px;
+}
+
+.pp-cancel {
+  height: 80px;
+  padding: 0 0 0 $space-4;
+  display: flex;
+  align-items: center;
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.pp-cancel-press {
+  transform: scale(0.94);
+  opacity: 0.6;
+}
+
+.pp-cancel-text {
+  color: $color-sky-700;
+  font-size: $font-md;
+  font-weight: $weight-bold;
+}
+
+.pp-body {
+  padding: 0 $space-5;
+}
+
+// ---- 当前定位 ----
+.pp-loc {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 104px;
+  margin-top: 4px;
+  padding: 0 $space-4;
+  background: $color-surface;
+  border-radius: $radius-lg;
+  box-shadow: 0 6px 18px rgba(28, 43, 51, 0.05);
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.pp-loc-press {
+  transform: scale($press-scale);
+}
+
+.pp-loc-error {
+  background: $color-surface;
+}
+
+.pp-pin {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: $color-sky-soft;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $space-3;
+}
+
+.pp-pin-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background: $color-sky-500;
+  border: 4px solid $color-surface;
+}
+
+.pp-pin-dot-pulse {
+  animation: pp-pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes pp-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.35;
+  }
+}
+
+.pp-loc-label {
+  color: $color-ink-3;
+  font-size: $font-sm;
+  margin-right: $space-3;
+}
+
+.pp-loc-city {
+  color: $color-ink;
+  font-size: $font-lg;
+  font-weight: 800;
+}
+
+.pp-loc-muted {
+  color: $color-ink-3;
+  font-size: $font-md;
+}
+
+.pp-loc-fail {
+  color: $color-coral;
+  font-size: $font-md;
+  font-weight: $weight-bold;
+}
+
+// ---- 分区 ----
+.pp-section {
+  margin-top: $space-5;
+}
+
+.pp-section-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.pp-section-title {
+  color: $color-ink;
+  font-size: $font-md;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.pp-section-action {
+  padding: 8px 0 8px $space-3;
+}
+
+.pp-section-action-text {
+  color: $color-ink-3;
+  font-size: $font-sm;
+}
+
+.pp-rgroup {
+  margin-bottom: $space-2;
+}
+
+.pp-rgroup-title {
+  display: block;
+  margin: 0 0 $space-2 4px;
+  color: $color-ink-3;
+  font-size: $font-xs;
+  letter-spacing: 2px;
+}
+
+.pp-chips {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.pp-chip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 64px;
+  padding: 0 $space-4;
+  margin: 0 $space-2 $space-2 0;
+  background: $color-surface;
+  border-radius: $radius-pill;
+  border: 2px solid $color-line-warm;
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.pp-chip-press {
+  transform: scale(0.95);
+}
+
+.pp-chip-icon {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.pp-chip-text {
+  color: $color-ink;
+  font-size: 26px;
+  font-weight: $weight-medium;
+}
+
+.pp-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.pp-cell {
+  width: 156px;
+  height: 80px;
+  margin-bottom: $space-3;
+  background: $color-surface;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(28, 43, 51, 0.05);
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.pp-cell-text {
+  color: $color-ink;
+  font-size: $font-md;
+  font-weight: $weight-bold;
+}
+
+// ---- 结果 ----
+.pp-group {
+  margin-top: $space-3;
+}
+
+.pp-group-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: $space-2 0 $space-2 4px;
+}
+
+.pp-group-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.pp-group-title {
+  color: $color-ink-2;
+  font-size: $font-sm;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.pp-group-count {
+  margin-left: $space-1;
+  min-width: 32px;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 8px;
+  border-radius: 16px;
+  background: $color-paper-2;
+  color: $color-ink-3;
+  font-size: 20px;
+  text-align: center;
+}
+
+.pp-list {
+  background: $color-surface;
+  border-radius: $radius-lg;
+  padding: 0 $space-4;
+  box-shadow: 0 6px 18px rgba(28, 43, 51, 0.05);
+}
+
+.pp-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-height: 112px;
+  border-bottom: 2px dashed $color-line-warm;
+  transition: transform $duration-press $ease-out-strong;
+}
+
+.pp-item-last {
+  border-bottom: 0;
+}
+
+.pp-item-press {
+  transform: scale(0.98);
+  opacity: 0.7;
+}
+
+.pp-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $space-3;
+  flex-shrink: 0;
+}
+
+.pp-badge-city {
+  background: $color-place-city-soft;
+}
+
+.pp-badge-station {
+  background: $color-place-station-soft;
+}
+
+.pp-badge-airport {
+  background: $color-place-airport-soft;
+}
+
+.pp-badge-port {
+  background: $color-place-port-soft;
+}
+
+.pp-badge-icon {
+  width: 34px;
+  height: 34px;
+}
+
+.pp-item-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: $space-3 0;
+}
+
+.pp-item-name {
+  color: $color-ink;
+  font-size: 30px;
+  font-weight: $weight-bold;
+}
+
+.pp-hl {
+  color: $color-coral;
+}
+
+.pp-item-sub {
+  margin-top: 6px;
+  color: $color-ink-3;
+  font-size: $font-xs;
+}
+
+// ---- 空态 ----
+.pp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 160px;
+}
+
+.pp-empty-icon {
+  width: 144px;
+  height: 144px;
+  border-radius: 72px;
+  background: $color-sky-soft;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: $space-4;
+}
+
+.pp-glass-lg {
+  width: 64px;
+  height: 64px;
+  margin-right: 0;
+}
+
+.pp-glass-ring-lg {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  border-width: 6px;
+}
+
+.pp-glass-handle-lg {
+  left: 40px;
+  top: 46px;
+  width: 22px;
+  height: 7px;
+  border-radius: 4px;
+}
+
+.pp-empty-text {
+  color: $color-ink-3;
+  font-size: $font-md;
+}
