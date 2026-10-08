@@ -9,3 +9,10 @@ import port from './port.png';
 import type { PlaceType } from '../../services/places';
 
 export const PLACE_ICON: Record<PlaceType, string> = { city, station, airport, port };
+
+import craftTrain from './craft-train.png';
+import craftPlane from './craft-plane.png';
+import craftShip from './craft-ship.png';
+
+/** loading 页载具：白色实心图标（火车 / 飞机 / 轮船） */
+export const CRAFT_ICON = { station: craftTrain, airport: craftPlane, port: craftShip } as const;

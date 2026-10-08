@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Image } from '@tarojs/components';
-import { PLACE_ICON } from '../../assets/place';
+import { CRAFT_ICON } from '../../assets/place';
 import Taro, { useRouter } from '@tarojs/taro';
 import { loadAdaptedPlans } from '../../services/adapt';
 import './index.scss';
@@ -97,12 +97,9 @@ export default function LoadingPage() {
           <View className='ld-rail' />
           <View className={`ld-rail-fill ld-fill-${legs}`} />
           {crafts.map((kind, i) => (
-            <Image
-              key={`craft-${i}`}
-              className={`ld-craft ${i > 0 ? 'ld-craft-wait' : ''} ld-k-${legs}-${i}`}
-              src={PLACE_ICON[kind]}
-              mode='aspectFit'
-            />
+            <View key={`craft-${i}`} className={`ld-craft ld-craft-${kind} ${i > 0 ? 'ld-craft-wait' : ''} ld-k-${legs}-${i}`}>
+              <Image className='ld-craft-icon' src={CRAFT_ICON[kind]} mode='aspectFit' />
+            </View>
           ))}
 
           <View className='ld-stop'>
