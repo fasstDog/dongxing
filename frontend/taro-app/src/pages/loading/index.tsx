@@ -95,6 +95,7 @@ export default function LoadingPage() {
       <View className='ld-card'>
         <View className='ld-route'>
           <View className='ld-rail' />
+          <View className={`ld-rail-fill ld-fill-${legs}`} />
           {crafts.map((kind, i) => (
             <Image
               key={`craft-${i}`}

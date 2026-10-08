@@ -176,12 +176,66 @@
   font-weight: 600;
 }
 
+
+// 走过的轨道变成实线，前端与载具中心对齐；未走的仍是虚线。无动画时高度为 0。
+.ld-rail-fill {
+  position: absolute;
+  z-index: 2;
+  left: 84px;
+  top: 60px;
+  width: 4px;
+  height: 0;
+  border-radius: 2px;
+  background: $color-sky-500;
+}
+
+.ld-fill-1 { animation: ld-fill-1 1.5s linear infinite; }
+.ld-fill-2 { animation: ld-fill-2 3.0s linear infinite; }
+.ld-fill-3 { animation: ld-fill-3 4.5s linear infinite; }
+.ld-fill-4 { animation: ld-fill-4 6.0s linear infinite; }
+
+@keyframes ld-fill-1 {
+  0% { height: 0; }
+  92% { height: 120px; }
+  100% { height: 0; }
+}
+
+@keyframes ld-fill-2 {
+  0% { height: 0; }
+  46% { height: 120px; }
+  54% { height: 120px; }
+  96% { height: 240px; }
+  100% { height: 0; }
+}
+
+@keyframes ld-fill-3 {
+  0% { height: 0; }
+  30.67% { height: 120px; }
+  36% { height: 120px; }
+  64% { height: 240px; }
+  69.33% { height: 240px; }
+  97.33% { height: 360px; }
+  100% { height: 0; }
+}
+
+@keyframes ld-fill-4 {
+  0% { height: 0; }
+  23% { height: 120px; }
+  27% { height: 120px; }
+  48% { height: 240px; }
+  52% { height: 240px; }
+  73% { height: 360px; }
+  77% { height: 360px; }
+  98% { height: 480px; }
+  100% { height: 0; }
+}
+
 // 载具沿轨道分段滑行：每段看下一点的类型。无动画时只留第一段的图标停在出发端。
 .ld-craft {
   position: absolute;
-  z-index: 3;
-  left: 2px;
-  top: 30px;
+  z-index: 4;
+  left: 54px;
+  top: 28px;
   width: 64px;
   height: 64px;
 }
