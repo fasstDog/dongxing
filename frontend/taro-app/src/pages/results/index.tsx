@@ -17,7 +17,7 @@ const dec = (s?: string) => {
 
 type Mode = 'path' | 'recommend';
 
-type LegLine = { code: string; rest: string };
+type LegLine = { code: string; rest: string; plus: number };
 
 function shortStop(name: string): string {
   const s = (name || '').trim();
@@ -37,6 +37,26 @@ function serviceCode(ref: string): string {
     .trim();
 }
 
+function clockOnly(token: string): { day: string; hm: string } {
+  const m = (token || '').match(/^(\d{2}-\d{2})\s+(\d{2}:\d{2})$/);
+  if (m) return { day: m[1], hm: m[2] };
+  const hm = (token || '').replace(/\d{2}-\d{2}\s+/g, '').trim();
+  return { day: '', hm };
+}
+
+function dayOffset(depDay: string, arrDay: string): number {
+  const parse = (s: string) => {
+    const m = (s || '').match(/^(\d{2})-(\d{2})$/);
+    if (!m) return null;
+    return Date.UTC(2026, Number(m[1]) - 1, Number(m[2]));
+  };
+  const dep = parse(depDay);
+  const arr = parse(arrDay);
+  if (dep == null || arr == null) return 0;
+  const diff = Math.round((arr - dep) / 86400000);
+  return diff > 0 ? diff : 0;
+}
+
 function legLines(plan: UiPlan): LegLine[] {
   const lines: LegLine[] = [];
   (plan.timeline || []).forEach((seg) => {
@@ -45,17 +65,11 @@ function legLines(plan: UiPlan): LegLine[] {
     const from = shortStop(seg.from || '');
     const to = shortStop(seg.to || '');
     const parts = (seg.timeRange || '').split('→').map((x) => x.trim());
-    const parse = (token: string) => {
-      const m = (token || '').match(/^(\d{2}-\d{2})\s+(\d{2}:\d{2})$/);
-      return m ? { day: m[1], hm: m[2] } : { day: '', hm: token || '' };
-    };
-    const dep = parse(parts[0] || '');
-    const arr = parse(parts[1] || '');
-    const cross = Boolean(dep.day && arr.day && dep.day !== arr.day);
-    const depText = cross ? `${dep.day} ${dep.hm}` : dep.hm;
-    const arrText = cross ? `${arr.day} ${arr.hm}` : arr.hm;
-    const rest = [from, depText, '→', to, arrText].filter(Boolean).join(' ');
-    if (code || rest) lines.push({ code, rest });
+    const dep = clockOnly(parts[0] || '');
+    const arr = clockOnly(parts[1] || '');
+    const plus = dayOffset(dep.day, arr.day);
+    const rest = [from, dep.hm, '→', to, arr.hm].filter(Boolean).join(' ');
+    if (code || rest) lines.push({ code, rest, plus });
   });
   return lines;
 }
@@ -223,6 +237,7 @@ export default function ResultsPage() {
                         {leg.code ? <Text className='r-leg-code'>{leg.code}</Text> : null}
                         {leg.code ? <Text className='r-leg-ref'>参考</Text> : null}
                         <Text className='r-leg-rest'>{leg.rest}</Text>
+                        {leg.plus ? <Text className='r-leg-plus'>+{leg.plus}</Text> : null}
                       </Text>
                     ))
                   : <Text className='r-leg'><Text className='r-leg-rest'>{p.routeOneLine}</Text></Text>}
