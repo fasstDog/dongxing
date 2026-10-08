@@ -444,10 +444,11 @@ export default function DetailPage() {
       </View>
 
       <View className='g-dock'>
-        <View className='g-buy-link' onClick={onBuy}>
-          <Text className='g-buy-link-text'>去购票</Text>
-        </View>
         <View className='g-acts'>
+          <View className='g-act' onClick={onBuy}>
+            <Text className='g-act-icon'>▣</Text>
+            <Text className='g-act-label'>去购票</Text>
+          </View>
           <View className='g-act' onClick={toggleSaved}>
             <Text className={saved ? 'g-act-icon g-act-icon-on' : 'g-act-icon'}>{saved ? '★' : '☆'}</Text>
             <Text className={saved ? 'g-act-label g-act-label-on' : 'g-act-label'}>{saved ? '已收藏' : '收藏路线'}</Text>

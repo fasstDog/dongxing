@@ -130,20 +130,7 @@
   bottom: 0;
   background: $color-paper;
   border-top: 1px solid $color-line-warm;
-  padding: 12px $space-4 28px;
-}
-
-.g-buy-link {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding: 8px 0 12px;
-}
-
-.g-buy-link-text {
-  color: $color-sky-700;
-  font-size: 26px;
-  font-weight: 600;
+  padding: 16px 8px 28px;
 }
 
 .g-acts {
@@ -178,7 +165,7 @@
 .g-act-label {
   margin-top: 6px;
   color: $color-ink-2;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
 }
 
