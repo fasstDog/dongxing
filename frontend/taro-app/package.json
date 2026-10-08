@@ -13,7 +13,8 @@
     "build:rn": "taro build --type rn",
     "dev:weapp": "npm run build:weapp -- --watch",
     "dev:rn": "npm run build:rn -- --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "gen:places": "node scripts/gen-places.js"
   },
   "browserslist": [
     "last 3 versions",
@@ -42,6 +43,7 @@
     "@types/node": "^20.19.43",
     "@types/react": "^18.2.0",
     "babel-preset-taro": "3.6.32",
+    "pinyin-pro": "^3.29.4",
     "sass": "^1.77.0",
     "typescript": "^5.7.2",
     "webpack": "5.91.0"
