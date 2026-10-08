@@ -245,19 +245,6 @@
   height: 48px;
 }
 
-/* Tabler filled：飞机机头朝上 → 180°；火车车头、轮船船头朝右 → 90°，都转到朝下 */
-.ld-nose-airport {
-  transform: rotate(180deg);
-}
-
-.ld-nose-station {
-  transform: rotate(90deg);
-}
-
-.ld-nose-port {
-  transform: rotate(90deg);
-}
-
 .ld-craft-wait {
   opacity: 0;
 }

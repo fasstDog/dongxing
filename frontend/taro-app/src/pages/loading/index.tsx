@@ -98,7 +98,7 @@ export default function LoadingPage() {
           <View className={`ld-rail-fill ld-fill-${legs}`} />
           {crafts.map((kind, i) => (
             <View key={`craft-${i}`} className={`ld-craft ${i > 0 ? 'ld-craft-wait' : ''} ld-k-${legs}-${i}`}>
-              <Image className={`ld-craft-icon ld-nose-${kind}`} src={CRAFT_ICON[kind]} mode='aspectFit' />
+              <Image className='ld-craft-icon' src={CRAFT_ICON[kind]} mode='aspectFit' />
             </View>
           ))}
 
