@@ -5,38 +5,42 @@ import { findPlan, type UiPlan, type UiPlay, type UiTimelineItem } from '../../s
 import { getDongxingGlobal } from '../../services/store';
 import './index.scss';
 
-type Clock = { hm: string; plus: number };
-
 type LegView = {
-  key: string;
   code: string;
   mode: string;
   seat: string;
   from: string;
   to: string;
-  dep: Clock;
-  arr: Clock;
+  depHm: string;
+  arrHm: string;
+  plus: number;
   flight: boolean;
+  duration: string;
 };
 
 type XferView = {
-  key: string;
+  city: string;
   from: string;
   to: string;
-  wait: string;
   minutes: number;
   how: string;
 };
 
-type PlayView = {
-  name: string;
-  dist: string;
-  suggest: string;
+type Spot = { name: string; dist: string; suggest: string };
+
+type Section = {
+  key: string;
+  title: string;
+  paragraphs: string[];
+  photo?: 'train' | 'plane';
 };
 
 const PLAY_MIN = 180;
 
-const FALLBACK_PLAY: Record<string, PlayView[]> = {
+const HOUR = ['零', '一', '两', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十', '二十一', '二十二', '二十三'];
+const DIG = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+
+const FALLBACK_PLAY: Record<string, Spot[]> = {
   西安: [
     { name: '西安钟楼', dist: '市中心，离西安北站大约 12 公里', suggest: '逛 1 小时' },
     { name: '回民街', dist: '钟楼旁边', suggest: '逛 1 小时' }
@@ -78,11 +82,7 @@ function clocks(timeRange: string) {
   const parts = (timeRange || '').split('→').map((part) => part.trim());
   const dep = parseStamp(parts[0] || '');
   const arr = parseStamp(parts[1] || '');
-  return {
-    dep: { hm: dep.hm, plus: 0 },
-    arr: { hm: arr.hm, plus: dayGap(dep.key, arr.key) },
-    depKey: dep.key
-  };
+  return { dep, arr, plus: dayGap(dep.key, arr.key) };
 }
 
 function waitMinutes(buffer: string) {
@@ -93,35 +93,150 @@ function waitMinutes(buffer: string) {
   return 0;
 }
 
-function waitText(minutes: number) {
-  if (minutes <= 0) return '';
-  if (minutes < 60) return `约 ${minutes} 分钟`;
-  const hour = Math.floor(minutes / 60);
-  const rest = minutes % 60;
-  if (rest === 0) return `约 ${hour} 小时`;
-  if (rest === 30) return `约 ${hour}.5 小时`;
-  return `约 ${hour} 小时 ${rest} 分`;
+function dayPart(hm: string) {
+  const hour = Number((hm || '0').split(':')[0]);
+  if (hour < 5) return '夜里';
+  if (hour < 9) return '早上';
+  if (hour < 12) return '上午';
+  if (hour < 14) return '中午';
+  if (hour < 18) return '下午';
+  if (hour < 22) return '晚上';
+  return '夜里';
 }
 
-function buildTrip(timeline: UiTimelineItem[]) {
+function minuteName(m: number) {
+  if (m === 0) return '';
+  if (m < 10) return `零${DIG[m]}`;
+  if (m === 10) return '十';
+  if (m < 20) return `十${DIG[m - 10]}`;
+  const ten = Math.floor(m / 10);
+  const one = m % 10;
+  return `${DIG[ten]}十${one ? DIG[one] : ''}`;
+}
+
+function spoken(hm: string) {
+  let h = Number((hm || '').split(':')[0]);
+  const m = Number((hm || '').split(':')[1]);
+  if (Number.isNaN(h)) return hm || '';
+  if (h >= 13) h -= 12;
+  const hour = HOUR[h] || String(h);
+  if (!m) return `${hour}点`;
+  if (m === 30) return `${hour}点半`;
+  return `${hour}点${minuteName(m)}分`;
+}
+
+function hourSpan(minutes: number) {
+  if (minutes <= 0) return '';
+  if (minutes < 60) return `${minutes} 分钟`;
+  const hour = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  const words = ['', '一', '两', '三', '四', '五', '六', '七', '八', '九', '十'];
+  if (rest === 0 && hour <= 10) return `${words[hour]}个小时`;
+  if (rest === 30 && hour <= 10) return `${words[hour]}个半小时`;
+  if (rest === 0) return `${hour} 个小时`;
+  return `${hour} 小时 ${rest} 分`;
+}
+
+function durationPhrase(text: string) {
+  const raw = (text || '').replace(/^约\s*/, '').trim();
+  return raw ? `大约 ${raw}` : '';
+}
+
+function seatPhrase(seat: string) {
+  const text = (seat || '').split(/[；;]/)[0].trim();
+  if (!text) return '';
+  return text.split('/')[0].replace(/便宜|优先|难抢/g, '').trim();
+}
+
+function rideSentence(leg: LegView) {
+  const seat = seatPhrase(leg.seat);
+  const ride = leg.code ? (seat ? `${leg.code} 的${seat}` : leg.code) : seat || leg.mode;
+  const verb = leg.flight ? '搭' : '坐';
+  const dur = durationPhrase(leg.duration);
+  const day = leg.plus <= 0 ? '' : leg.plus === 1 ? '第二天' : leg.plus === 2 ? '第三天' : `第 ${leg.plus + 1} 天`;
+  const arrive = `${day}${dayPart(leg.arrHm)}${spoken(leg.arrHm)}`;
+  const bits = [`${spoken(leg.depHm)}从${leg.from}${verb} ${ride}`];
+  if (dur) bits.push(dur);
+  return `${bits.join('，')}，${arrive}到${leg.to}。`;
+}
+
+function audience(type: string) {
+  if (type === 'cheap') return '适合想少花钱、不赶时间的人。';
+  if (type === 'balanced') return '适合不急着到、也想在路上歇一歇的人。';
+  return '适合想少在路上耗时间、也愿意多花一点的人。';
+}
+
+function transferPhrase(n: number) {
+  if (!n) return '不用换乘';
+  if (n === 1) return '中途换一次';
+  if (n === 2) return '中途换两次';
+  return `中途换 ${n} 次`;
+}
+
+function citiesOf(plan: UiPlan) {
+  return (plan.routeOneLine || '')
+    .split(/→|->/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
+function leadOf(plan: UiPlan, legs: LegView[]) {
+  const cities = citiesOf(plan);
+  const dur = (plan.duration || '').replace(/^约\s*/, '大约 ');
+  const tail = `${dur ? `全程${dur}，` : ''}${transferPhrase(plan.transfers)}${plan.price ? `，总价 ${plan.price}。` : '。'}${audience(plan.type)}`;
+  if (legs.length >= 2) {
+    const mid = cities[1] || legs[0].to;
+    const end = cities[cities.length - 1] || legs[legs.length - 1].to;
+    const next = legs[1];
+    const start = `${dayPart(legs[0].depHm)}坐${legs[0].mode}到${mid}`;
+    const sameDay = next.plus === 0;
+    const follow = next.flight ? `${dayPart(next.depHm)}再飞${end}` : `${dayPart(next.depHm)}再坐到${end}`;
+    return `${start}，${follow}${sameDay ? '，当天就能到。' : '。'}${tail}`;
+  }
+  if (legs.length === 1) {
+    const from = cities[0] || legs[0].from;
+    const end = cities[cities.length - 1] || legs[0].to;
+    const how = legs[0].flight ? `从${from}直飞${end}。` : `从${from}坐${legs[0].mode}直达${end}，不用换车。`;
+    return `${how}${tail}`;
+  }
+  return tail;
+}
+
+function spotsFor(plan: UiPlan, city: string): Spot[] {
+  const fromData = (plan.play || [])
+    .filter((item: UiPlay) => item.name)
+    .slice(0, 2)
+    .map((item) => ({ name: item.name, dist: item.distText || '', suggest: item.suggestText || '' }));
+  if (fromData.length) return fromData;
+  return (FALLBACK_PLAY[city] || []).slice(0, 2);
+}
+
+function spotSentence(spot: Spot, first: boolean) {
+  const head = first ? `可以去${spot.name}` : `也可以去${spot.name}`;
+  const rest = [spot.dist, spot.suggest].filter(Boolean).join('，');
+  return rest ? `${head}，${rest}。` : `${head}。`;
+}
+
+function readTimeline(timeline: UiTimelineItem[]) {
   const legs: LegView[] = [];
   const xfers: XferView[] = [];
   let originKey = '';
-  timeline.forEach((item, index) => {
+  timeline.forEach((item) => {
     if (item.isXfer) return;
     const clock = clocks(item.timeRange || '');
-    if (!originKey) originKey = clock.depKey;
-    const plusBase = dayGap(originKey, clock.depKey);
+    if (!originKey) originKey = clock.dep.key;
+    const plusBase = dayGap(originKey, clock.dep.key);
     legs.push({
-      key: `leg-${index}`,
       code: codeOf(item.serviceRef || ''),
       mode: item.modeLabel || (item.isFlight ? '飞机' : '火车'),
       seat: item.seatHint || '',
       from: placeName(item.from || ''),
       to: placeName(item.to || ''),
-      dep: { hm: clock.dep.hm, plus: plusBase },
-      arr: { hm: clock.arr.hm, plus: plusBase + clock.arr.plus },
-      flight: !!item.isFlight
+      depHm: clock.dep.hm,
+      arrHm: clock.arr.hm,
+      plus: plusBase + clock.plus,
+      flight: !!item.isFlight,
+      duration: item.duration || ''
     });
   });
   for (let i = 0; i < timeline.length; i += 1) {
@@ -130,49 +245,58 @@ function buildTrip(timeline: UiTimelineItem[]) {
     const prev = [...timeline.slice(0, i)].reverse().find((seg) => !seg.isXfer);
     const next = timeline.slice(i + 1).find((seg) => !seg.isXfer);
     if (!prev || !next) continue;
-    const minutes = waitMinutes(item.buffer || '');
     xfers.push({
-      key: `xfer-${i}`,
+      city: item.city || '',
       from: placeName(prev.to || ''),
       to: placeName(next.from || ''),
-      wait: waitText(minutes),
-      minutes,
+      minutes: waitMinutes(item.buffer || ''),
       how: item.xferLabel || '换乘'
     });
   }
-  const rows: Array<{ kind: 'leg'; leg: LegView } | { kind: 'xfer'; xfer: XferView }> = [];
-  let xferAt = 0;
+  return { legs, xfers };
+}
+
+function buildGuide(plan: UiPlan) {
+  const { legs, xfers } = readTimeline(plan.timeline);
+  const cities = citiesOf(plan);
+  const endCity = cities[cities.length - 1] || '';
+  const sections: Section[] = [];
   legs.forEach((leg, index) => {
-    if (index > 0 && xfers[xferAt]) {
-      rows.push({ kind: 'xfer', xfer: xfers[xferAt] });
-      xferAt += 1;
+    const part = dayPart(leg.depHm);
+    let title = `${part}从${leg.from}出发`;
+    if (index === 0 && leg.flight) title = `${part}从${leg.from}起飞`;
+    if (index > 0 && leg.flight) title = `${part}飞${endCity || leg.to}`;
+    if (index > 0 && !leg.flight) title = `${part}从${leg.from}继续走`;
+    const section: Section = {
+      key: `leg-${index}`,
+      title,
+      paragraphs: [rideSentence(leg)],
+      photo: index === 0 ? (leg.flight ? 'plane' : 'train') : undefined
+    };
+    if (index === legs.length - 1 && leg.flight && index > 0) section.photo = 'plane';
+    sections.push(section);
+
+    const xfer = xfers[index];
+    if (!xfer || index === legs.length - 1) return;
+    const city = xfer.city || leg.to;
+    const span = hourSpan(xfer.minutes);
+    const link = xfer.from && xfer.to ? `从${xfer.from}到${xfer.to}` : `在${city}`;
+    const how = xfer.how || '换乘';
+    if (xfer.minutes >= PLAY_MIN) {
+      const spots = spotsFor(plan, city);
+      const paragraphs = [`${link}是${how}，中间大约有${span}。这段时间够在附近走走。`];
+      if (spots[0]) paragraphs.push(spotSentence(spots[0], true));
+      if (spots[1]) paragraphs.push(spotSentence(spots[1], false));
+      sections.push({ key: `stay-${index}`, title: `到了${city}，先去转转`, paragraphs });
+    } else {
+      sections.push({
+        key: `stay-${index}`,
+        title: `到了${city}，接着走`,
+        paragraphs: [`${link}是${how}，中间大约只有${span || '一小会儿'}，来不及绕路，接着走就好。`]
+      });
     }
-    rows.push({ kind: 'leg', leg });
   });
-  return { rows, longEnough: xfers.some((item) => item.minutes >= PLAY_MIN) };
-}
-
-function playSpots(plan: UiPlan, city: string): PlayView[] {
-  const fromData = (plan.play || [])
-    .filter((item: UiPlay) => item.name)
-    .slice(0, 2)
-    .map((item) => ({
-      name: item.name,
-      dist: item.distText || '',
-      suggest: item.suggestText || ''
-    }));
-  if (fromData.length) return fromData;
-  return (FALLBACK_PLAY[city] || []).slice(0, 2);
-}
-
-function hubCity(plan: UiPlan) {
-  const xfer = plan.timeline.find((item) => item.isXfer && item.city);
-  return xfer?.city || '';
-}
-
-function Plus({ n }: { n: number }) {
-  if (!n) return null;
-  return <Text className='d-plus'>+{n}</Text>;
+  return { lead: leadOf(plan, legs), sections };
 }
 
 export default function DetailPage() {
@@ -220,107 +344,46 @@ export default function DetailPage() {
 
   if (!plan) {
     return (
-      <View className='d-page'>
-        <View className='d-empty'>
-          <Text className='d-empty-text'>方案找不到了，先回结果看看</Text>
-          <View className='d-buy-btn' onClick={onBack}>
-            <Text className='d-buy-label'>回结果</Text>
+      <View className='g-page'>
+        <View className='g-empty'>
+          <Text className='g-empty-text'>方案找不到了，先回结果看看</Text>
+          <View className='g-buy' onClick={onBack}>
+            <Text className='g-buy-label'>回结果</Text>
           </View>
         </View>
       </View>
     );
   }
 
-  const trip = buildTrip(plan.timeline);
-  const city = hubCity(plan);
-  const spots = trip.longEnough ? playSpots(plan, city) : [];
-  const transferText = plan.transfers > 0 ? `${plan.transfers} 次` : '不用换';
+  const guide = buildGuide(plan);
 
   return (
-    <View className='d-page'>
-      <View className='d-sky'>
-        <View className='d-head'>
-          <View className='d-back' onClick={onBack}>
-            <Text className='d-back-arrow'>‹</Text>
+    <View className='g-page'>
+      <View className='g-sky'>
+        <View className='g-head'>
+          <View className='g-back' onClick={onBack}>
+            <Text className='g-back-arrow'>‹</Text>
           </View>
-          <Text className='d-title'>{plan.typeLabel} · 攻略</Text>
+          <Text className='g-title'>{plan.typeLabel} · 攻略</Text>
         </View>
       </View>
 
-      <View className='d-body'>
-        <View className={plan.hasFlight ? 'd-sum d-sum-flight' : 'd-sum d-sum-train'}>
-          <View className='d-metrics'>
-            <View className='d-metric'>
-              <Text className='d-num'>{plan.price}</Text>
-              <Text className='d-lab'>总价</Text>
-            </View>
-            <View className='d-metric'>
-              <Text className='d-num'>{plan.duration}</Text>
-              <Text className='d-lab'>总时长</Text>
-            </View>
-            <View className='d-metric'>
-              <Text className='d-num'>{transferText}</Text>
-              <Text className='d-lab'>换乘</Text>
-            </View>
-          </View>
-        </View>
-
-        <Text className='d-section'>行程</Text>
-        {trip.rows.map((row) =>
-          row.kind === 'xfer' ? (
-            <View className='d-xfer' key={row.xfer.key}>
-              <Text className='d-xfer-route'>
-                {row.xfer.from} → {row.xfer.to}
+      <View className='g-body'>
+        <Text className='g-lead'>{guide.lead}</Text>
+        {guide.sections.map((section) => (
+          <View className='g-sec' key={section.key}>
+            <Text className='g-h'>{section.title}</Text>
+            {section.paragraphs.map((paragraph) => (
+              <Text className='g-p' key={paragraph}>
+                {paragraph}
               </Text>
-              <Text className='d-xfer-meta'>
-                {[row.xfer.wait, row.xfer.how].filter(Boolean).join(' · ')}
-              </Text>
-            </View>
-          ) : (
-            <View className='d-leg' key={row.leg.key}>
-              <View className='d-leg-top'>
-                <Text className='d-code'>{row.leg.code || row.leg.mode}</Text>
-                {row.leg.seat ? <Text className='d-seat'>{row.leg.seat}</Text> : null}
-              </View>
-              <View className='d-leg-line'>
-                <View className='d-stop'>
-                  <Text className='d-stop-name'>{row.leg.from}</Text>
-                  <View className='d-clock'>
-                    <Text className='d-hm'>{row.leg.dep.hm}</Text>
-                    <Plus n={row.leg.dep.plus} />
-                  </View>
-                </View>
-                <Text className='d-to'>→</Text>
-                <View className='d-stop d-stop-end'>
-                  <Text className='d-stop-name d-stop-name-end'>{row.leg.to}</Text>
-                  <View className='d-clock d-clock-end'>
-                    <Text className='d-hm'>{row.leg.arr.hm}</Text>
-                    <Plus n={row.leg.arr.plus} />
-                  </View>
-                </View>
-              </View>
-            </View>
-          )
-        )}
-
-        {spots.length ? (
-          <View>
-            <Text className='d-section'>怎么玩</Text>
-            <View className='d-play'>
-              {spots.map((spot) => (
-                <View className='d-spot' key={spot.name}>
-                  <Text className='d-spot-name'>{spot.name}</Text>
-                  <Text className='d-spot-sub'>{[spot.dist, spot.suggest].filter(Boolean).join(' · ')}</Text>
-                </View>
-              ))}
-            </View>
+            ))}
+            {section.photo === 'train' ? <View className='g-photo g-photo-train' /> : null}
+            {section.photo === 'plane' ? <View className='g-photo g-photo-plane' /> : null}
           </View>
-        ) : null}
-      </View>
-
-      <View className='d-bar'>
-        <View className='d-buy-btn' onClick={onBuy}>
-          <Text className='d-buy-label'>去购票</Text>
+        ))}
+        <View className='g-buy' onClick={onBuy}>
+          <Text className='g-buy-label'>去购票</Text>
         </View>
       </View>
     </View>

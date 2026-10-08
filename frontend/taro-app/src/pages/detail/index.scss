@@ -1,25 +1,25 @@
 @import '../../styles/tokens.scss';
 
-.d-page {
+.g-page {
   min-height: 100vh;
   box-sizing: border-box;
   background: $color-paper;
-  padding-bottom: 160px;
+  padding-bottom: 48px;
 }
 
-.d-sky {
+.g-sky {
   background-color: $color-sky-700;
-  background-image: linear-gradient(160deg, $color-sky-900 0%, $color-sky-700 70%, $color-sky-500 100%);
-  padding: $space-4 $space-5 72px;
+  background-image: linear-gradient(160deg, $color-sky-900 0%, $color-sky-700 72%, $color-sky-500 100%);
+  padding: $space-4 $space-5 $space-5;
 }
 
-.d-head {
+.g-head {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.d-back {
+.g-back {
   width: 72px;
   height: 72px;
   border-radius: 36px;
@@ -31,218 +31,72 @@
   flex-shrink: 0;
 }
 
-.d-back-arrow {
+.g-back-arrow {
   color: #fff;
   font-size: 40px;
   font-weight: 700;
   line-height: 1;
 }
 
-.d-title {
+.g-title {
   margin-left: 16px;
   color: #fff;
   font-size: 40px;
   font-weight: 800;
 }
 
-.d-body {
-  margin-top: -48px;
-  padding: 0 $space-4;
+.g-body {
+  padding: $space-5 $space-5 0;
 }
 
-.d-sum {
-  background-color: $color-surface;
-  background-repeat: no-repeat, repeat;
-  background-position: right -8px top -8px, 0 0;
-  background-size: 280px auto, 12px 14px;
-  border-radius: 24px;
-  box-shadow: $shadow-ticket;
-  padding: $space-4 $space-4 $space-3;
-  overflow: hidden;
-}
-
-.d-sum-train {
-  background-image: url('../../assets/ticket/mark-train.png'),
-    radial-gradient(circle, rgba(168, 148, 120, 0.28) 1.15px, rgba(168, 148, 120, 0) 1.35px);
-}
-
-.d-sum-flight {
-  background-image: url('../../assets/ticket/mark-plane.png'),
-    radial-gradient(circle, rgba(168, 148, 120, 0.28) 1.15px, rgba(168, 148, 120, 0) 1.35px);
-}
-
-.d-metrics {
-  display: flex;
-  flex-direction: row;
-}
-
-.d-metric {
-  flex: 1;
-  min-width: 0;
-}
-
-.d-num {
+.g-lead {
   display: block;
   color: $color-ink;
   font-size: 32px;
-  font-weight: 800;
+  font-weight: 500;
+  line-height: 1.75;
 }
 
-.d-lab {
+.g-sec {
+  margin-top: 40px;
+}
+
+.g-h {
   display: block;
-  margin-top: 6px;
-  color: $color-ink-3;
-  font-size: 22px;
-}
-
-.d-section {
-  display: block;
-  margin: $space-4 4px $space-2;
-  color: $color-ink-2;
-  font-size: 26px;
-  font-weight: 700;
-}
-
-.d-leg {
-  background: $color-surface;
-  border-radius: 20px;
-  box-shadow: $shadow-ticket;
-  padding: $space-3 $space-4;
-  margin-bottom: $space-2;
-}
-
-.d-leg-top {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.d-code {
-  color: $color-sky-900;
-  font-size: 30px;
-  font-weight: 800;
-}
-
-.d-seat {
-  color: $color-ink-2;
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.d-leg-line {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  margin-top: 12px;
-}
-
-.d-stop {
-  flex: 1;
-  min-width: 0;
-}
-
-.d-stop-end {
-  align-items: flex-end;
-}
-
-.d-stop-name {
-  display: block;
-  color: $color-ink-2;
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.d-stop-name-end {
-  text-align: right;
-}
-
-.d-clock {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  margin-top: 4px;
-}
-
-.d-clock-end {
-  justify-content: flex-end;
-}
-
-.d-hm {
   color: $color-ink;
   font-size: 36px;
   font-weight: 800;
+  line-height: 1.35;
 }
 
-.d-plus {
-  color: $color-coral;
-  font-size: 20px;
-  font-weight: 700;
-  margin-left: 4px;
-}
-
-.d-to {
-  color: $color-ink-3;
-  font-size: 32px;
-  font-weight: 700;
-  margin: 0 12px 8px;
-}
-
-.d-xfer {
-  margin: 4px $space-3 12px;
-  padding: 8px 0;
-}
-
-.d-xfer-route {
+.g-p {
   display: block;
-  color: $color-ink;
-  font-size: 26px;
-  font-weight: 700;
+  margin-top: 16px;
+  color: $color-ink-2;
+  font-size: 30px;
+  line-height: 1.8;
 }
 
-.d-xfer-meta {
-  display: block;
-  margin-top: 4px;
-  color: $color-ink-3;
-  font-size: 22px;
-}
-
-.d-play {
-  background: $color-surface;
+.g-photo {
+  margin-top: 20px;
+  height: 280px;
   border-radius: 20px;
-  box-shadow: $shadow-ticket;
-  padding: 4px $space-4;
+  background-color: $color-paper-2;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
-.d-spot {
-  padding: $space-3 0;
+.g-photo-train {
+  background-image: url('../../assets/ticket/mark-train.png');
 }
 
-.d-spot-name {
-  display: block;
-  color: $color-ink;
-  font-size: 28px;
-  font-weight: 700;
+.g-photo-plane {
+  background-image: url('../../assets/ticket/mark-plane.png');
 }
 
-.d-spot-sub {
-  display: block;
-  margin-top: 6px;
-  color: $color-ink-3;
-  font-size: 22px;
-  line-height: 1.4;
-}
-
-.d-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 16px $space-4 28px;
-  background: $color-paper;
-}
-
-.d-buy-btn {
+.g-buy {
+  margin-top: 48px;
   background: $color-coral;
   border-radius: 999px;
   padding: 22px 0;
@@ -252,17 +106,17 @@
   justify-content: center;
 }
 
-.d-buy-label {
+.g-buy-label {
   color: #fff;
   font-size: 32px;
   font-weight: 700;
 }
 
-.d-empty {
+.g-empty {
   padding: 80px $space-5;
 }
 
-.d-empty-text {
+.g-empty-text {
   display: block;
   color: $color-ink-2;
   font-size: 28px;
