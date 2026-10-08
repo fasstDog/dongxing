@@ -214,7 +214,7 @@ export default function ResultsPage() {
       {status === 'ok' ? (
         <View className='r-list'>
           {main.map((p) => (
-            <View key={p.id} className='r-card' hoverClass='r-press' {...PRESS} onClick={() => onOpen(p.id)}>
+            <View key={p.id} className={p.hasFlight ? 'r-card r-card-flight' : 'r-card'} hoverClass='r-press' {...PRESS} onClick={() => onOpen(p.id)}>
               <View className='r-card-top'>
                 <Text className={`r-tag r-tag-${p.type}`}>{p.typeLabel || '方案'}</Text>
                 <Text className='r-xfer'>{p.transfers ? `${p.transfers} 次换乘` : '不用换乘'}</Text>
@@ -235,7 +235,6 @@ export default function ResultsPage() {
                   ? legLines(p).map((leg, i) => (
                       <Text key={`${p.id}-${i}`} className='r-leg'>
                         {leg.code ? <Text className='r-leg-code'>{leg.code}</Text> : null}
-                        {leg.code ? <Text className='r-leg-ref'>参考</Text> : null}
                         <Text className='r-leg-rest'>{leg.rest}</Text>
                         {leg.plus ? <Text className='r-leg-plus'>+{leg.plus}</Text> : null}
                       </Text>
