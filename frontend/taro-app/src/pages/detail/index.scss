@@ -4,7 +4,7 @@
   min-height: 100vh;
   box-sizing: border-box;
   background: $color-paper;
-  padding-bottom: 48px;
+  padding-bottom: 220px;
 }
 
 .g-sky {
@@ -121,4 +121,140 @@
   color: $color-ink-2;
   font-size: 28px;
   margin-bottom: $space-4;
+}
+
+.g-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $color-paper;
+  border-top: 1px solid $color-line-warm;
+  padding: 12px $space-4 28px;
+}
+
+.g-buy-link {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 8px 0 12px;
+}
+
+.g-buy-link-text {
+  color: $color-sky-700;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.g-acts {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.g-act {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0 4px;
+}
+
+.g-act-icon {
+  color: $color-ink-2;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.g-act-icon-on {
+  color: $color-sky-700;
+}
+
+.g-heart-on {
+  color: $color-coral;
+}
+
+.g-act-label {
+  margin-top: 6px;
+  color: $color-ink-2;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.g-act-label-on {
+  color: $color-ink;
+}
+
+.g-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(28, 43, 51, 0.45);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.g-sheet {
+  background: $color-paper;
+  border-radius: 24px 24px 0 0;
+  padding: $space-5 $space-5 40px;
+}
+
+.g-sheet-title {
+  display: block;
+  color: $color-ink;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.g-input {
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  font-size: 28px;
+  color: $color-ink;
+}
+
+.g-sheet-row {
+  display: flex;
+  flex-direction: row;
+  margin-top: 24px;
+}
+
+.g-sheet-cancel {
+  flex: 1;
+  margin-right: 16px;
+  border-radius: 999px;
+  padding: 18px 0;
+  background: $color-paper-2;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.g-sheet-cancel-text {
+  color: $color-ink-2;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.g-sheet-ok {
+  flex: 1;
+  border-radius: 999px;
+  padding: 18px 0;
+  background: $color-sky-700;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.g-sheet-ok-text {
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
 }

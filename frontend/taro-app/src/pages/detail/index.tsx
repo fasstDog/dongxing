@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text } from '@tarojs/components';
+import { View, Text, Input } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import { findPlan, type UiPlan, type UiPlay, type UiTimelineItem } from '../../services/adapt';
 import { getDongxingGlobal } from '../../services/store';
@@ -36,6 +36,26 @@ type Section = {
 };
 
 const PLAY_MIN = 180;
+const SAVE_KEY = 'dx-guide-saved';
+const LIKE_KEY = 'dx-guide-liked';
+const LIKE_BASE = 128;
+
+function readIds(key: string) {
+  try {
+    const raw = Taro.getStorageSync(key);
+    return Array.isArray(raw) ? raw.filter((id) => typeof id === 'string') : [];
+  } catch (err) {
+    return [];
+  }
+}
+
+function writeIds(key: string, ids: string[]) {
+  try {
+    Taro.setStorageSync(key, ids);
+  } catch (err) {
+    /* 本地写不进就只留在这一页 */
+  }
+}
 
 const HOUR = ['零', '一', '两', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十', '二十一', '二十二', '二十三'];
 const DIG = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
@@ -304,6 +324,10 @@ export default function DetailPage() {
   const [plan, setPlan] = useState<UiPlan | null>(null);
   const [fromCity, setFromCity] = useState('徐州');
   const [toCity, setToCity] = useState('拉萨');
+  const [saved, setSaved] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [feedback, setFeedback] = useState('');
 
   useEffect(() => {
     const planId = decodeURIComponent(router.params.id || '');
@@ -327,7 +351,42 @@ export default function DetailPage() {
       return;
     }
     setPlan(found);
+    const id = found.id;
+    setSaved(readIds(SAVE_KEY).indexOf(id) >= 0);
+    setLiked(readIds(LIKE_KEY).indexOf(id) >= 0);
+    setFeedbackOpen(false);
+    setFeedback('');
   }, [router.params]);
+
+  const toggleSaved = () => {
+    if (!plan) return;
+    const ids = readIds(SAVE_KEY).filter((id) => id !== plan.id);
+    const next = !saved;
+    if (next) ids.push(plan.id);
+    writeIds(SAVE_KEY, ids);
+    setSaved(next);
+    Taro.showToast({ title: next ? '已收藏这条路线' : '已取消收藏', icon: 'none' });
+  };
+
+  const toggleLiked = () => {
+    if (!plan) return;
+    const ids = readIds(LIKE_KEY).filter((id) => id !== plan.id);
+    const next = !liked;
+    if (next) ids.push(plan.id);
+    writeIds(LIKE_KEY, ids);
+    setLiked(next);
+  };
+
+  const submitFeedback = () => {
+    const text = feedback.trim();
+    if (!text) {
+      Taro.showToast({ title: '写一点再发', icon: 'none' });
+      return;
+    }
+    setFeedback('');
+    setFeedbackOpen(false);
+    Taro.showToast({ title: '收到了，谢谢', icon: 'none' });
+  };
 
   const onBuy = () => {
     Taro.showToast({ title: '去 12306 或航司看看', icon: 'none', duration: 2000 });
@@ -382,10 +441,49 @@ export default function DetailPage() {
             {section.photo === 'plane' ? <View className='g-photo g-photo-plane' /> : null}
           </View>
         ))}
-        <View className='g-buy' onClick={onBuy}>
-          <Text className='g-buy-label'>去购票</Text>
+      </View>
+
+      <View className='g-dock'>
+        <View className='g-buy-link' onClick={onBuy}>
+          <Text className='g-buy-link-text'>去购票</Text>
+        </View>
+        <View className='g-acts'>
+          <View className='g-act' onClick={toggleSaved}>
+            <Text className={saved ? 'g-act-icon g-act-icon-on' : 'g-act-icon'}>{saved ? '★' : '☆'}</Text>
+            <Text className={saved ? 'g-act-label g-act-label-on' : 'g-act-label'}>{saved ? '已收藏' : '收藏路线'}</Text>
+          </View>
+          <View className='g-act' onClick={toggleLiked}>
+            <Text className={liked ? 'g-act-icon g-heart-on' : 'g-act-icon'}>{liked ? '♥' : '♡'}</Text>
+            <Text className={liked ? 'g-act-label g-act-label-on' : 'g-act-label'}>{`点赞 ${LIKE_BASE + (liked ? 1 : 0)}`}</Text>
+          </View>
+          <View className='g-act' onClick={() => setFeedbackOpen(true)}>
+            <Text className='g-act-icon'>✎</Text>
+            <Text className='g-act-label'>反馈</Text>
+          </View>
         </View>
       </View>
+
+      {feedbackOpen ? (
+        <View className='g-mask'>
+          <View className='g-sheet'>
+            <Text className='g-sheet-title'>反馈</Text>
+            <Input
+              className='g-input'
+              placeholder='这条路线哪里不对'
+              value={feedback}
+              onInput={(event) => setFeedback(event.detail.value)}
+            />
+            <View className='g-sheet-row'>
+              <View className='g-sheet-cancel' onClick={() => setFeedbackOpen(false)}>
+                <Text className='g-sheet-cancel-text'>取消</Text>
+              </View>
+              <View className='g-sheet-ok' onClick={submitFeedback}>
+                <Text className='g-sheet-ok-text'>提交</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      ) : null}
     </View>
   );
 }
