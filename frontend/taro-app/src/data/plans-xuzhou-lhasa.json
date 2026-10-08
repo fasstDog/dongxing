@@ -40,7 +40,7 @@
             "seat_hint": "硬座便宜；硬卧难抢",
             "price_ref_cny": 397,
             "price_display": "约 ¥397",
-            "service_ref": "Z 字头过路车（参考）",
+            "service_ref": "Z165（参考）",
             "leg_id": "leg-xz-lxa-direct",
             "comfort": "hardseat"
           }
@@ -83,7 +83,7 @@
             "seat_hint": "二等座",
             "price_ref_cny": 480,
             "price_display": "约 ¥480",
-            "service_ref": "G 字头（参考）",
+            "service_ref": "G1972（参考）",
             "leg_id": "leg-xz-xian-g",
             "comfort": "second_class"
           },
@@ -109,7 +109,7 @@
             "seat_hint": "经济舱",
             "price_ref_cny": 650,
             "price_display": "约 ¥650",
-            "service_ref": "航司直飞（参考）",
+            "service_ref": "MU2341（参考）",
             "leg_id": "leg-xian-lxa-flight",
             "comfort": "economy"
           }
@@ -175,7 +175,7 @@
             "seat_hint": "硬卧 / 硬座",
             "price_ref_cny": 350,
             "price_display": "约 ¥350",
-            "service_ref": "Z165 类",
+            "service_ref": "Z165（参考）",
             "leg_id": "leg-xz-xnn-z-class",
             "comfort": "hard_sleeper"
           },
@@ -201,7 +201,7 @@
             "seat_hint": "硬卧优先",
             "price_ref_cny": 300,
             "price_display": "约 ¥300",
-            "service_ref": "西宁始发进藏 Z6801 类",
+            "service_ref": "Z6801（参考）",
             "leg_id": "leg-xnn-lxa-origin",
             "comfort": "hard_sleeper"
           }
@@ -283,7 +283,7 @@
                 "seat_hint": "硬座便宜；硬卧难抢",
                 "price_ref_cny": 397,
                 "price_display": "约 ¥397",
-                "service_ref": "Z 字头过路车（参考）",
+                "service_ref": "Z165（参考）",
                 "leg_id": "leg-xz-lxa-direct",
                 "comfort": "hardseat"
               }
@@ -326,7 +326,7 @@
                 "seat_hint": "二等座",
                 "price_ref_cny": 480,
                 "price_display": "约 ¥480",
-                "service_ref": "G 字头（参考）",
+                "service_ref": "G1972（参考）",
                 "leg_id": "leg-xz-xian-g",
                 "comfort": "second_class"
               },
@@ -352,7 +352,7 @@
                 "seat_hint": "经济舱",
                 "price_ref_cny": 650,
                 "price_display": "约 ¥650",
-                "service_ref": "航司直飞（参考）",
+                "service_ref": "MU2341（参考）",
                 "leg_id": "leg-xian-lxa-flight",
                 "comfort": "economy"
               }
@@ -418,7 +418,7 @@
                 "seat_hint": "硬卧 / 硬座",
                 "price_ref_cny": 350,
                 "price_display": "约 ¥350",
-                "service_ref": "Z165 类",
+                "service_ref": "Z165（参考）",
                 "leg_id": "leg-xz-xnn-z-class",
                 "comfort": "hard_sleeper"
               },
@@ -444,7 +444,7 @@
                 "seat_hint": "硬卧优先",
                 "price_ref_cny": 300,
                 "price_display": "约 ¥300",
-                "service_ref": "西宁始发进藏 Z6801 类",
+                "service_ref": "Z6801（参考）",
                 "leg_id": "leg-xnn-lxa-origin",
                 "comfort": "hard_sleeper"
               }
@@ -565,7 +565,7 @@
                 "seat_hint": "硬卧 / 硬座",
                 "price_ref_cny": 350,
                 "price_display": "约 ¥350",
-                "service_ref": "Z165 类",
+                "service_ref": "Z165（参考）",
                 "leg_id": "leg-xz-xnn-z-class",
                 "comfort": "hard_sleeper"
               },
@@ -591,7 +591,7 @@
                 "seat_hint": "硬卧优先",
                 "price_ref_cny": 300,
                 "price_display": "约 ¥300",
-                "service_ref": "西宁始发进藏 Z6801 类",
+                "service_ref": "Z6801（参考）",
                 "leg_id": "leg-xnn-lxa-origin",
                 "comfort": "hard_sleeper"
               }
@@ -667,7 +667,7 @@
                 "seat_hint": "硬卧 / 硬座",
                 "price_ref_cny": 350,
                 "price_display": "约 ¥350",
-                "service_ref": "Z165 类",
+                "service_ref": "Z165（参考）",
                 "leg_id": "leg-xz-xnn-z-class",
                 "comfort": "hard_sleeper"
               },
@@ -693,7 +693,7 @@
                 "seat_hint": "硬卧优先",
                 "price_ref_cny": 300,
                 "price_display": "约 ¥300",
-                "service_ref": "西宁始发进藏 Z6801 类",
+                "service_ref": "Z6801（参考）",
                 "leg_id": "leg-xnn-lxa-origin",
                 "comfort": "hard_sleeper"
               }
@@ -769,7 +769,7 @@
                 "seat_hint": "硬卧 / 硬座",
                 "price_ref_cny": 350,
                 "price_display": "约 ¥350",
-                "service_ref": "Z165 类",
+                "service_ref": "Z165（参考）",
                 "leg_id": "leg-xz-xnn-z-class",
                 "comfort": "hard_sleeper"
               },
@@ -795,7 +795,7 @@
                 "seat_hint": "硬卧优先",
                 "price_ref_cny": 300,
                 "price_display": "约 ¥300",
-                "service_ref": "西宁始发进藏 Z6801 类",
+                "service_ref": "Z6801（参考）",
                 "leg_id": "leg-xnn-lxa-origin",
                 "comfort": "hard_sleeper"
               }

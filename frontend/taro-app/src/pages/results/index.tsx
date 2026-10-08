@@ -17,6 +17,49 @@ const dec = (s?: string) => {
 
 type Mode = 'path' | 'recommend';
 
+type LegLine = { code: string; rest: string };
+
+function shortStop(name: string): string {
+  const s = (name || '').trim();
+  if (!s) return '';
+  if (s.includes('机场')) {
+    const m = s.match(/^[\u4e00-\u9fa5]{2}/);
+    return m ? m[0] : s.replace(/(国际)?机场/g, '');
+  }
+  return s.replace(/站$/, '');
+}
+
+function serviceCode(ref: string): string {
+  return (ref || '')
+    .replace(/（参考）/g, '')
+    .replace(/类/g, '')
+    .replace(/西宁始发进藏/g, '')
+    .trim();
+}
+
+function legLines(plan: UiPlan): LegLine[] {
+  const lines: LegLine[] = [];
+  (plan.timeline || []).forEach((seg) => {
+    if (!seg || seg.isXfer) return;
+    const code = serviceCode(seg.serviceRef || '') || seg.modeLabel || '';
+    const from = shortStop(seg.from || '');
+    const to = shortStop(seg.to || '');
+    const parts = (seg.timeRange || '').split('→').map((x) => x.trim());
+    const parse = (token: string) => {
+      const m = (token || '').match(/^(\d{2}-\d{2})\s+(\d{2}:\d{2})$/);
+      return m ? { day: m[1], hm: m[2] } : { day: '', hm: token || '' };
+    };
+    const dep = parse(parts[0] || '');
+    const arr = parse(parts[1] || '');
+    const cross = Boolean(dep.day && arr.day && dep.day !== arr.day);
+    const depText = cross ? `${dep.day} ${dep.hm}` : dep.hm;
+    const arrText = cross ? `${arr.day} ${arr.hm}` : arr.hm;
+    const rest = [from, depText, '→', to, arrText].filter(Boolean).join(' ');
+    if (code || rest) lines.push({ code, rest });
+  });
+  return lines;
+}
+
 export default function ResultsPage() {
   const router = useRouter();
   const [status, setStatus] = useState<'loading' | 'ok' | 'empty' | 'error'>('loading');
@@ -163,11 +206,28 @@ export default function ResultsPage() {
                 <Text className='r-xfer'>{p.transfers ? `${p.transfers} 次换乘` : '不用换乘'}</Text>
               </View>
               <View className='r-metrics'>
-                <Text className={`r-num ${p.type === 'cheap' || p.type === 'balanced' ? `r-num-on r-num-${p.type}` : ''}`}>{p.price}</Text>
-                <Text className={`r-num r-num-dur ${p.type === 'fast' || p.type === 'balanced' ? `r-num-on r-num-${p.type}` : ''}`}>{p.duration}</Text>
+                <View className='r-metric'>
+                  <Text className={`r-num ${p.type === 'cheap' || p.type === 'balanced' ? `r-num-on r-num-${p.type}` : ''}`}>{p.price}</Text>
+                  <Text className='r-metric-label'>参考价</Text>
+                </View>
+                <View className='r-metric r-metric-end'>
+                  <Text className={`r-num r-num-dur ${p.type === 'fast' || p.type === 'balanced' ? `r-num-on r-num-${p.type}` : ''}`}>{p.duration}</Text>
+                  <Text className='r-metric-label r-metric-label-end'>全程</Text>
+                </View>
               </View>
-              <Text className='r-line'>{p.routeOneLine}</Text>
-              <Text className='r-why'>{p.why}</Text>
+              <View className='r-tear' />
+              <View className='r-legs'>
+                {legLines(p).length
+                  ? legLines(p).map((leg, i) => (
+                      <Text key={`${p.id}-${i}`} className='r-leg'>
+                        {leg.code ? <Text className='r-leg-code'>{leg.code}</Text> : null}
+                        {leg.code ? <Text className='r-leg-ref'>参考</Text> : null}
+                        <Text className='r-leg-rest'>{leg.rest}</Text>
+                      </Text>
+                    ))
+                  : <Text className='r-leg'><Text className='r-leg-rest'>{p.routeOneLine}</Text></Text>}
+              </View>
+              {p.why ? <Text className='r-why'>{p.why}</Text> : null}
             </View>
           ))}
 
