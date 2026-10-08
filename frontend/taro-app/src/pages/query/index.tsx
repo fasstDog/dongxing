@@ -248,38 +248,6 @@ export default function QueryPage() {
             </View>
           </View>
 
-          {vias.map((v, i) => (
-            <View className='q-row q-row-enter' key={`via-${i}`}>
-              <View className='q-node-col'>
-                <View className='q-track' />
-                <View className='q-node q-node-via'>
-                  <Text className='q-node-num'>{i + 1}</Text>
-                </View>
-                <View className='q-track' />
-              </View>
-              <View className='q-row-body q-row-body-via' hoverClass='q-row-body-press' {...PRESS} onClick={() => openPicker('via', i)}>
-                <Text className='q-label q-label-via'>途经</Text>
-                {renderValue(v, `第 ${i + 1} 个途经地`, true)}
-                {renderError(shown.vias[i])}
-              </View>
-              <View className='q-row-actions'>
-                {i > 0 ? (
-                  <View className='q-mini' hoverClass='q-mini-press' {...PRESS} onClick={() => onMoveViaUp(i)}>
-                    <Text className='q-mini-text'>↑</Text>
-                  </View>
-                ) : null}
-                <View
-                  className='q-mini q-mini-danger'
-                  hoverClass='q-mini-press'
-                  {...PRESS}
-                  onClick={() => onRemoveVia(i)}
-                >
-                  <Text className='q-mini-text q-mini-text-danger'>✕</Text>
-                </View>
-              </View>
-            </View>
-          ))}
-
           <View className='q-row'>
             <View className='q-node-col'>
               <View className='q-track' />
@@ -302,6 +270,33 @@ export default function QueryPage() {
           <View className='q-perf-line' />
           <View className='q-notch q-notch-right' />
         </View>
+
+        {/* 途经：撕口下方按顺序列出 */}
+        {vias.length ? (
+          <View className='q-vias'>
+            {vias.map((v, i) => (
+              <View className='q-via q-row-enter' key={`via-${i}`}>
+                <View className='q-via-num'>
+                  <Text className='q-via-num-text'>{i + 1}</Text>
+                </View>
+                <View className='q-via-body' hoverClass='q-row-body-press' {...PRESS} onClick={() => openPicker('via', i)}>
+                  {renderValue(v, `第 ${i + 1} 个途经地`, true)}
+                  {renderError(shown.vias[i])}
+                </View>
+                <View className='q-via-actions'>
+                  {i > 0 ? (
+                    <View className='q-mini q-mini-light' hoverClass='q-mini-press' {...PRESS} onClick={() => onMoveViaUp(i)}>
+                      <Text className='q-mini-text'>↑</Text>
+                    </View>
+                  ) : null}
+                  <View className='q-mini q-mini-danger' hoverClass='q-mini-press' {...PRESS} onClick={() => onRemoveVia(i)}>
+                    <Text className='q-mini-text q-mini-text-danger'>✕</Text>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </View>
+        ) : null}
 
         <View className='q-ticket-stub'>
           <View

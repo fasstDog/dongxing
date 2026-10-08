@@ -191,20 +191,6 @@
   background: $color-coral;
 }
 
-.q-node-via {
-  width: 34px;
-  height: 34px;
-  border-radius: 17px;
-  background: $color-sky-soft;
-  border: 2px solid $color-sky-300;
-}
-
-.q-node-num {
-  color: $color-sky-700;
-  font-size: 18px;
-  font-weight: 700;
-}
-
 .q-row-body {
   flex: 1;
   padding: 18px 0;
@@ -215,10 +201,6 @@
   padding-right: 104px;
 }
 
-.q-row-body-via {
-  padding-right: 128px;
-}
-
 .q-row-body-last {
   border-bottom: 0;
 }
@@ -227,10 +209,6 @@
   color: $color-ink-3;
   font-size: $font-xs;
   letter-spacing: 4px;
-}
-
-.q-label-via {
-  color: $color-sky-500;
 }
 
 .q-row-body-press {
@@ -390,15 +368,6 @@
   font-weight: 700;
 }
 
-.q-row-actions {
-  position: absolute;
-  right: 0;
-  bottom: 22px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
 .q-mini {
   width: 52px;
   height: 52px;
@@ -466,6 +435,59 @@
 }
 
 // 票根：添加途经 / 清空
+.q-vias {
+  padding: $space-2 $space-5 0 $space-4;
+}
+
+.q-via {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 6px $space-2 6px 10px;
+  margin-bottom: $space-2;
+  background: $color-paper;
+  border-radius: 24px;
+}
+
+.q-via-num {
+  flex-shrink: 0;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.q-via-num-text {
+  width: 34px;
+  height: 34px;
+  line-height: 30px;
+  border-radius: 17px;
+  text-align: center;
+  box-sizing: border-box;
+  background: $color-surface;
+  border: 2px solid $color-sky-300;
+  color: $color-sky-700;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.q-mini-light {
+  background: $color-surface;
+}
+
+.q-via-body {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 0 10px $space-1;
+}
+
+.q-via-actions {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .q-ticket-stub {
   display: flex;
   flex-direction: row;
