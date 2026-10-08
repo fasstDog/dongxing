@@ -15,24 +15,35 @@
   padding: $space-4 $space-5 36px;
 }
 
-.r-back {
-  width: 72px;
-  height: 72px;
-  margin-bottom: 4px;
+.r-head {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+}
+
+.r-back {
+  width: 72px;
+  height: 72px;
+  border-radius: 36px;
+  background: rgba(255, 255, 255, 0.22);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .r-back-arrow {
   color: #fff;
-  font-size: 44px;
-  font-weight: 600;
+  font-size: 32px;
+  font-weight: 700;
   line-height: 1;
 }
 
 .r-route {
+  flex: 1;
+  min-width: 0;
+  margin-left: 16px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

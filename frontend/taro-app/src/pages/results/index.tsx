@@ -149,6 +149,7 @@ export default function ResultsPage() {
   return (
     <View className='r-page'>
       <View className='r-sky'>
+        <View className='r-head'>
         <View className='r-back' hoverClass='r-press' {...PRESS} onClick={onBack}>
           <Text className='r-back-arrow'>←</Text>
         </View>
@@ -159,6 +160,7 @@ export default function ResultsPage() {
               <Text className={i > 0 && i < names.length - 1 ? 'r-place r-place-via' : 'r-place'}>{n}</Text>
             </View>
           ))}
+        </View>
         </View>
       </View>
 
