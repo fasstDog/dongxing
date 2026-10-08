@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { View, Text, Image } from '@tarojs/components';
 import Taro, { useDidShow, useRouter } from '@tarojs/taro';
 import { loadQueryDraft, saveQueryDraft } from '../../services/store';
-import { placeFromName, takePendingPick, type PickField, type PlaceValue } from '../../services/places';
+import { TYPE_TITLE, placeFromName, takePendingPick, type PickField, type PlaceValue } from '../../services/places';
 import { QUERY_SAMPLES, MAX_VIAS, type QuerySample } from '../../data/samples';
 import { HERO_SCENE, ROUTE_THEMES } from '../../assets/decor';
 import { PLACE_ICON } from '../../assets/place';
@@ -179,19 +179,28 @@ export default function QueryPage() {
     });
   };
 
-  /** 字段显示：车站 / 机场 / 码头显示站名 + 类型图标，城市显示城市名 */
+  /** 字段显示：左侧类型图标（浅色底圆角块），名称下方「类型 · 所属城市」；未选时灰色虚线占位 */
   const renderValue = (v: Slot, placeholder: string, via = false) => (
     <View className={`q-field ${via ? 'q-field-via' : ''}`}>
       {v ? (
-        <Text className={`q-field-text ${via ? 'q-field-text-via' : ''}`}>{v.name}</Text>
-      ) : (
-        <Text className={`q-field-ph ${via ? 'q-field-ph-via' : ''}`}>{placeholder}</Text>
-      )}
-      {v && v.type !== 'city' ? (
-        <View className={`q-type q-type-${v.type}`}>
-          <Image className='q-type-icon' src={PLACE_ICON[v.type]} mode='aspectFit' />
+        <View className={`q-ptile q-ptile-${v.type} ${via ? 'q-ptile-via' : ''}`}>
+          <Image className={`q-ptile-icon ${via ? 'q-ptile-icon-via' : ''}`} src={PLACE_ICON[v.type]} mode='aspectFit' />
         </View>
-      ) : null}
+      ) : (
+        <View className={`q-ptile q-ptile-empty ${via ? 'q-ptile-via' : ''}`} />
+      )}
+      <View className='q-field-main'>
+        {v ? (
+          <Text className={`q-field-text ${via ? 'q-field-text-via' : ''}`}>{v.name}</Text>
+        ) : (
+          <Text className={`q-field-ph ${via ? 'q-field-ph-via' : ''}`}>{placeholder}</Text>
+        )}
+        {v ? (
+          <Text className={`q-field-sub q-field-sub-${v.type}`}>
+            {v.type === 'city' || !v.city ? TYPE_TITLE[v.type] : `${TYPE_TITLE[v.type]} · ${v.city}`}
+          </Text>
+        ) : null}
+      </View>
     </View>
   );
 

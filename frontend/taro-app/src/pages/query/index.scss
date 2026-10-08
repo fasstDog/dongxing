@@ -238,11 +238,73 @@
 }
 
 .q-field {
-  margin-top: 2px;
-  height: 60px;
+  margin-top: 8px;
+  min-height: 72px;
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.q-field-via {
+  min-height: 60px;
+}
+
+// 地点类型图标块：浅色底圆角方块，颜色与 place-picker 一致
+.q-ptile {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  margin-right: $space-3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.q-ptile-via {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+}
+
+.q-ptile-city {
+  background: $color-place-city-soft;
+}
+
+.q-ptile-station {
+  background: $color-place-station-soft;
+}
+
+.q-ptile-airport {
+  background: $color-place-airport-soft;
+}
+
+.q-ptile-port {
+  background: $color-place-port-soft;
+}
+
+.q-ptile-empty {
+  background: $color-paper;
+  border: 2px dashed $color-line-warm;
+}
+
+.q-ptile-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.q-ptile-icon-via {
+  width: 34px;
+  height: 34px;
+}
+
+.q-field-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   overflow: hidden;
 }
 
@@ -250,6 +312,7 @@
   color: $color-ink;
   font-size: $font-title;
   font-weight: 700;
+  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -263,38 +326,33 @@
   color: $color-ink-4;
   font-size: $font-title;
   font-weight: $weight-regular;
+  line-height: 1.2;
 }
 
 .q-field-ph-via {
   font-size: 36px;
 }
 
-.q-type {
-  flex-shrink: 0;
-  margin-left: $space-2;
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.q-field-sub {
+  margin-top: 4px;
+  font-size: $font-xs;
+  color: $color-ink-3;
 }
 
-.q-type-station {
-  background: $color-place-station-soft;
+.q-field-sub-city {
+  color: $color-place-city;
 }
 
-.q-type-airport {
-  background: $color-place-airport-soft;
+.q-field-sub-station {
+  color: $color-place-station;
 }
 
-.q-type-port {
-  background: $color-place-port-soft;
+.q-field-sub-airport {
+  color: $color-place-airport;
 }
 
-.q-type-icon {
-  width: 30px;
-  height: 30px;
+.q-field-sub-port {
+  color: $color-place-port;
 }
 
 .q-err {
