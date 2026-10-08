@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { View, Text, Input, Image } from '@tarojs/components';
+import { View, Text, Image } from '@tarojs/components';
 import Taro, { useDidShow, useRouter } from '@tarojs/taro';
 import { loadQueryDraft, saveQueryDraft } from '../../services/store';
+import { placeFromName, takePendingPick, type PickField, type PlaceValue } from '../../services/places';
 import { QUERY_SAMPLES, MAX_VIAS, type QuerySample } from '../../data/samples';
-import { travel } from '../../styles/tokens';
 import { HERO_SCENE, ROUTE_THEMES } from '../../assets/decor';
 import './index.scss';
 
@@ -13,32 +13,28 @@ type FieldErrors = {
   vias: Record<number, string>;
 };
 
-const CITY_MAX_LEN = 12;
-const PLACEHOLDER_STYLE = `color:${travel.ink4};font-weight:400`;
+type Slot = PlaceValue | null;
+
 /** 按压反馈：hover-class 在小程序 / H5 / RN 均可用 */
 const PRESS = { hoverStartTime: 0, hoverStayTime: 80 } as const;
+const TYPE_TAG: Record<string, string> = { station: '火车站', airport: '机场' };
 
-const clean = (s: string) => String(s || '').trim();
-
-function validate(from: string, to: string, vias: string[]): FieldErrors {
+function validate(from: Slot, to: Slot, vias: Slot[]): FieldErrors {
   const errs: FieldErrors = { vias: {} };
-  const f = clean(from);
-  const t = clean(to);
-  if (!f) errs.from = '填一下出发城市';
-  if (!t) errs.to = '填一下到达城市';
-  if (f && t && f === t) errs.to = '到达和出发是同一个城市';
-  vias.forEach((raw, i) => {
-    const v = clean(raw);
+  if (!from) errs.from = '选一下出发地';
+  if (!to) errs.to = '选一下目的地';
+  if (from && to && from.city === to.city) errs.to = '出发和到达在同一个城市';
+  vias.forEach((v, i) => {
     if (!v) {
-      errs.vias[i] = `途经 ${i + 1} 还没填，填上或删掉`;
+      errs.vias[i] = `途经 ${i + 1} 还没选，选上或删掉`;
       return;
     }
-    if (v === f || v === t) {
-      errs.vias[i] = '途经别和出发 / 到达重复';
+    if ((from && v.city === from.city) || (to && v.city === to.city)) {
+      errs.vias[i] = '途经别和出发 / 到达在同一个城市';
       return;
     }
-    const dup = vias.findIndex((other, j) => j < i && clean(other) === v);
-    if (dup >= 0) errs.vias[i] = `和途经 ${dup + 1} 重复了`;
+    const dup = vias.findIndex((other, j) => j < i && !!other && other.city === v.city);
+    if (dup >= 0) errs.vias[i] = `和途经 ${dup + 1} 在同一个城市`;
   });
   return errs;
 }
@@ -57,9 +53,9 @@ function errorList(e: FieldErrors) {
 
 export default function QueryPage() {
   const router = useRouter();
-  const [fromCity, setFromCity] = useState('徐州');
-  const [toCity, setToCity] = useState('拉萨');
-  const [vias, setVias] = useState<string[]>([]);
+  const [from, setFrom] = useState<Slot>(() => placeFromName('徐州'));
+  const [to, setTo] = useState<Slot>(() => placeFromName('拉萨'));
+  const [vias, setVias] = useState<Slot[]>([]);
   const [attempted, setAttempted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -67,47 +63,67 @@ export default function QueryPage() {
   useEffect(() => {
     const p = router.params || {};
     if (p.from !== undefined || p.to !== undefined) {
-      setFromCity(decodeURIComponent(p.from || ''));
-      setToCity(decodeURIComponent(p.to || ''));
+      setFrom(placeFromName(decodeURIComponent(p.from || '')));
+      setTo(placeFromName(decodeURIComponent(p.to || '')));
       const v = p.vias ? decodeURIComponent(p.vias).split(',') : [];
-      setVias(v.slice(0, MAX_VIAS));
+      setVias(v.slice(0, MAX_VIAS).map(placeFromName));
       if (p.check === '1') setAttempted(true);
       return;
     }
     const draft = loadQueryDraft();
     if (draft) {
-      setFromCity(draft.fromCity);
-      setToCity(draft.toCity);
+      setFrom(draft.from);
+      setTo(draft.to);
       setVias(draft.vias);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useDidShow(() => setSubmitting(false));
+  // 从地点搜索页回来：回填对应字段
+  useDidShow(() => {
+    setSubmitting(false);
+    const pick = takePendingPick();
+    if (!pick) return;
+    if (pick.field === 'from') setFrom(pick.value);
+    else if (pick.field === 'to') setTo(pick.value);
+    else
+      setVias((prev) => {
+        const next = prev.slice();
+        if (pick.index >= next.length) {
+          if (next.length < MAX_VIAS) next.push(pick.value);
+        } else next[pick.index] = pick.value;
+        return next;
+      });
+  });
 
-  const errors = useMemo(() => validate(fromCity, toCity, vias), [fromCity, toCity, vias]);
+  const errors = useMemo(() => validate(from, to, vias), [from, to, vias]);
   const shown: FieldErrors = attempted ? errors : { vias: {} };
   const problems = errorList(errors);
-  const isBlank = !clean(fromCity) && !clean(toCity) && vias.length === 0;
+  const isBlank = !from && !to && vias.length === 0;
 
   const toast = (title: string) => Taro.showToast({ title, icon: 'none' });
 
+  const openPicker = (field: PickField, index = 0) => {
+    Taro.navigateTo({ url: `/pages/place-picker/index?field=${field}&index=${index}` });
+  };
+
   const onSwap = () => {
-    if (!clean(fromCity) && !clean(toCity)) return;
-    setFromCity(toCity);
-    setToCity(fromCity);
+    if (!from && !to) return;
+    setFrom(to);
+    setTo(from);
     if (vias.length > 1) {
       setVias(vias.slice().reverse());
       toast('起终点已交换，途经顺序也反过来了');
     }
   };
 
+  // 添加途经：直接进地点搜索，选中后才新增一行
   const onAddVia = () => {
     if (vias.length >= MAX_VIAS) {
       toast(`途经最多 ${MAX_VIAS} 个`);
       return;
     }
-    setVias([...vias, '']);
+    openPicker('via', vias.length);
   };
 
   const onRemoveVia = (i: number) => {
@@ -125,38 +141,31 @@ export default function QueryPage() {
     setVias(next);
   };
 
-  const onChangeVia = (i: number, value: string) => {
-    const next = vias.slice();
-    next[i] = value;
-    setVias(next);
-  };
-
   const onClear = () => {
-    setFromCity('');
-    setToCity('');
+    setFrom(null);
+    setTo(null);
     setVias([]);
     setAttempted(false);
   };
 
   const onSample = (s: QuerySample) => {
-    setFromCity(s.fromCity);
-    setToCity(s.toCity);
-    setVias(s.vias.slice());
+    setFrom(placeFromName(s.fromCity));
+    setTo(placeFromName(s.toCity));
+    setVias(s.vias.map(placeFromName));
     setAttempted(false);
   };
 
   const onSearch = () => {
     if (submitting) return;
     setAttempted(true);
-    if (problems.length) return;
-    const from = clean(fromCity);
-    const to = clean(toCity);
-    const viaList = vias.map(clean);
-    saveQueryDraft({ fromCity: from, toCity: to, vias: viaList });
+    if (problems.length || !from || !to) return;
+    const viaList = vias.filter(Boolean) as PlaceValue[];
+    saveQueryDraft({ from, to, vias: viaList });
+    // 引擎契约按城市查询：选了车站 / 机场时传其所属城市
     const q = [
-      `from=${encodeURIComponent(from)}`,
-      `to=${encodeURIComponent(to)}`,
-      viaList.length ? `vias=${encodeURIComponent(viaList.join(','))}` : ''
+      `from=${encodeURIComponent(from.city)}`,
+      `to=${encodeURIComponent(to.city)}`,
+      viaList.length ? `vias=${encodeURIComponent(viaList.map((v) => v.city).join(','))}` : ''
     ]
       .filter(Boolean)
       .join('&');
@@ -169,6 +178,22 @@ export default function QueryPage() {
       }
     });
   };
+
+  /** 字段显示：车站 / 机场显示站名 + 类型小标，城市显示城市名 */
+  const renderValue = (v: Slot, placeholder: string, via = false) => (
+    <View className={`q-field ${via ? 'q-field-via' : ''}`}>
+      {v ? (
+        <Text className={`q-field-text ${via ? 'q-field-text-via' : ''}`}>{v.name}</Text>
+      ) : (
+        <Text className={`q-field-ph ${via ? 'q-field-ph-via' : ''}`}>{placeholder}</Text>
+      )}
+      {v && TYPE_TAG[v.type] ? (
+        <View className={`q-type q-type-${v.type}`}>
+          <Text className={`q-type-text q-type-text-${v.type}`}>{TYPE_TAG[v.type]}</Text>
+        </View>
+      ) : null}
+    </View>
+  );
 
   const renderError = (msg?: string) => (msg ? <View className='q-err'>{msg}</View> : null);
   const viaFull = vias.length >= MAX_VIAS;
@@ -204,17 +229,9 @@ export default function QueryPage() {
               </View>
               <View className='q-track' />
             </View>
-            <View className='q-row-body q-row-body-from'>
+            <View className='q-row-body q-row-body-from' hoverClass='q-row-body-press' {...PRESS} onClick={() => openPicker('from')}>
               <Text className='q-label'>出发</Text>
-              <Input
-                className='q-input'
-                placeholder='出发城市'
-                placeholderClass='q-placeholder'
-                placeholderStyle={PLACEHOLDER_STYLE}
-                maxlength={CITY_MAX_LEN}
-                value={fromCity}
-                onInput={(e) => setFromCity(e.detail.value)}
-              />
+              {renderValue(from, '出发地')}
               {renderError(shown.from)}
             </View>
             <View className='q-swap' hoverClass='q-swap-press' {...PRESS} onClick={onSwap}>
@@ -231,17 +248,9 @@ export default function QueryPage() {
                 </View>
                 <View className='q-track' />
               </View>
-              <View className='q-row-body q-row-body-via'>
+              <View className='q-row-body q-row-body-via' hoverClass='q-row-body-press' {...PRESS} onClick={() => openPicker('via', i)}>
                 <Text className='q-label q-label-via'>途经</Text>
-                <Input
-                  className='q-input q-input-via'
-                  placeholder={`第 ${i + 1} 个途经城市`}
-                  placeholderClass='q-placeholder'
-                  placeholderStyle={PLACEHOLDER_STYLE}
-                  maxlength={CITY_MAX_LEN}
-                  value={v}
-                  onInput={(e) => onChangeVia(i, e.detail.value)}
-                />
+                {renderValue(v, `第 ${i + 1} 个途经地`, true)}
                 {renderError(shown.vias[i])}
               </View>
               <View className='q-row-actions'>
@@ -270,17 +279,9 @@ export default function QueryPage() {
               </View>
               <View className='q-track q-track-hidden' />
             </View>
-            <View className='q-row-body q-row-body-last'>
+            <View className='q-row-body q-row-body-last' hoverClass='q-row-body-press' {...PRESS} onClick={() => openPicker('to')}>
               <Text className='q-label'>到达</Text>
-              <Input
-                className='q-input'
-                placeholder='到达城市'
-                placeholderClass='q-placeholder'
-                placeholderStyle={PLACEHOLDER_STYLE}
-                maxlength={CITY_MAX_LEN}
-                value={toCity}
-                onInput={(e) => setToCity(e.detail.value)}
-              />
+              {renderValue(to, '目的地')}
               {renderError(shown.to)}
             </View>
           </View>

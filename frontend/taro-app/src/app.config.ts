@@ -4,7 +4,8 @@ export default {
     'pages/mine/index',
     'pages/results/index',
     'pages/detail/index',
-    'pages/about/index'
+    'pages/about/index',
+    'pages/place-picker/index'
   ],
   window: {
     backgroundTextStyle: 'dark',
@@ -38,5 +39,11 @@ export default {
         selectedIconPath: 'assets/tab/mine-active.png'
       }
     ]
-  }
+  },
+  permission: {
+    'scope.userLocation': {
+      desc: '用于快速填入你所在的城市'
+    }
+  },
+  requiredPrivateInfos: ['getLocation']
 };

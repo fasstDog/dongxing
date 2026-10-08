@@ -3,16 +3,17 @@
  * 注意：Taro 小程序构建会剥掉 app.ts 的具名导出，跨页共享状态必须放在独立模块里。
  */
 import Taro from '@tarojs/taro';
+import { placeFromName, type PlaceValue } from './places';
 
-/** 查询页草稿。不指定日期，搜索按「日期灵活」处理。 */
+/** 查询页草稿：出发 / 到达 / 有序途经（城市、火车站或机场）。不指定日期，搜索按「日期灵活」处理。 */
 export type QueryDraft = {
-  fromCity: string;
-  toCity: string;
-  vias: string[];
+  from: PlaceValue | null;
+  to: PlaceValue | null;
+  vias: PlaceValue[];
 };
 
 export interface DongxingGlobal {
-  lastQuery: (QueryDraft & Record<string, unknown>) | null;
+  lastQuery: QueryDraft | null;
   lastPlans: unknown[] | null;
   disclaimer: string;
 }
@@ -40,19 +41,28 @@ export function saveQueryDraft(q: QueryDraft) {
   }
 }
 
+const isPlace = (v: unknown): v is PlaceValue =>
+  !!v && typeof v === 'object' && typeof (v as PlaceValue).name === 'string' && typeof (v as PlaceValue).city === 'string';
+
 export function loadQueryDraft(): QueryDraft | null {
   if (state.lastQuery) return state.lastQuery;
   try {
     const q = Taro.getStorageSync(QUERY_STORAGE_KEY);
-    if (q && typeof q === 'object' && typeof q.fromCity === 'string') {
+    if (!q || typeof q !== 'object') return null;
+    // 旧版草稿（纯文本城市）兼容
+    if (typeof q.fromCity === 'string') {
       return {
-        fromCity: q.fromCity || '',
-        toCity: q.toCity || '',
-        vias: Array.isArray(q.vias) ? q.vias.slice(0, 3) : []
+        from: placeFromName(q.fromCity),
+        to: placeFromName(q.toCity || ''),
+        vias: (Array.isArray(q.vias) ? q.vias : []).map(placeFromName).filter(isPlace).slice(0, 3)
       };
     }
+    return {
+      from: isPlace(q.from) ? q.from : null,
+      to: isPlace(q.to) ? q.to : null,
+      vias: (Array.isArray(q.vias) ? q.vias : []).filter(isPlace).slice(0, 3)
+    };
   } catch (e) {
-    // ignore
+    return null;
   }
-  return null;
 }

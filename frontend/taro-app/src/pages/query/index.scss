@@ -233,22 +233,71 @@
   color: $color-sky-500;
 }
 
-.q-input {
+.q-row-body-press {
+  opacity: 0.6;
+}
+
+.q-field {
   margin-top: 2px;
   height: 60px;
-  line-height: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+}
+
+.q-field-text {
   color: $color-ink;
   font-size: $font-title;
   font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.q-input-via {
+.q-field-text-via {
   font-size: 36px;
 }
 
-.q-placeholder {
+.q-field-ph {
   color: $color-ink-4;
+  font-size: $font-title;
   font-weight: $weight-regular;
+}
+
+.q-field-ph-via {
+  font-size: 36px;
+}
+
+.q-type {
+  flex-shrink: 0;
+  margin-left: $space-2;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: $radius-pill;
+  display: flex;
+  align-items: center;
+}
+
+.q-type-station {
+  background: $color-coral-soft;
+}
+
+.q-type-airport {
+  background: #eceefc;
+}
+
+.q-type-text {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.q-type-text-station {
+  color: $color-coral;
+}
+
+.q-type-text-airport {
+  color: $color-route-indigo;
 }
 
 .q-err {
