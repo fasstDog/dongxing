@@ -12,4 +12,4 @@ Tabler Icons — MIT License, Copyright (c) 2020-2026 Paweł Kuna.
 
 颜色：火车 `#ff6b4a`、飞机 `#4c5fd5`、轮船 `#0a8fd8`。
 
-行程票右下角剪影不在这里，见 `../ticket/README.md`（同样是 Tabler Icons，MIT）。
+行程票右下角照片不在这里，见 `../ticket/README.md`（Pexels，可商用）。

@@ -88,10 +88,10 @@
 
 .r-card {
   background-color: $color-surface;
-  background-image: url('../../assets/ticket/mark-train.svg'), radial-gradient(circle, rgba(168, 148, 120, 0.28) 1.15px, rgba(168, 148, 120, 0) 1.35px);
+  background-image: url('../../assets/ticket/mark-train.png'), radial-gradient(circle, rgba(168, 148, 120, 0.28) 1.15px, rgba(168, 148, 120, 0) 1.35px);
   background-repeat: no-repeat, repeat;
-  background-position: right -8px bottom -12px, 0 0;
-  background-size: 200px 140px, 28px 28px;
+  background-position: right -28px bottom -22px, 0 0;
+  background-size: 340px 200px, 28px 28px;
   border-radius: 32px;
   padding: 40px 36px 36px;
   margin-bottom: $space-4;
@@ -100,7 +100,7 @@
 }
 
 .r-card-flight {
-  background-image: url('../../assets/ticket/mark-plane.svg'), radial-gradient(circle, rgba(168, 148, 120, 0.28) 1.15px, rgba(168, 148, 120, 0) 1.35px);
+  background-image: url('../../assets/ticket/mark-plane.png'), radial-gradient(circle, rgba(168, 148, 120, 0.28) 1.15px, rgba(168, 148, 120, 0) 1.35px);
 }
 
 .r-card-top {
@@ -216,7 +216,7 @@
 .r-leg {
   display: block;
   margin-top: 12px;
-  padding-right: 88px;
+  padding-right: 128px;
   line-height: 1.45;
 }
 
@@ -243,7 +243,7 @@
 .r-why {
   display: block;
   margin-top: 20px;
-  padding-right: 88px;
+  padding-right: 128px;
   color: $color-ink-2;
   font-size: 24px;
   line-height: 1.5;

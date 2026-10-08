@@ -1,11 +1,8 @@
-# 行程票水印
+# 行程票右下角照片
 
-结果页卡片右下角的单色剪影。
+结果页卡片右下角的渐隐照片。左缘和上缘已做成透明，叠在卡片上不挡正文。纯火车方案用高铁，含飞机的方案用飞机。
 
-- `mark-train.svg`：Tabler Icons v3.34.1 filled `train`（高铁侧面剪影，车窗以 evenodd 挖空）。
-- `mark-plane.svg`：Tabler Icons v3.34.1 outline `plane` 的轮廓改为单色填充（飞机侧面剪影）。
+- `mark-train.png`：高铁侧面。Pexels 照片 [7209369](https://www.pexels.com/photo/a-gray-bullet-train-in-the-metro-station-7209369/)，摄影师 Dongjie Chen。镇江站和谐号。
+- `mark-plane.png`：客机侧面。Pexels 照片 [13034092](https://www.pexels.com/photo/an-airplane-in-the-blue-sky-13034092/)，摄影师 Jubair Bin Iqbal。
 
-页面里只调低透明度使用，不改造型。
-
-Tabler Icons — MIT License, Copyright (c) 2020-2026 Paweł Kuna.
-https://github.com/tabler/tabler-icons
+两张都按 [Pexels License](https://www.pexels.com/license/) 使用：可免费用于商业项目，可以裁切和加透明蒙版。许可不要求署名，这里仍记下作者。
