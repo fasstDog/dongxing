@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { View, Text, Input } from '@tarojs/components';
+import { View, Text, Input, Image } from '@tarojs/components';
 import Taro, { useDidShow, useRouter } from '@tarojs/taro';
 import { loadQueryDraft, saveQueryDraft } from '../../services/store';
 import { QUERY_SAMPLES, MAX_VIAS, type QuerySample } from '../../data/samples';
-import { color } from '../../styles/tokens';
+import { travel } from '../../styles/tokens';
+import { HERO_SCENE, ROUTE_THEMES } from '../../assets/decor';
 import './index.scss';
 
 type FieldErrors = {
@@ -13,7 +14,9 @@ type FieldErrors = {
 };
 
 const CITY_MAX_LEN = 12;
-const PLACEHOLDER_STYLE = `color:${color.text4}`;
+const PLACEHOLDER_STYLE = `color:${travel.ink4};font-weight:400`;
+/** 按压反馈：hover-class 在小程序 / H5 / RN 均可用 */
+const PRESS = { hoverStartTime: 0, hoverStayTime: 80 } as const;
 
 const clean = (s: string) => String(s || '').trim();
 
@@ -168,103 +171,158 @@ export default function QueryPage() {
   };
 
   const renderError = (msg?: string) => (msg ? <View className='q-err'>{msg}</View> : null);
+  const viaFull = vias.length >= MAX_VIAS;
 
   return (
     <View className='q-page'>
+      {/* 头部：天空渐变 + 远山 / 航迹 / 铁轨 */}
       <View className='q-hero'>
+        <Image className='q-hero-scene' src={HERO_SCENE} mode='aspectFill' />
         <View className='q-hero-top'>
-          <Text className='q-brand'>懂行</Text>
-          <View className='q-about' onClick={() => Taro.navigateTo({ url: '/pages/about/index' })}>
-            <View className='q-about-text'>关于</View>
+          <View className='q-brand-wrap'>
+            <View className='q-brand-mark'>
+              <View className='q-brand-mark-dot' />
+            </View>
+            <Text className='q-brand'>懂行</Text>
+          </View>
+          <View
+            className='q-about'
+            hoverClass='q-about-press'
+            {...PRESS}
+            onClick={() => Taro.navigateTo({ url: '/pages/about/index' })}
+          >
+            <Text className='q-about-text'>关于</Text>
           </View>
         </View>
-        <View className='q-hero-title'>直达之外，帮你找更聪明的走法</View>
+        <View className='q-hero-title-1'>直达之外，</View>
+        <View className='q-hero-title-2'>
+          <Text className='q-hero-title-2a'>帮你找</Text>
+          <Text className='q-hero-title-2b'>更聪明的走法</Text>
+        </View>
       </View>
 
-      {/* 起终点 + 有序途经 */}
-      <View className='q-card q-card-od'>
-        <View className='q-rail'>
+      {/* 路线车票 */}
+      <View className='q-ticket'>
+        <View className='q-ticket-main'>
           <View className='q-row'>
-            <View className='q-dot q-dot-from' />
-            <Text className='q-label'>出发</Text>
-            <Input
-              className='q-input'
-              placeholder='出发城市，如 徐州'
-              placeholderClass='q-placeholder'
-              placeholderStyle={PLACEHOLDER_STYLE}
-              maxlength={CITY_MAX_LEN}
-              value={fromCity}
-              onInput={(e) => setFromCity(e.detail.value)}
-            />
-            <View className='q-swap' onClick={onSwap}>
+            <View className='q-node-col'>
+              <View className='q-track q-track-hidden' />
+              <View className='q-node q-node-from'>
+                <View className='q-node-core' />
+              </View>
+              <View className='q-track' />
+            </View>
+            <View className='q-row-body q-row-body-from'>
+              <Text className='q-label'>出发</Text>
+              <Input
+                className='q-input'
+                placeholder='出发城市'
+                placeholderClass='q-placeholder'
+                placeholderStyle={PLACEHOLDER_STYLE}
+                maxlength={CITY_MAX_LEN}
+                value={fromCity}
+                onInput={(e) => setFromCity(e.detail.value)}
+              />
+              {renderError(shown.from)}
+            </View>
+            <View className='q-swap' hoverClass='q-swap-press' {...PRESS} onClick={onSwap}>
               <Text className='q-swap-icon'>⇅</Text>
             </View>
           </View>
-          {renderError(shown.from)}
 
           {vias.map((v, i) => (
-            <View key={`via-${i}`}>
-              <View className='q-row q-row-via'>
-                <View className='q-dot q-dot-via'>
-                  <Text className='q-dot-num'>{i + 1}</Text>
+            <View className='q-row q-row-enter' key={`via-${i}`}>
+              <View className='q-node-col'>
+                <View className='q-track' />
+                <View className='q-node q-node-via'>
+                  <Text className='q-node-num'>{i + 1}</Text>
                 </View>
+                <View className='q-track' />
+              </View>
+              <View className='q-row-body q-row-body-via'>
                 <Text className='q-label q-label-via'>途经</Text>
                 <Input
-                  className='q-input'
+                  className='q-input q-input-via'
                   placeholder={`第 ${i + 1} 个途经城市`}
                   placeholderClass='q-placeholder'
-              placeholderStyle={PLACEHOLDER_STYLE}
+                  placeholderStyle={PLACEHOLDER_STYLE}
                   maxlength={CITY_MAX_LEN}
                   value={v}
                   onInput={(e) => onChangeVia(i, e.detail.value)}
                 />
+                {renderError(shown.vias[i])}
+              </View>
+              <View className='q-row-actions'>
                 {i > 0 ? (
-                  <View className='q-icon-btn' onClick={() => onMoveViaUp(i)}>
-                    <Text className='q-icon-text'>↑</Text>
+                  <View className='q-mini' hoverClass='q-mini-press' {...PRESS} onClick={() => onMoveViaUp(i)}>
+                    <Text className='q-mini-text'>↑</Text>
                   </View>
                 ) : null}
-                <View className='q-icon-btn q-icon-btn-danger' onClick={() => onRemoveVia(i)}>
-                  <Text className='q-icon-text q-icon-text-danger'>✕</Text>
+                <View
+                  className='q-mini q-mini-danger'
+                  hoverClass='q-mini-press'
+                  {...PRESS}
+                  onClick={() => onRemoveVia(i)}
+                >
+                  <Text className='q-mini-text q-mini-text-danger'>✕</Text>
                 </View>
               </View>
-              {renderError(shown.vias[i])}
             </View>
           ))}
 
-          <View className='q-row q-row-last'>
-            <View className='q-dot q-dot-to' />
-            <Text className='q-label'>到达</Text>
-            <Input
-              className='q-input'
-              placeholder='到达城市，如 拉萨'
-              placeholderClass='q-placeholder'
-              placeholderStyle={PLACEHOLDER_STYLE}
-              maxlength={CITY_MAX_LEN}
-              value={toCity}
-              onInput={(e) => setToCity(e.detail.value)}
-            />
+          <View className='q-row'>
+            <View className='q-node-col'>
+              <View className='q-track' />
+              <View className='q-node q-node-to'>
+                <View className='q-node-core q-node-core-to' />
+              </View>
+              <View className='q-track q-track-hidden' />
+            </View>
+            <View className='q-row-body q-row-body-last'>
+              <Text className='q-label'>到达</Text>
+              <Input
+                className='q-input'
+                placeholder='到达城市'
+                placeholderClass='q-placeholder'
+                placeholderStyle={PLACEHOLDER_STYLE}
+                maxlength={CITY_MAX_LEN}
+                value={toCity}
+                onInput={(e) => setToCity(e.detail.value)}
+              />
+              {renderError(shown.to)}
+            </View>
           </View>
-          {renderError(shown.to)}
         </View>
 
-        <View className='q-toolbar'>
+        {/* 撕口：两侧半圆缺口 + 虚线 */}
+        <View className='q-perf'>
+          <View className='q-notch q-notch-left' />
+          <View className='q-perf-line' />
+          <View className='q-notch q-notch-right' />
+        </View>
+
+        <View className='q-ticket-stub'>
           <View
-            className={`q-add ${vias.length >= MAX_VIAS ? 'q-add-disabled' : ''}`}
+            className={`q-add ${viaFull ? 'q-add-disabled' : ''}`}
+            hoverClass={viaFull ? 'none' : 'q-add-press'}
+            {...PRESS}
             onClick={onAddVia}
           >
-            <Text className='q-add-text'>
-              {vias.length >= MAX_VIAS ? `最多 ${MAX_VIAS} 个途经城市` : '+ 添加途经城市'}
-            </Text>
+            {viaFull ? null : (
+              <View className='q-add-plus'>
+                <Text className='q-add-plus-text'>+</Text>
+              </View>
+            )}
+            <Text className='q-add-text'>{viaFull ? `最多 ${MAX_VIAS} 个途经城市` : '添加途经城市'}</Text>
           </View>
           {!isBlank ? (
-            <View className='q-link' onClick={onClear}>
-              <Text className='q-link-text'>清空</Text>
+            <View className='q-clear' hoverClass='q-clear-press' {...PRESS} onClick={onClear}>
+              <Text className='q-clear-text'>清空</Text>
             </View>
           ) : null}
         </View>
       </View>
 
-      {/* 提交态 / 空态 / 错误态 */}
       {attempted && problems.length ? (
         <View className='q-banner q-banner-error'>
           <View className='q-banner-text-error'>
@@ -278,25 +336,67 @@ export default function QueryPage() {
       ) : null}
 
       <View
-        className={`q-submit ${submitting ? 'q-submit-busy' : ''} ${attempted && problems.length ? 'q-submit-blocked' : ''}`}
+        className={`q-cta ${submitting ? 'q-cta-busy' : ''} ${attempted && problems.length ? 'q-cta-blocked' : ''}`}
+        hoverClass='q-cta-press'
+        {...PRESS}
         onClick={onSearch}
       >
-        <Text className='q-submit-text'>{submitting ? '正在组合方案…' : '开始推荐'}</Text>
-      </View>
-
-      {/* 样例：仅列本地 mock 中存在的场景 */}
-      <View className='q-section-title'>常用路线</View>
-      <View className='q-samples'>
-        {QUERY_SAMPLES.map((s) => (
-          <View key={s.key} className='q-sample' onClick={() => onSample(s)}>
-            <View className='q-sample-od'>
-              {s.fromCity} → {s.vias.length ? `${s.vias.join(' → ')} → ` : ''}
-              {s.toCity}
-            </View>
+        <Text className='q-cta-text'>{submitting ? '正在组合方案…' : '开始推荐'}</Text>
+        {submitting ? null : (
+          <View className='q-cta-arrow'>
+            <Text className='q-cta-arrow-text'>→</Text>
           </View>
-        ))}
+        )}
       </View>
 
+      {/* 常用路线：票根 */}
+      <View className='q-section'>
+        <View className='q-section-bar' />
+        <Text className='q-section-title'>常用路线</Text>
+      </View>
+      <View className='q-stubs'>
+        {QUERY_SAMPLES.map((s) => {
+          const theme = ROUTE_THEMES[s.key] || ROUTE_THEMES['xz-lxa'];
+          return (
+            <View
+              key={s.key}
+              className='q-stub'
+              hoverClass='q-stub-press'
+              {...PRESS}
+              onClick={() => onSample(s)}
+            >
+              <View className={`q-stub-side q-tone-${theme.tone}`}>
+                <Image className='q-stub-icon' src={theme.icon} mode='aspectFit' />
+              </View>
+              <View className='q-stub-cut'>
+                <View className='q-stub-hole q-stub-hole-top' />
+                <View className='q-stub-hole q-stub-hole-bottom' />
+              </View>
+              <View className='q-stub-body'>
+                <View className='q-stub-od'>
+                  <Text className='q-stub-city'>{s.fromCity}</Text>
+                  <Text className='q-stub-arrow'>→</Text>
+                  <Text className='q-stub-city'>{s.toCity}</Text>
+                </View>
+                {s.vias.length ? (
+                  <View className='q-stub-vias'>
+                    {s.vias.map((v) => (
+                      <View key={v} className={`q-stub-via q-tone-soft-${theme.tone}`}>
+                        <View className={`q-stub-via-dot q-tone-${theme.tone}`} />
+                        <Text className={`q-stub-via-text q-tone-text-${theme.tone}`}>{v}</Text>
+                      </View>
+                    ))}
+                  </View>
+                ) : (
+                  <View className='q-stub-line'>
+                    <View className={`q-stub-line-bar q-tone-${theme.tone}`} />
+                  </View>
+                )}
+              </View>
+            </View>
+          );
+        })}
+      </View>
     </View>
   );
 }

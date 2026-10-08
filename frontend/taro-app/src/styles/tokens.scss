@@ -63,3 +63,50 @@ $shadow-card: 0 4px 16px rgba(100, 101, 102, 0.08);
 
 // ---- 尺寸 ----
 $touch-min: 88px; // 最小可点高度
+
+// ======================================================================
+// 旅行主题（v2，新增；旧 token 保持不变，结果页/详情页不受影响）
+// ======================================================================
+
+// 天空：深青 → 湖蓝
+$color-sky-900: #0b3c49;
+$color-sky-700: #0e5a6b;
+$color-sky-500: #1f86a6;
+$color-sky-300: #5fb8d3;
+$color-sky-soft: #e4f2f4;
+
+// 暖色强调：珊瑚 → 杏橙
+$color-coral: #ff6b4a;
+$color-coral-2: #ff9a5c;
+$color-coral-soft: #fff0ea;
+$color-sand: #ffd9b0;
+
+// 纸面与墨色（暖调）
+$color-paper: #fbf6ee;
+$color-paper-2: #f4ecdf;
+$color-ink: #1c2b33;
+$color-ink-2: #55656d;
+$color-ink-3: #97a3a9;
+$color-ink-4: #c5ccd0;
+$color-line-warm: #ece2d3;
+$color-error: #e5484d;
+$color-error-soft: #fdeeee;
+
+// 路线主题色（常用路线票根）
+$color-route-indigo: #4c5fd5;
+$color-route-teal: #12867f;
+$color-route-coral: #ff6b4a;
+$color-route-amber: #e99a2c;
+
+$font-display: 56px;
+$font-title: 44px;
+$radius-xl: 32px;
+
+$shadow-ticket: 0 12px 32px rgba(28, 43, 51, 0.1);
+$shadow-cta: 0 12px 28px rgba(255, 107, 74, 0.35);
+
+// 动效：强 ease-out，按压 160ms 内
+$ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+$duration-press: 160ms;
+$duration-enter: 220ms;
+$press-scale: 0.97;

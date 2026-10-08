@@ -28,3 +28,22 @@ export const planColor: Record<PlanTypeKey, string> = {
   fast: color.fast,
   balanced: color.balanced
 };
+
+/** 旅行主题（v2，新增；与 tokens.scss 同步） */
+export const travel = {
+  sky900: '#0b3c49',
+  sky700: '#0e5a6b',
+  sky500: '#1f86a6',
+  sky300: '#5fb8d3',
+  coral: '#ff6b4a',
+  coral2: '#ff9a5c',
+  sand: '#ffd9b0',
+  paper: '#fbf6ee',
+  ink: '#1c2b33',
+  ink3: '#97a3a9',
+  ink4: '#c5ccd0',
+  routeIndigo: '#4c5fd5',
+  routeTeal: '#12867f',
+  routeCoral: '#ff6b4a',
+  routeAmber: '#e99a2c'
+} as const;
