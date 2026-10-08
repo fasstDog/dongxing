@@ -6,8 +6,11 @@
 
 .q-page {
   min-height: 100vh;
+  box-sizing: border-box;
   background: $color-paper;
+  // 原生 tabBar 占位由系统处理；这里再留出底部呼吸距离 + 安全区
   padding-bottom: 64px;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
 }
 
 // ---------------- 头部 ----------------
@@ -30,10 +33,10 @@
 
 .q-hero-top {
   position: relative;
+  height: 56px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
 }
 
 .q-brand-wrap {
@@ -66,28 +69,6 @@
   font-size: 34px;
   font-weight: 800;
   letter-spacing: 6px;
-}
-
-.q-about {
-  height: 56px;
-  padding: 0 $space-4;
-  border-radius: $radius-pill;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform $duration-press $ease-out-strong;
-}
-
-.q-about-press {
-  transform: scale(0.94);
-  background: rgba(255, 255, 255, 0.26);
-}
-
-.q-about-text {
-  color: #fff;
-  font-size: $font-sm;
 }
 
 .q-hero-title-1 {

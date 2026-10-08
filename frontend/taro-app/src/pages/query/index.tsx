@@ -185,14 +185,6 @@ export default function QueryPage() {
             </View>
             <Text className='q-brand'>懂行</Text>
           </View>
-          <View
-            className='q-about'
-            hoverClass='q-about-press'
-            {...PRESS}
-            onClick={() => Taro.navigateTo({ url: '/pages/about/index' })}
-          >
-            <Text className='q-about-text'>关于</Text>
-          </View>
         </View>
         <View className='q-hero-title-1'>直达之外，</View>
         <View className='q-hero-title-2'>
