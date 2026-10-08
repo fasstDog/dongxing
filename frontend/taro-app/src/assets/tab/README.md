@@ -1,6 +1,6 @@
 # Tab bar 图标
 
-`home*.png` / `mine*.png`（81×81，透明底）由 [Tabler Icons](https://tabler.io/icons) v3.19.0 的 outline `home` / `user` 着色导出。
+`home*.png` / `about*.png` / `mine*.png`（81×81，透明底）由 [Tabler Icons](https://tabler.io/icons) v3.19.0 的 outline `home` / `info-circle` / `user` 着色导出。
 
 Tabler Icons — MIT License, Copyright (c) 2020-2024 Paweł Kuna.
 

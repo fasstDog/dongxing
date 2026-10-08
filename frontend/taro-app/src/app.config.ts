@@ -26,6 +26,12 @@ export default {
         selectedIconPath: 'assets/tab/home-active.png'
       },
       {
+        pagePath: 'pages/about/index',
+        text: '关于',
+        iconPath: 'assets/tab/about.png',
+        selectedIconPath: 'assets/tab/about-active.png'
+      },
+      {
         pagePath: 'pages/mine/index',
         text: '我的',
         iconPath: 'assets/tab/mine.png',
